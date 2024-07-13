@@ -141,12 +141,13 @@ end
 
 local drag_card = Card.drag
 local current_card_dragging = nil
-local dragged_order = {}
+local old_card_index = nil
 function Card:drag()
   if self.area and (self.area == G.hand or self.area == G.jokers or self.area == G.consumeables) and current_card_dragging ~= self.ID then
-    dragged_order = {}
     for k,card in ipairs(self.area.cards) do
-      dragged_order[k] = card.ID
+      if card.ID == self.ID then
+        old_card_index = k
+      end
     end
     current_card_dragging = self.ID
   end
@@ -156,23 +157,20 @@ end
 function Card:stop_drag()
   Node.stop_drag(self)
   if self.area and self.area == G.hand or self.area == G.jokers or self.area == G.consumeables then
-    local order = {}
+    local new_card_index = nil
     for k,card in ipairs(self.area.cards) do
-      order[k] = card.ID
-    end
-
-    local orderChanged = false
-    local permutation = {}
-    for i = 1, #dragged_order do
-      for j = 1, #self.area.cards do
-        if dragged_order[i] == self.area.cards[j].ID then
-          permutation[j] = i
-          if i ~= j then orderChanged = true end
-        end
+      if card.ID == self.ID then
+        new_card_index = k
       end
     end
+
+    local orderChanged = new_card_index ~= old_card_index
     if G.MULTIPLAYER.enabled and orderChanged then
-      G.FUNCS.tcp_send({ cmd = "REORDER", type = self.area.config.type, order = permutation })
+      local areaType = self.area == G.hand and "hand" 
+        or self.area == G.jokers and "jokers" 
+        or self.area == G.consumeables and "consumeables" 
+        or nil
+      G.FUNCS.tcp_send({ cmd = "REORDER", type = areaType, oldIndex = old_card_index, newIndex = new_card_index })
     end
   end
   current_card_dragging = nil
