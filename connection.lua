@@ -23,6 +23,16 @@ G.FUNCS.tcp_listen = function()
     sendDebugMessage("Received data: " .. G.JSON.encode(res))
     if res.cmd == "JOIN" then
       G.FUNCS.room_join(res.data)
+    elseif res.cmd == "START" then
+      local key = 1
+      for k, v in ipairs(G.P_CENTER_POOLS.Back) do
+        if v.name == res.data.deck then
+          key = k
+          break
+        end
+      end
+      G.GAME.viewed_back:change_to(G.P_CENTER_POOLS.Back[key])
+      G.FUNCS.start_run(nil, { seed = res.data.seed, stake = res.data.stake })
     end
   else
     sendDebugMessage("Failed to receive data: " .. (res.error or "Unknown error"))
