@@ -139,6 +139,45 @@ function Card:click()
     end
 end
 
+local drag_card = Card.drag
+local current_card_dragging = nil
+local dragged_order = {}
+function Card:drag()
+  if self.area and (self.area == G.hand or self.area == G.jokers or self.area == G.consumeables) and current_card_dragging ~= self.ID then
+    dragged_order = {}
+    for k,card in ipairs(self.area.cards) do
+      dragged_order[k] = card.ID
+    end
+    current_card_dragging = self.ID
+  end
+  drag_card(self)
+end
+
+function Card:stop_drag()
+  Node.stop_drag(self)
+  if self.area and self.area == G.hand or self.area == G.jokers or self.area == G.consumeables then
+    local order = {}
+    for k,card in ipairs(self.area.cards) do
+      order[k] = card.ID
+    end
+
+    local orderChanged = false
+    local permutation = {}
+    for i = 1, #dragged_order do
+      for j = 1, #self.area.cards do
+        if dragged_order[i] == self.area.cards[j].ID then
+          permutation[j] = i
+          if i ~= j then orderChanged = true end
+        end
+      end
+    end
+    if G.MULTIPLAYER.enabled and orderChanged then
+      G.FUNCS.tcp_send({ cmd = "REORDER", type = self.area.config.type, order = permutation })
+    end
+  end
+  current_card_dragging = nil
+end
+
 function Controller:queue_R_cursor_press(x, y)
   if self.locks.frame then return end
   if not G.SETTINGS.paused and G.hand and G.hand.highlighted[1] then 
