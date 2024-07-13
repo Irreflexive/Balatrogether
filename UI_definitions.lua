@@ -110,10 +110,10 @@ function G.UIDEF.player_list()
   local t = {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR, minh = 7, minw = 4.2}, nodes={
     {n=G.UIT.R, config={align = "cm", padding = 0.0}, nodes={
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        {n=G.UIT.T, config={text = 'Room Code', scale = 0.5, colour = G.C.WHITE}},
+        {n=G.UIT.T, config={text = 'IP', scale = 0.5, colour = G.C.WHITE}},
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        UIBox_button({id = 'server_code', col = true, label = {G.MULTIPLAYER.code}, button = 'nil', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
+        UIBox_button({id = 'server_code', col = true, label = {G.MULTIPLAYER.address}, button = 'nil', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
         UIBox_button({id = 'copy_code', col = true, label = {'Copy'}, button = 'copy_server_code', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.3}, nodes={}},
@@ -127,7 +127,7 @@ function G.UIDEF.player_list()
         create_option_cycle({id = 'player_page',scale = 0.9, h = 0.3, w = 3.5, options = player_pages, cycle_shoulders = true, opt_callback = 'change_player_list_page', current_option = 1, colour = G.C.RED, no_pips = true, focus_args = {snap_to = true}})
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.05, minh = 0.9}, nodes={
-          {n=G.UIT.C, config={align = "cm", minw = 4, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.RED, button = "leave_server", shadow = true}, nodes={
+          {n=G.UIT.C, config={align = "cm", minw = 4, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.RED, button = "room_leave", shadow = true}, nodes={
             {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
               {n=G.UIT.T, config={text = 'LEAVE', scale = 0.8, colour = G.C.UI.TEXT_LIGHT, func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
             }}
@@ -151,7 +151,7 @@ function G.UIDEF.player_list_page(_page)
       {n=G.UIT.C, config={align = 'cl', minw = 0.8}, nodes = {
         {n=G.UIT.T, config={text = k..'', scale = 0.4, colour = G.C.WHITE}},
       }},
-      UIBox_button({id = k, col = true, label = {v and G.STEAM.friends.getFriendPersonaName(G.STEAM.extra.parseUint64(v)) or ''}, button = 'nil', colour = v and (G.MULTIPLAYER.id == k and G.C.IMPORTANT or G.C.RED) or G.C.GREY, minw = 4, scale = 0.4, minh = 0.6, focus_args = {snap_to = not snapped}}),
+      UIBox_button({id = k, col = true, label = {v and G.STEAM.friends.getFriendPersonaName(G.STEAM.extra.parseUint64(v)) or ''}, button = 'nil', colour = v and (tostring(G.STEAM.user.getSteamID()) == v and G.C.IMPORTANT or G.C.RED) or G.C.GREY, minw = 4, scale = 0.4, minh = 0.6, focus_args = {snap_to = not snapped}}),
     }}      
     snapped = true
   end

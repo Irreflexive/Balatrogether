@@ -23,8 +23,6 @@ G.FUNCS.tcp_listen = function()
     sendDebugMessage("Received data: " .. G.JSON.encode(res))
     if res.cmd == "JOIN" then
       G.FUNCS.room_join(res.data)
-    elseif res.cmd == "LEAVE" then
-      G.FUNCS.room_leave()
     end
   else
     sendDebugMessage("Failed to receive data: " .. (res.error or "Unknown error"))
@@ -70,17 +68,17 @@ G.FUNCS.room_join = function(data)
   -- Load UI
   G.SETTINGS.paused = true
   G.FUNCS.overlay_menu{
-    definition = G.UIDEF.server_config(false),
+    definition = G.UIDEF.server_config(tostring(G.STEAM.user.getSteamID()) == data.players[1]),
   }
   G.OVERLAY_MENU.config.no_esc = true
 end
 
 G.FUNCS.room_leave = function()
-  G.MULTIPLAYER.enabled = false
+  G.FUNCS.tcp_close()
   G.MULTIPLAYER.versus = false
   G.MULTIPLAYER.players = {}
   G.SETTINGS.paused = false
-  G.FUNCS.overlay_menu_close()
+  G.FUNCS:exit_overlay_menu()
 end
 
 ----------------------------------------------

@@ -49,11 +49,6 @@ G.FUNCS.join_server = function()
   G.FUNCS.tcp_send(command)
 end
 
-G.FUNCS.leave_server = function()
-  sendDebugMessage("Leaving server!")
-  G.FUNCS.tcp_close()
-end
-
 G.FUNCS.change_player_list_page = function(args)
   if not args or not args.cycle_config then return end
   if G.OVERLAY_MENU then
@@ -72,9 +67,9 @@ end
 
 G.FUNCS.copy_server_code = function(e)
   if G.F_LOCAL_CLIPBOARD then
-    G.CLIPBOARD = G.MULTIPLAYER.code
+    G.CLIPBOARD = G.MULTIPLAYER.address
   else
-    love.system.setClipboardText(G.MULTIPLAYER.code)
+    love.system.setClipboardText(G.MULTIPLAYER.address)
   end 
 end
 
