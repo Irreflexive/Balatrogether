@@ -60,27 +60,7 @@ function G.UIDEF.run_setup(from_game_over)
 end
 
 function G.UIDEF.Balatrogether()
-  local t = create_UIBox_generic_options({no_back = true, no_esc = true, contents = {
-    {n=G.UIT.R, config={align = "cm", padding = 0, draw_layer = 1}, nodes={
-      create_tabs(
-        {tabs = {
-          -- {
-          --   label = "Host",
-          --   chosen = false,
-          --   tab_definition_function = G.UIDEF.Balatrogether_host,
-          --   tab_definition_function_args = 'Host'
-          -- },
-          -- {
-          --   label = "Join",
-          --   chosen = false,
-          --   tab_definition_function = G.UIDEF.Balatrogether_join,
-          --   tab_definition_function_args = 'Join'
-          -- }
-        },
-        snap_to_nav = true})
-    }}
-  }})
-  return t
+  return G.UIDEF.run_setup_option('New Run')
 end
 
 ----------------------------------------------
