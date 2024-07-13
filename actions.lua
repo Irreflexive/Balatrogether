@@ -45,7 +45,42 @@ G.MULTIPLAYER.actions = {
       end
     end
     G.GAME.selected_back = G.P_CENTER_POOLS.Back[key]
-    G.FUNCS.start_run(nil, { seed = data.seed, stake = data.stake })
+    G.FUNCS.start_run(nil, { seed = data.seed, stake = data.stake, challenge = {
+      name = 'Multiplayer Test',
+      id = 'c_multiplayer_test',
+      rules = {
+          custom = {
+          },
+          modifiers = {
+            {id = 'consumable_slots', value = 5},
+          }
+      },
+      jokers = {
+          {id = 'j_joker'},
+          {id = 'j_joker'},
+          {id = 'j_joker'},
+          {id = 'j_joker'},
+          {id = 'j_joker'},
+      },
+      consumeables = {
+          {id = 'c_heirophant'},
+          {id = 'c_high_priestess'},
+          {id = 'c_pluto'},
+      },
+      vouchers = {
+      },
+      deck = {
+          type = "Challenge Deck",
+      },
+      restrictions = {
+          banned_cards = {
+          },
+          banned_tags = {
+          },
+          banned_other = {
+          }
+      }
+    }})
   end,
 
   PLAY_HAND = function(data)
@@ -162,11 +197,11 @@ G.FUNCS.skip_blind = function(...)
 end
 
 G.FUNCS.sell_card = function(e, ...)
-  if G.MULTIPLAYER.enabled then
+  local card = e.config.ref_table
+  if G.MULTIPLAYER.enabled and card.area then
     local index = 1
-    local card = e.config.ref_table
-    for k,v in ipairs(card.area) do
-      if v == card then index = k end
+    for k,v in ipairs(card.area.cards) do
+      if v.ID == card.ID then index = k end
     end
     G.FUNCS.tcp_send({ cmd = "SELL", index = index, type = card.area == G.jokers and 'jokers' or 'consumeables' })
   else
@@ -175,11 +210,11 @@ G.FUNCS.sell_card = function(e, ...)
 end
 
 G.FUNCS.use_card = function(e, ...)
-  if G.MULTIPLAYER.enabled then
+  local card = e.config.ref_table
+  if G.MULTIPLAYER.enabled and card.area == G.consumeables then
     local index = 1
-    local card = e.config.ref_table
-    for k,v in ipairs(card.area) do
-      if v == card then index = k end
+    for k,v in ipairs(card.area.cards) do
+      if v.ID == card.ID then index = k end
     end
     G.FUNCS.tcp_send({ cmd = "USE", index = index })
   else

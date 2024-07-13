@@ -109,8 +109,8 @@ function Card:click()
     if self.area and self.area:can_highlight(self) then
         if (self.area == G.hand) and (G.STATE == G.STATES.HAND_PLAYED) then return end
         local index = 1
-        for k,v in ipairs(G.hand.cards) do
-          if v == self then index = k end
+        for k,v in ipairs(self.area.cards) do
+          if v.ID == self.ID then index = k end
         end
         local areaType = self.area == G.hand and "hand" or self.area == G.jokers and "jokers" or self.area == G.consumeables and "consumeables" or nil
         if self.highlighted ~= true then 
