@@ -45,6 +45,7 @@ G.FUNCS.tcp_close = function()
   G.MULTIPLAYER.tcp:close()
   G.MULTIPLAYER.tcp = nil
   G.MULTIPLAYER.enabled = false
+  G.MULTIPLAYER.players = {}
   sendDebugMessage("TCP connection closed")
 end
 
@@ -86,10 +87,12 @@ end
 
 G.FUNCS.room_leave = function()
   G.FUNCS.tcp_close()
-  G.MULTIPLAYER.versus = false
-  G.MULTIPLAYER.players = {}
   G.SETTINGS.paused = false
   G.FUNCS:exit_overlay_menu()
+end
+
+G.FUNCS.is_host = function()
+  return tostring(G.STEAM.user.getSteamID()) == G.MULTIPLAYER.players[1]
 end
 
 ----------------------------------------------

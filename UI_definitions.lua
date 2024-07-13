@@ -42,7 +42,7 @@ function G.UIDEF.run_setup(from_game_over)
               chosen = _challenge_chosen
             } or nil,
             {
-              label = "Multiplayer",
+              label = "Balatrogether",
               tab_definition_function = G.UIDEF.multiplayer_join,
             }
         },
@@ -157,6 +157,72 @@ function G.UIDEF.player_list_page(_page)
   end
 
   return {n=G.UIT.ROOT, config={align = "cm", padding = 0.1, colour = G.C.CLEAR}, nodes=player_list}
+end
+
+function create_UIBox_options()  
+  local current_seed = nil
+  local restart = nil
+  local main_menu = nil
+  local your_collection = nil
+  local credits = nil
+
+  G.E_MANAGER:add_event(Event({
+    blockable = false,
+    func = function()
+      G.REFRESH_ALERTS = true
+    return true
+    end
+  }))
+
+  if G.STAGE == G.STAGES.RUN then
+    if G.MULTIPLAYER.enabled then
+      if G.FUNCS.is_host() then
+        restart = UIBox_button{id = 'restart_button', label = {localize('b_start_new_run')}, button = "setup_run_multiplayer", minw = 5}
+      else
+        restart = nil
+      end
+    else
+      restart = UIBox_button{id = 'restart_button', label = {localize('b_start_new_run')}, button = "setup_run", minw = 5}
+    end
+    if G.MULTIPLAYER.enabled then
+      main_menu = UIBox_button{ label = {"Leave Server"}, button = "go_to_menu", minw = 5}
+    else
+      main_menu = UIBox_button{ label = {localize('b_main_menu')}, button = "go_to_menu", minw = 5}
+    end
+    your_collection = UIBox_button{ label = {localize('b_collection')}, button = "your_collection", minw = 5, id = 'your_collection'}
+    current_seed = {n=G.UIT.R, config={align = "cm", padding = 0.05}, nodes={
+        {n=G.UIT.C, config={align = "cm", padding = 0}, nodes={
+        {n=G.UIT.T, config={text = localize('b_seed')..": ", scale = 0.4, colour = G.C.WHITE}}
+      }},
+      {n=G.UIT.C, config={align = "cm", padding = 0, minh = 0.8}, nodes={
+        {n=G.UIT.C, config={align = "cm", padding = 0, minh = 0.8}, nodes={
+          {n=G.UIT.R, config={align = "cm", r = 0.1, colour = G.GAME.seeded and G.C.RED or G.C.BLACK, minw = 1.8, minh = 0.5, padding = 0.1, emboss = 0.05}, nodes={
+            {n=G.UIT.C, config={align = "cm"}, nodes={
+              {n=G.UIT.T, config={ text = tostring(G.GAME.pseudorandom.seed), scale = 0.43, colour = G.C.UI.TEXT_LIGHT, shadow = true}}
+            }}
+          }}
+        }}
+      }},
+      UIBox_button({col = true, button = 'copy_seed', label = {localize('b_copy')}, colour = G.C.BLUE, scale = 0.3, minw = 1.3, minh = 0.5,}),
+    }}
+  end
+  if G.STAGE == G.STAGES.MAIN_MENU then
+    credits = UIBox_button{ label = {localize('b_credits')}, button = "show_credits", minw = 5}
+  end
+
+  local settings = UIBox_button({button = 'settings', label = {localize('b_settings')}, minw = 5, focus_args = {snap_to = true}})
+  local high_scores = UIBox_button{ label = {localize('b_stats')}, button = "high_scores", minw = 5}
+
+  local t = create_UIBox_generic_options({ contents = {
+      settings,
+      (G.GAME.seeded and not G.MULTIPLAYER.enabled) and current_seed or nil,
+      restart,
+      main_menu,
+      high_scores,
+      your_collection,
+      credits
+    }})
+  return t
 end
 
 ----------------------------------------------
