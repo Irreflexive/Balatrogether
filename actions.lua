@@ -137,8 +137,13 @@ G.MULTIPLAYER.actions = {
   end,
 
   BUY = function(data)
-    local e = findDescendantOfElementByConfig(G.shop_jokers.cards[data.index], "func", "can_buy")
-    buy_card(e)
+    if data.type == "shop_jokers" then
+      local e = findDescendantOfElementByConfig(G.shop_jokers.cards[data.index], "id", "buy")
+      buy_card(e)
+    else
+      local card = G[data.type].cards[data.index]
+      use_card({config = {ref_table = card}})
+    end
   end,
 
   BUY_AND_USE = function(data)
@@ -211,12 +216,17 @@ end
 
 G.FUNCS.use_card = function(e)
   local card = e.config.ref_table
-  if G.MULTIPLAYER.enabled and card.area == G.consumeables then
+  if G.MULTIPLAYER.enabled then
     local index = 1
     for k,v in ipairs(card.area.cards) do
       if v.ID == card.ID then index = k end
     end
-    G.FUNCS.tcp_send({ cmd = "USE", index = index })
+    local areaType = card.area == G.shop_jokers and "shop_jokers"
+      or card.area == G.shop_booster and "shop_booster"
+      or card.area == G.shop_vouchers and "shop_vouchers"
+      or card.area == G.pack_cards and "pack_cards"
+      or nil
+    G.FUNCS.tcp_send({ cmd = card.area == G.consumeables and "USE" or "BUY", index = index, type = areaType })
   else
     use_card(e)
   end
@@ -229,7 +239,7 @@ G.FUNCS.buy_from_shop = function(e)
     for k,v in ipairs(G.shop_jokers.cards) do
       if v.ID == card.ID then index = k end
     end
-    G.FUNCS.tcp_send({ cmd = e.config.id == 'buy_and_use' and "BUY_AND_USE" or "BUY", index = index })
+    G.FUNCS.tcp_send({ cmd = e.config.id == 'buy_and_use' and "BUY_AND_USE" or "BUY", index = index, type = "shop_jokers" })
   else
     buy_card(e)
   end
