@@ -112,7 +112,11 @@ function Card:click()
         for k,v in ipairs(self.area.cards) do
           if v.ID == self.ID then index = k end
         end
-        local areaType = self.area == G.hand and "hand" or self.area == G.jokers and "jokers" or self.area == G.consumeables and "consumeables" or nil
+        local areaType = self.area == G.hand and "hand" 
+          or self.area == G.jokers and "jokers" 
+          or self.area == G.consumeables and "consumeables" 
+          or self.area == G.shop_jokers and "shop_jokers"
+          or nil
         if self.highlighted ~= true then 
             if G.MULTIPLAYER.enabled and areaType then
               G.FUNCS.tcp_send({ cmd = "HIGHLIGHT", index = index, type = areaType })
