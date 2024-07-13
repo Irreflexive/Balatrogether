@@ -38,12 +38,7 @@ G.MULTIPLAYER.actions = {
   end,
 
   START = function(data)
-    for k, v in ipairs(G.P_CENTER_POOLS.Back) do
-      if v.name == data.deck then
-        G.GAME.selected_back = v
-        break
-      end
-    end
+    G.GAME.selected_back = Back(get_deck_from_name(data.deck))
     G.FUNCS.start_run(nil, { seed = data.seed, stake = data.stake, challenge = {
       name = 'Multiplayer Test',
       id = 'c_multiplayer_test',
@@ -70,7 +65,7 @@ G.MULTIPLAYER.actions = {
       vouchers = {
       },
       deck = {
-          type = "Challenge Deck  ",
+          type = G.GAME.selected_back.name,
       },
       restrictions = {
           banned_cards = {

@@ -80,7 +80,8 @@ G.FUNCS.start_setup_run = function(e)
   
   elseif G.SETTINGS.current_setup == 'Multiplayer Run' then
     local _stake = G.forced_stake or G.PROFILES[G.SETTINGS.profile].MEMORY.stake or 1
-    G.FUNCS.tcp_send({cmd = "START", stake = _stake, seed = generate_starting_seed(), challenge = nil, deck = G.GAME.selected_back.name})
+    local _deck = G.PROFILES[G.SETTINGS.profile].MEMORY.deck or "Red Deck"
+    G.FUNCS.tcp_send({cmd = "START", stake = _stake, seed = generate_starting_seed(), challenge = nil, deck = _deck})
 
   elseif G.SETTINGS.current_setup == 'Continue' then
     if G.SAVED_GAME ~= nil then
