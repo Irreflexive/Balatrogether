@@ -8,8 +8,8 @@
 ----------------------------------------------
 ------------MOD CODE -------------------------
 
-function SMODS.INIT.Balatrogeter()
-  sendDebugMessage("Launching Balatrogeter!")
+function SMODS.INIT.Balatrogether()
+  sendDebugMessage("Launching Balatrogether!")
 end
 
 function G.UIDEF.run_setup(from_game_over)
