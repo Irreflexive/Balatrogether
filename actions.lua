@@ -42,7 +42,7 @@ G.MULTIPLAYER.actions = {
         break
       end
     end
-    G.GAME.viewed_back:change_to(G.P_CENTER_POOLS.Back[key])
+    G.GAME.selected_back = G.P_CENTER_POOLS.Back[key]
     G.FUNCS.start_run(nil, { seed = data.seed, stake = data.stake })
   end,
 
