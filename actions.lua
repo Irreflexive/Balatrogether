@@ -6,6 +6,8 @@
 
 local play_hand = G.FUNCS.play_cards_from_highlighted
 local discard_hand = G.FUNCS.discard_cards_from_highlighted
+local sort_by_value = G.FUNCS.sort_hand_value
+local sort_by_suit = G.FUNCS.sort_hand_suit
 
 G.MULTIPLAYER.actions = {
 
@@ -62,6 +64,14 @@ G.MULTIPLAYER.actions = {
     G.hand:unhighlight_all()
   end,
 
+  SORT_HAND = function(data)
+    if data.type == "suit" then
+      sort_by_suit()
+    elseif data.type == "value" then
+      sort_by_value()
+    end
+  end,
+
 }
 
 G.FUNCS.play_cards_from_highlighted = function(e)
@@ -77,6 +87,22 @@ G.FUNCS.discard_cards_from_highlighted = function(e)
     G.FUNCS.tcp_send({ cmd = "DISCARD_HAND" })
   else
     discard_hand(e)
+  end
+end
+
+G.FUNCS.sort_hand_suit = function(e)
+  if G.MULTIPLAYER.enabled then
+    G.FUNCS.tcp_send({ cmd = "SORT_HAND", type = "suit" })
+  else
+    sort_by_suit(e)
+  end
+end
+
+G.FUNCS.sort_hand_value = function(e)
+  if G.MULTIPLAYER.enabled then
+    G.FUNCS.tcp_send({ cmd = "SORT_HAND", type = "value" })
+  else
+    sort_by_value(e)
   end
 end
 
