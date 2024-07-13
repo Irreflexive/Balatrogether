@@ -12,7 +12,7 @@ G.FUNCS.tcp_connect = function()
   G.MULTIPLAYER.tcp = tcp
   tcp:connect(G.MULTIPLAYER.address, 7063)
   tcp:settimeout(0)
-  sendDebugMessage("TCP connection opened")
+  if G.MULTIPLAYER.debug then sendDebugMessage("TCP connection opened") end
 end
 
 G.FUNCS.tcp_listen = function()
@@ -24,10 +24,10 @@ G.FUNCS.tcp_listen = function()
     if func then
       func(res.data)
     else
-      sendDebugMessage("Unknown action: " .. res.cmd)
+      if G.MULTIPLAYER.debug then sendDebugMessage("Unknown action: " .. res.cmd) end
     end
   else
-    sendDebugMessage("Failed to receive data: " .. (res.error or "Unknown error"))
+    if G.MULTIPLAYER.debug then sendDebugMessage("Failed to receive data: " .. (res.error or "Unknown error")) end
     G.FUNCS.tcp_close()
   end
 end
@@ -38,12 +38,12 @@ G.FUNCS.tcp_close = function()
   G.MULTIPLAYER.tcp = nil
   G.MULTIPLAYER.enabled = false
   G.MULTIPLAYER.players = {}
-  sendDebugMessage("TCP connection closed")
+  if G.MULTIPLAYER.debug then sendDebugMessage("TCP connection closed") end
 end
 
 G.FUNCS.tcp_send = function(data)
   data.steam_id = tostring(G.STEAM.user.getSteamID())
-  sendDebugMessage("Sending data: " .. G.JSON.encode(data))
+  if G.MULTIPLAYER.debug then sendDebugMessage("Sending data: " .. G.JSON.encode(data)) end
   G.MULTIPLAYER.tcp:send(G.JSON.encode(data) .. "\n")
 end
 

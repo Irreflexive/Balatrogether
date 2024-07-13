@@ -238,6 +238,12 @@ G.MULTIPLAYER.actions = {
     go_to_shop(e)
   end,
 
+  REORDER = function(data)
+    local card = G[data.type].cards[data.from]
+    table.remove(G[data.type].cards, data.from)
+    table.insert(G[data.type].cards, data.to, card)
+  end,
+
 }
 
 G.FUNCS.play_cards_from_highlighted = function(...)

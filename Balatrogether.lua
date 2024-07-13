@@ -20,10 +20,10 @@ end
 
 G.MULTIPLAYER = {
   enabled = false,
-  -- address = "",
-  address = "192.9.250.154",
+  address = "",
   players = {},
   tcp = nil,
+  debug = false,
 }
 
 local old_update = love.update
@@ -170,7 +170,7 @@ function Card:stop_drag()
         or self.area == G.jokers and "jokers" 
         or self.area == G.consumeables and "consumeables" 
         or nil
-      G.FUNCS.tcp_send({ cmd = "REORDER", type = areaType, oldIndex = old_card_index, newIndex = new_card_index })
+      G.FUNCS.tcp_send({ cmd = "REORDER", type = areaType, from = old_card_index, to = new_card_index })
     end
   end
   current_card_dragging = nil
