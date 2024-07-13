@@ -12,6 +12,7 @@ local select_blind = G.FUNCS.select_blind
 local skip_blind = G.FUNCS.skip_blind
 local sell_card = G.FUNCS.sell_card
 local use_card = G.FUNCS.use_card
+local buy_card = G.FUNCS.buy_from_shop
 
 G.MULTIPLAYER.actions = {
 
@@ -37,14 +38,12 @@ G.MULTIPLAYER.actions = {
   end,
 
   START = function(data)
-    local key = 1
     for k, v in ipairs(G.P_CENTER_POOLS.Back) do
       if v.name == data.deck then
-        key = k
+        G.GAME.selected_back = v
         break
       end
     end
-    G.GAME.selected_back = G.P_CENTER_POOLS.Back[key]
     G.FUNCS.start_run(nil, { seed = data.seed, stake = data.stake, challenge = {
       name = 'Multiplayer Test',
       id = 'c_multiplayer_test',
@@ -52,6 +51,7 @@ G.MULTIPLAYER.actions = {
           custom = {
           },
           modifiers = {
+            {id = 'dollars', value = 1000},
             {id = 'consumable_slots', value = 5},
           }
       },
@@ -70,7 +70,7 @@ G.MULTIPLAYER.actions = {
       vouchers = {
       },
       deck = {
-          type = "Challenge Deck",
+          type = "Challenge Deck  ",
       },
       restrictions = {
           banned_cards = {
@@ -137,13 +137,13 @@ G.MULTIPLAYER.actions = {
   end,
 
   BUY = function(data)
-    local card = G.jokers.cards[data.index]
-    card:buy_card()
+    local e = findDescendantOfElementByConfig(G.shop_jokers.cards[data.index], "func", "can_buy")
+    buy_card(e)
   end,
 
   BUY_AND_USE = function(data)
-    local card = G.jokers.cards[data.index]
-    card:buy_and_use_card()
+    local e = findDescendantOfElementByConfig(G.shop_jokers.cards[data.index], "id", "buy_and_use")
+    buy_card(e)
   end,
 
 }
@@ -209,7 +209,7 @@ G.FUNCS.sell_card = function(e, ...)
   end
 end
 
-G.FUNCS.use_card = function(e, ...)
+G.FUNCS.use_card = function(e)
   local card = e.config.ref_table
   if G.MULTIPLAYER.enabled and card.area == G.consumeables then
     local index = 1
@@ -218,7 +218,20 @@ G.FUNCS.use_card = function(e, ...)
     end
     G.FUNCS.tcp_send({ cmd = "USE", index = index })
   else
-    use_card(e, ...)
+    use_card(e)
+  end
+end
+
+G.FUNCS.buy_from_shop = function(e)
+  local card = e.config.ref_table
+  if G.MULTIPLAYER.enabled then
+    local index = 1
+    for k,v in ipairs(G.shop_jokers.cards) do
+      if v.ID == card.ID then index = k end
+    end
+    G.FUNCS.tcp_send({ cmd = e.config.id == 'buy_and_use' and "BUY_AND_USE" or "BUY", index = index })
+  else
+    buy_card(e)
   end
 end
 
