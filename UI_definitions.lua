@@ -152,9 +152,14 @@ function G.UIDEF.player_list()
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
         create_option_cycle({id = 'player_page',scale = 0.9, h = 0.3, w = 3.5, options = player_pages, cycle_shoulders = true, opt_callback = 'change_player_list_page', current_option = 1, colour = G.C.RED, no_pips = true, focus_args = {snap_to = true}})
       }},
-      {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        UIBox_button({label = {"LEAVE"}, minw = 1, minh = 0.6, button = 'back', colour = G.C.RED, scale = 0.5, col = true})
-      }},
+      {n=G.UIT.R, config={align = "cm", padding = 0.05, minh = 0.9}, nodes={
+          {n=G.UIT.C, config={align = "cm", minw = 4, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.RED, button = "leave_server", shadow = true}, nodes={
+            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+              {n=G.UIT.T, config={text = 'LEAVE', scale = 0.8, colour = G.C.UI.TEXT_LIGHT, func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
+            }}
+          }}
+        }
+      }
     }},
   }}
   return t

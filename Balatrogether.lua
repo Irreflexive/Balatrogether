@@ -11,9 +11,9 @@
 function SMODS.INIT.Balatrogether()
 	local mod = SMODS.findModByID("Balatrogether")
   sendDebugMessage("Launching Balatrogether!")
-	assert(load(love.filesystem.read(mod.path .. "json.lua")))()
-	assert(load(love.filesystem.read(mod.path .. "UI_definitions.lua")))()
-	assert(load(love.filesystem.read(mod.path .. "connection.lua")))()
+	assert(load(NFS.read(mod.path .. "json.lua")))()
+	assert(load(NFS.read(mod.path .. "UI_definitions.lua")))()
+	assert(load(NFS.read(mod.path .. "connection.lua")))()
 end
 
 G.join_room_code = ""
@@ -26,6 +26,12 @@ G.MULTIPLAYER = {
   tcp = nil,
 }
 
+local old_update = love.update
+function love.update(dt)
+  old_update(dt)
+  G.FUNCS.tcp_listen()
+end
+
 G.FUNCS.start_server = function()
   sendDebugMessage("Starting server!")
   G.FUNCS.tcp_connect()
@@ -33,7 +39,7 @@ G.FUNCS.start_server = function()
     cmd = "CREATE", 
     versus = false,
   }
-  G.FUNCS.tcp_send(command);
+  G.FUNCS.tcp_send(command)
 end
 
 G.FUNCS.join_server = function()
@@ -43,7 +49,12 @@ G.FUNCS.join_server = function()
     cmd = "JOIN", 
     code = G.join_room_code, 
   }
-  G.FUNCS.tcp_send(command);
+  G.FUNCS.tcp_send(command)
+end
+
+G.FUNCS.leave_server = function()
+  sendDebugMessage("Leaving server!")
+  G.FUNCS.tcp_close()
 end
 
 G.FUNCS.change_player_list_page = function(args)
