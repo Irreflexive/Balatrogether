@@ -42,7 +42,9 @@ G.FUNCS.tcp_close = function()
 end
 
 G.FUNCS.tcp_send = function(data)
-  data.steam_id = tostring(G.STEAM.user.getSteamID())
+  if data.cmd == "JOIN" then
+    data.steam_id = tostring(G.STEAM.user.getSteamID())
+  end
   if G.MULTIPLAYER.debug then sendDebugMessage("Sending data: " .. G.JSON.encode(data)) end
   G.MULTIPLAYER.tcp:send(G.JSON.encode(data) .. "\n")
 end
