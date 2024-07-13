@@ -13,6 +13,8 @@ local skip_blind = G.FUNCS.skip_blind
 local sell_card = G.FUNCS.sell_card
 local use_card = G.FUNCS.use_card
 local reroll = G.FUNCS.reroll_shop
+local next_round = G.FUNCS.toggle_shop
+local go_to_shop = G.FUNCS.cash_out
 
 local buy_card = function(e)
   local c1 = e.config.ref_table
@@ -227,6 +229,15 @@ G.MULTIPLAYER.actions = {
     reroll()
   end,
 
+  NEXT_ROUND = function(data)
+    next_round()
+  end,
+
+  GO_TO_SHOP = function(data)
+    local e = G.next_round_button:get_UIE_by_ID('cash_out_button')
+    go_to_shop(e)
+  end,
+
 }
 
 G.FUNCS.play_cards_from_highlighted = function(...)
@@ -326,6 +337,192 @@ G.FUNCS.reroll_shop = function(...)
     G.FUNCS.tcp_send({ cmd = "REROLL" })
   else
     reroll(...)
+  end
+end
+
+G.FUNCS.toggle_shop = function(...)
+  if G.MULTIPLAYER.enabled then
+    G.FUNCS.tcp_send({ cmd = "NEXT_ROUND" })
+  else
+    next_round(...)
+  end
+end
+
+G.FUNCS.cash_out = function(...)
+  if G.MULTIPLAYER.enabled then
+    G.FUNCS.tcp_send({ cmd = "GO_TO_SHOP" })
+  else
+    go_to_shop(...)
+  end
+end
+
+function add_round_eval_row(config)
+  local config = config or {}
+  local width = G.round_eval.T.w - 0.51
+  local num_dollars = config.dollars or 1
+  local scale = 0.9
+
+  if config.name ~= 'bottom' then
+      if config.name ~= 'blind1' then
+          if not G.round_eval.divider_added then 
+              G.E_MANAGER:add_event(Event({
+                  trigger = 'after',delay = 0.25,
+                  func = function() 
+                      local spacer = {n=G.UIT.R, config={align = "cm", minw = width}, nodes={
+                          {n=G.UIT.O, config={object = DynaText({string = {'......................................'}, colours = {G.C.WHITE},shadow = true, float = true, y_offset = -30, scale = 0.45, spacing = 13.5, font = G.LANGUAGES['en-us'].font, pop_in = 0})}}
+                      }}
+                      G.round_eval:add_child(spacer,G.round_eval:get_UIE_by_ID(config.bonus and 'bonus_round_eval' or 'base_round_eval'))
+                      return true
+                  end
+              }))
+              delay(0.6)
+              G.round_eval.divider_added = true
+          end
+      else
+          delay(0.2)
+      end
+
+      delay(0.2)
+
+      G.E_MANAGER:add_event(Event({
+          trigger = 'before',delay = 0.5,
+          func = function()
+              --Add the far left text and context first:
+              local left_text = {}
+              if config.name == 'blind1' then
+                  local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5)
+                  local blind_sprite = AnimatedSprite(0, 0, 1.2,1.2, G.ANIMATION_ATLAS['blind_chips'], copy_table(G.GAME.blind.pos))
+                  blind_sprite:define_draw_steps({
+                      {shader = 'dissolve', shadow_height = 0.05},
+                      {shader = 'dissolve'}
+                  })
+                  table.insert(left_text, {n=G.UIT.O, config={w=1.2,h=1.2 , object = blind_sprite, hover = true, can_collide = false}})
+
+                  table.insert(left_text,                  
+                  config.saved and 
+                  {n=G.UIT.C, config={padding = 0.05, align = 'cm'}, nodes={
+                      {n=G.UIT.R, config={align = 'cm'}, nodes={
+                          {n=G.UIT.O, config={object = DynaText({string = {' '..localize('ph_mr_bones')..' '}, colours = {G.C.FILTER}, shadow = true, pop_in = 0, scale = 0.5*scale, silent = true})}}
+                      }}
+                  }}
+                  or {n=G.UIT.C, config={padding = 0.05, align = 'cm'}, nodes={
+                      {n=G.UIT.R, config={align = 'cm'}, nodes={
+                          {n=G.UIT.O, config={object = DynaText({string = {' '..localize('ph_score_at_least')..' '}, colours = {G.C.UI.TEXT_LIGHT}, shadow = true, pop_in = 0, scale = 0.4*scale, silent = true})}}
+                      }},
+                      {n=G.UIT.R, config={align = 'cm', minh = 0.8}, nodes={
+                          {n=G.UIT.O, config={w=0.5,h=0.5 , object = stake_sprite, hover = true, can_collide = false}},
+                          {n=G.UIT.T, config={text = G.GAME.blind.chip_text, scale = scale_number(G.GAME.blind.chips, scale, 100000), colour = G.C.RED, shadow = true}}
+                      }}
+                  }}) 
+              elseif string.find(config.name, 'tag') then
+                  local blind_sprite = Sprite(0, 0, 0.7,0.7, G.ASSET_ATLAS['tags'], copy_table(config.pos))
+                  blind_sprite:define_draw_steps({
+                      {shader = 'dissolve', shadow_height = 0.05},
+                      {shader = 'dissolve'}
+                  })
+                  blind_sprite:juice_up()
+                  table.insert(left_text, {n=G.UIT.O, config={w=0.7,h=0.7 , object = blind_sprite, hover = true, can_collide = false}})
+                  table.insert(left_text, {n=G.UIT.O, config={object = DynaText({string = {config.condition}, colours = {G.C.UI.TEXT_LIGHT}, shadow = true, pop_in = 0, scale = 0.4*scale, silent = true})}})                   
+              elseif config.name == 'hands' then
+                  table.insert(left_text, {n=G.UIT.T, config={text = config.disp or config.dollars, scale = 0.8*scale, colour = G.C.BLUE, shadow = true, juice = true}})
+                  table.insert(left_text, {n=G.UIT.O, config={object = DynaText({string = {" "..localize{type = 'variable', key = 'remaining_hand_money', vars = {G.GAME.modifiers.money_per_hand or 1}}}, colours = {G.C.UI.TEXT_LIGHT}, shadow = true, pop_in = 0, scale = 0.4*scale, silent = true})}})
+              elseif config.name == 'discards' then
+                  table.insert(left_text, {n=G.UIT.T, config={text = config.disp or config.dollars, scale = 0.8*scale, colour = G.C.RED, shadow = true, juice = true}})
+                  table.insert(left_text, {n=G.UIT.O, config={object = DynaText({string = {" "..localize{type = 'variable', key = 'remaining_discard_money', vars = {G.GAME.modifiers.money_per_discard or 0}}}, colours = {G.C.UI.TEXT_LIGHT}, shadow = true, pop_in = 0, scale = 0.4*scale, silent = true})}})
+              elseif string.find(config.name, 'joker') then
+                  table.insert(left_text, {n=G.UIT.O, config={object = DynaText({string = localize{type = 'name_text', set = config.card.config.center.set, key = config.card.config.center.key}, colours = {G.C.FILTER}, shadow = true, pop_in = 0, scale = 0.6*scale, silent = true})}})
+              elseif config.name == 'interest' then
+                  table.insert(left_text, {n=G.UIT.T, config={text = num_dollars, scale = 0.8*scale, colour = G.C.MONEY, shadow = true, juice = true}})
+                  table.insert(left_text,{n=G.UIT.O, config={object = DynaText({string = {" "..localize{type = 'variable', key = 'interest', vars = {G.GAME.interest_amount, 5, G.GAME.interest_amount*G.GAME.interest_cap/5}}}, colours = {G.C.UI.TEXT_LIGHT}, shadow = true, pop_in = 0, scale = 0.4*scale, silent = true})}})
+              end
+              local full_row = {n=G.UIT.R, config={align = "cm", minw = 5}, nodes={
+                  {n=G.UIT.C, config={padding = 0.05, minw = width*0.55, minh = 0.61, align = "cl"}, nodes=left_text},
+                  {n=G.UIT.C, config={padding = 0.05,minw = width*0.45, align = "cr"}, nodes={{n=G.UIT.C, config={align = "cm", id = 'dollar_'..config.name},nodes={}}}}
+              }}
+      
+              if config.name == 'blind1' then
+                  G.GAME.blind:juice_up()
+              end
+              G.round_eval:add_child(full_row,G.round_eval:get_UIE_by_ID(config.bonus and 'bonus_round_eval' or 'base_round_eval'))
+              play_sound('cancel', config.pitch or 1)
+              play_sound('highlight1',( 1.5*config.pitch) or 1, 0.2)
+              if config.card then config.card:juice_up(0.7, 0.46) end
+              return true
+          end
+      }))
+      local dollar_row = 0
+      if num_dollars > 60 then 
+          local dollar_string = localize('$')..num_dollars
+          G.E_MANAGER:add_event(Event({
+              trigger = 'before',delay = 0.38,
+              func = function()
+                  G.round_eval:add_child(
+                          {n=G.UIT.R, config={align = "cm", id = 'dollar_row_'..(dollar_row+1)..'_'..config.name}, nodes={
+                              {n=G.UIT.O, config={object = DynaText({string = {localize('$')..num_dollars}, colours = {G.C.MONEY}, shadow = true, pop_in = 0, scale = 0.65, float = true})}}
+                          }},
+                          G.round_eval:get_UIE_by_ID('dollar_'..config.name))
+
+                  play_sound('coin3', 0.9+0.2*math.random(), 0.7)
+                  play_sound('coin6', 1.3, 0.8)
+                  return true
+              end
+          }))
+      else
+          for i = 1, num_dollars or 1 do
+              G.E_MANAGER:add_event(Event({
+                  trigger = 'before',delay = 0.18 - ((num_dollars > 20 and 0.13) or (num_dollars > 9 and 0.1) or 0),
+                  func = function()
+                      if i%30 == 1 then 
+                          G.round_eval:add_child(
+                              {n=G.UIT.R, config={align = "cm", id = 'dollar_row_'..(dollar_row+1)..'_'..config.name}, nodes={}},
+                              G.round_eval:get_UIE_by_ID('dollar_'..config.name))
+                              dollar_row = dollar_row+1
+                      end
+
+                      local r = {n=G.UIT.T, config={text = localize('$'), colour = G.C.MONEY, scale = ((num_dollars > 20 and 0.28) or (num_dollars > 9 and 0.43) or 0.58), shadow = true, hover = true, can_collide = false, juice = true}}
+                      play_sound('coin3', 0.9+0.2*math.random(), 0.7 - (num_dollars > 20 and 0.2 or 0))
+                      
+                      if config.name == 'blind1' then 
+                          G.GAME.current_round.dollars_to_be_earned = G.GAME.current_round.dollars_to_be_earned:sub(2)
+                      end
+
+                      G.round_eval:add_child(r,G.round_eval:get_UIE_by_ID('dollar_row_'..(dollar_row)..'_'..config.name))
+                      G.VIBRATION = G.VIBRATION + 0.4
+                      return true
+                  end
+              }))
+          end
+      end
+  else
+      delay(0.4)
+      G.E_MANAGER:add_event(Event({
+          trigger = 'before',delay = 0.5,
+          func = function()
+              G.next_round_button = UIBox{
+                  definition = {n=G.UIT.ROOT, config={align = 'cm', colour = G.C.CLEAR}, nodes={
+                      {n=G.UIT.R, config={id = 'cash_out_button', align = "cm", padding = 0.1, minw = 7, r = 0.15, colour = G.C.ORANGE, shadow = true, hover = true, one_press = true, button = 'cash_out', focus_args = {snap_to = true}}, nodes={
+                          {n=G.UIT.T, config={text = localize('b_cash_out')..": ", scale = 1, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+                          {n=G.UIT.T, config={text = localize('$')..config.dollars, scale = 1.2*scale, colour = G.C.WHITE, shadow = true, juice = true}}
+                  }},}},
+                  config = {
+                    align = 'tmi',
+                    offset ={x=0,y=0.4},
+                    major = G.round_eval}
+              }
+
+              --local left_text = {n=G.UIT.R, config={id = 'cash_out_button', align = "cm", padding = 0.1, minw = 2, r = 0.15, colour = G.C.ORANGE, shadow = true, hover = true, one_press = true, button = 'cash_out', focus_args = {snap_to = true}}, nodes={
+              --    {n=G.UIT.T, config={text = localize('b_cash_out')..": ", scale = 1, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
+              --    {n=G.UIT.T, config={text = localize('$')..config.dollars, scale = 1.3*scale, colour = G.C.WHITE, shadow = true, juice = true}}
+              --}}
+              --G.round_eval:add_child(left_text,G.round_eval:get_UIE_by_ID('eval_bottom'))
+
+              G.GAME.current_round.dollars = config.dollars
+              
+              play_sound('coin6', config.pitch or 1)
+              G.VIBRATION = G.VIBRATION + 1
+              return true
+          end
+      }))
   end
 end
 
