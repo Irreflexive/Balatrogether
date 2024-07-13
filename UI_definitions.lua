@@ -111,10 +111,14 @@ function G.UIDEF.player_list()
     {n=G.UIT.R, config={align = "cm", padding = 0.0}, nodes={
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
         {n=G.UIT.T, config={text = 'Room Code', scale = 0.5, colour = G.C.WHITE}},
-        UIBox_button({id = 'server_code', col = true, label = {G.MULTIPLAYER.code}, button = 'nil', colour = G.C.GREY, scale = 0.5, minw = 2, minh = 0.6}),
       }},
-      {n=G.UIT.R, config={align = "cm", padding = 0.2}, nodes={
-        UIBox_button({id = 'copy_code', col = true, label = {'Copy'}, button = 'copy_server_code', colour = G.C.BLUE, scale = 0.6, minw = 3, minh = 0.8}),
+      {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
+        UIBox_button({id = 'server_code', col = true, label = {G.MULTIPLAYER.code}, button = 'nil', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
+        UIBox_button({id = 'copy_code', col = true, label = {'Copy'}, button = 'copy_server_code', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
+      }},
+      {n=G.UIT.R, config={align = "cm", padding = 0.3}, nodes={}},
+      {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
+        {n=G.UIT.T, config={text = 'Player List', scale = 0.5, colour = G.C.WHITE}},
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.1, minh = 2.8, minw = 4.2}, nodes={
         {n=G.UIT.O, config={id = 'server_player_list', object = Moveable()}},
