@@ -11,6 +11,7 @@ local sort_by_suit = G.FUNCS.sort_hand_suit
 local select_blind = G.FUNCS.select_blind
 local skip_blind = G.FUNCS.skip_blind
 local sell_card = G.FUNCS.sell_card
+local use_card = G.FUNCS.use_card
 
 G.MULTIPLAYER.actions = {
 
@@ -95,6 +96,21 @@ G.MULTIPLAYER.actions = {
     end
   end,
 
+  USE = function(data)
+    local card = G.consumeables.cards[data.index]
+    use_card({config = {ref_table = card}})
+  end,
+
+  BUY = function(data)
+    local card = G.jokers.cards[data.index]
+    card:buy_card()
+  end,
+
+  BUY_AND_USE = function(data)
+    local card = G.jokers.cards[data.index]
+    card:buy_and_use_card()
+  end,
+
 }
 
 G.FUNCS.play_cards_from_highlighted = function(...)
@@ -155,6 +171,19 @@ G.FUNCS.sell_card = function(e, ...)
     G.FUNCS.tcp_send({ cmd = "SELL", index = index, type = card.area == G.jokers and 'jokers' or 'consumeables' })
   else
     sell_card(e, ...)
+  end
+end
+
+G.FUNCS.use_card = function(e, ...)
+  if G.MULTIPLAYER.enabled then
+    local index = 1
+    local card = e.config.ref_table
+    for k,v in ipairs(card.area) do
+      if v == card then index = k end
+    end
+    G.FUNCS.tcp_send({ cmd = "USE", index = index })
+  else
+    use_card(e, ...)
   end
 end
 
