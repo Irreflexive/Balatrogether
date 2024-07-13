@@ -8,17 +8,17 @@
 ----------------------------------------------
 ------------MOD CODE -------------------------
 
-local socket = require("socket")
-
 function SMODS.INIT.Balatrogether()
 	local mod = SMODS.findModByID("Balatrogether")
   sendDebugMessage("Launching Balatrogether!")
 	assert(load(love.filesystem.read(mod.path .. "json.lua")))()
 	assert(load(love.filesystem.read(mod.path .. "UI_definitions.lua")))()
+	assert(load(love.filesystem.read(mod.path .. "connection.lua")))()
 end
 
+G.join_room_code = ""
 G.MULTIPLAYER = {
-  started = false,
+  enabled = false,
   code = "",
   players = {},
   id = 0,
@@ -28,45 +28,22 @@ G.MULTIPLAYER = {
 
 G.FUNCS.start_server = function()
   sendDebugMessage("Starting server!")
-
-  local host, port = "127.0.0.1", 7063
-  local tcp = assert(socket.tcp())
-
-  tcp:connect(host, port);
+  G.FUNCS.tcp_connect()
   local command = {
     cmd = "CREATE", 
-    versus = false, 
-    steam_id = tostring(G.STEAM.user.getSteamID())
+    versus = false,
   }
-  tcp:send(G.JSON.encode(command) .. "\n");
+  G.FUNCS.tcp_send(command);
+end
 
-  while true do
-      local s, status, partial = tcp:receive()
-      if status == "closed" then
-        break
-      end
-      local res = G.JSON.decode(s)
-      if res.success then
-        sendDebugMessage(s)
-        local data = res.data
-        G.MULTIPLAYER.started = true
-        G.MULTIPLAYER.versus = data.versus
-        G.MULTIPLAYER.code = data.code
-        G.MULTIPLAYER.players = data.players
-        G.MULTIPLAYER.id = 1
-        G.MULTIPLAYER.tcp = tcp
-      else
-        sendDebugMessage("Failed to start server: " .. res.error)
-        tcp:close()
-        break
-      end
-  end
-  -- Load UI
-  G.SETTINGS.paused = true
-  G.FUNCS.overlay_menu{
-    definition = G.UIDEF.server_config(),
+G.FUNCS.join_server = function()
+  sendDebugMessage("Joining server!")
+  G.FUNCS.tcp_connect()
+  local command = {
+    cmd = "JOIN", 
+    code = G.join_room_code, 
   }
-  G.OVERLAY_MENU.config.no_esc = true
+  G.FUNCS.tcp_send(command);
 end
 
 G.FUNCS.change_player_list_page = function(args)
