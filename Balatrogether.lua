@@ -89,7 +89,7 @@ end
 G.FUNCS.setup_run_multiplayer = function(e)
   G.SETTINGS.paused = true
   G.FUNCS.overlay_menu{
-    definition = G.UIDEF.server_config(G.FUNCS.is_host()),
+    definition = G.UIDEF.server_config(),
   }
   if (e.config.id == 'from_game_over' or e.config.id == 'from_game_won') then G.OVERLAY_MENU.config.no_esc =true end
 end

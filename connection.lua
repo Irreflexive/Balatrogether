@@ -20,9 +20,10 @@ G.FUNCS.tcp_listen = function()
   local res = G.FUNCS.tcp_receive()
   if res.success then
     if not res.data then return end
-    sendDebugMessage("Received data: " .. G.JSON.encode(res))
     if res.cmd == "JOIN" then
       G.FUNCS.room_join(res.data)
+    elseif res.cmd == "LEAVE" then
+      G.FUNCS.room_leave(res.data)
     elseif res.cmd == "START" then
       local key = 1
       for k, v in ipairs(G.P_CENTER_POOLS.Back) do
@@ -63,6 +64,7 @@ G.FUNCS.tcp_receive = function()
   elseif status == "closed" or s == nil then
     res = { success = false, error = "Connection closed" }
   else
+    sendDebugMessage("Received data: " .. s)
     local success, json = pcall(G.JSON.decode, s)
     if success then
       res = json
@@ -80,12 +82,21 @@ G.FUNCS.room_join = function(data)
   -- Load UI
   G.SETTINGS.paused = true
   G.FUNCS.overlay_menu{
-    definition = G.UIDEF.server_config(tostring(G.STEAM.user.getSteamID()) == data.players[1]),
+    definition = G.UIDEF.server_config(),
   }
   G.OVERLAY_MENU.config.no_esc = true
 end
 
-G.FUNCS.room_leave = function()
+G.FUNCS.room_leave = function(data)
+  G.MULTIPLAYER.players = res.data.players
+  G.SETTINGS.paused = true
+  G.FUNCS.overlay_menu{
+    definition = G.UIDEF.server_config(),
+  }
+  G.OVERLAY_MENU.config.no_esc = true
+end
+
+G.FUNCS.room_disconnect = function()
   G.FUNCS.tcp_close()
   G.SETTINGS.paused = false
   G.FUNCS:exit_overlay_menu()

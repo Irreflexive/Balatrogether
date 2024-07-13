@@ -74,7 +74,8 @@ function G.UIDEF.multiplayer_join()
   return t
 end
 
-function G.UIDEF.server_config(is_host)
+function G.UIDEF.server_config()
+  local is_host = G.FUNCS.is_host()
   local t =   create_UIBox_generic_options({no_back = true, no_esc = true, contents ={
       {n=G.UIT.R, config={align = "cm", padding = 0, draw_layer = 1}, nodes={
         create_tabs(
@@ -127,7 +128,7 @@ function G.UIDEF.player_list()
         create_option_cycle({id = 'player_page',scale = 0.9, h = 0.3, w = 3.5, options = player_pages, cycle_shoulders = true, opt_callback = 'change_player_list_page', current_option = 1, colour = G.C.RED, no_pips = true, focus_args = {snap_to = true}})
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.05, minh = 0.9}, nodes={
-          {n=G.UIT.C, config={align = "cm", minw = 4, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.RED, button = "room_leave", shadow = true}, nodes={
+          {n=G.UIT.C, config={align = "cm", minw = 4, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.RED, button = "room_disconnect", shadow = true}, nodes={
             {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
               {n=G.UIT.T, config={text = 'Leave', scale = 0.8, colour = G.C.UI.TEXT_LIGHT, func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
             }}
