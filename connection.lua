@@ -10,7 +10,7 @@ G.FUNCS.tcp_connect = function()
   if G.MULTIPLAYER.tcp then return end
   local tcp = assert(socket.tcp())
   G.MULTIPLAYER.tcp = tcp
-  tcp:connect("127.0.0.1", 7063)
+  tcp:connect(G.MULTIPLAYER.address, 7063)
   tcp:settimeout(0)
   sendDebugMessage("TCP connection opened")
 end
@@ -21,15 +21,13 @@ G.FUNCS.tcp_listen = function()
   if res.success then
     if not res.data then return end
     sendDebugMessage("Received data: " .. G.JSON.encode(res))
-    if res.cmd == "CREATE" then
-      G.FUNCS.room_created(res.data)
-    elseif res.cmd == "JOIN" then
+    if res.cmd == "JOIN" then
       G.FUNCS.room_join(res.data)
     elseif res.cmd == "LEAVE" then
       G.FUNCS.room_leave()
     end
   else
-    sendDebugMessage("Failed to receive data: " .. res.error)
+    sendDebugMessage("Failed to receive data: " .. (res.error or "Unknown error"))
     G.FUNCS.tcp_close()
   end
 end
@@ -50,10 +48,10 @@ end
 G.FUNCS.tcp_receive = function()
   local res = nil
   local s, status, partial = G.MULTIPLAYER.tcp:receive()
-  if status == "closed" then
-    res = { success = false, error = "Connection closed" }
-  elseif status == "timeout" then
+  if status == "timeout" then
     res = { success = true }
+  elseif status == "closed" or s == nil then
+    res = { success = false, error = "Connection closed" }
   else
     local success, json = pcall(G.JSON.decode, s)
     if success then
@@ -65,26 +63,10 @@ G.FUNCS.tcp_receive = function()
   return res
 end
 
-G.FUNCS.room_created = function(data)
-  G.MULTIPLAYER.enabled = true
-  G.MULTIPLAYER.versus = data.versus
-  G.MULTIPLAYER.code = data.code
-  G.MULTIPLAYER.players = data.players
-  G.MULTIPLAYER.id = 1
-  -- Load UI
-  G.SETTINGS.paused = true
-  G.FUNCS.overlay_menu{
-    definition = G.UIDEF.server_config(true),
-  }
-  G.OVERLAY_MENU.config.no_esc = true
-end
-
 G.FUNCS.room_join = function(data)
   G.MULTIPLAYER.enabled = true
-  G.MULTIPLAYER.versus = data.versus
-  G.MULTIPLAYER.code = data.code
+  G.MULTIPLAYER.versus = false
   G.MULTIPLAYER.players = data.players
-  G.MULTIPLAYER.id = #data.players
   -- Load UI
   G.SETTINGS.paused = true
   G.FUNCS.overlay_menu{
@@ -96,9 +78,7 @@ end
 G.FUNCS.room_leave = function()
   G.MULTIPLAYER.enabled = false
   G.MULTIPLAYER.versus = false
-  G.MULTIPLAYER.code = ""
   G.MULTIPLAYER.players = {}
-  G.MULTIPLAYER.id = 0
   G.SETTINGS.paused = false
   G.FUNCS.overlay_menu_close()
 end

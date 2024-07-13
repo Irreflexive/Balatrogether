@@ -16,12 +16,10 @@ function SMODS.INIT.Balatrogether()
 	assert(load(NFS.read(mod.path .. "connection.lua")))()
 end
 
-G.join_room_code = ""
 G.MULTIPLAYER = {
   enabled = false,
-  code = "",
+  address = "",
   players = {},
-  id = 0,
   in_game = false,
   tcp = nil,
 }
@@ -46,8 +44,7 @@ G.FUNCS.join_server = function()
   sendDebugMessage("Joining server!")
   G.FUNCS.tcp_connect()
   local command = {
-    cmd = "JOIN", 
-    code = G.join_room_code, 
+    cmd = "JOIN",
   }
   G.FUNCS.tcp_send(command)
 end

@@ -42,13 +42,8 @@ function G.UIDEF.run_setup(from_game_over)
               chosen = _challenge_chosen
             } or nil,
             {
-              label = "Host",
-              tab_definition_function = G.UIDEF.run_setup_host,
-              chosen = false,
-            },
-            {
-              label = "Join",
-              tab_definition_function = G.UIDEF.run_setup_join,
+              label = "Multiplayer",
+              tab_definition_function = G.UIDEF.multiplayer_join,
             }
         },
         snap_to_nav = true}),
@@ -57,32 +52,11 @@ function G.UIDEF.run_setup(from_game_over)
   return t
 end
 
-function G.UIDEF.run_setup_host()
+function G.UIDEF.multiplayer_join()
   local t = {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR, minh = 3, minw = 6}, nodes={
     {n=G.UIT.R, config={align = "cm", padding = 0.05}, nodes={
-        {n=G.UIT.C, config={align = "cm", minw = 2.4, id = 'host_versus_mode'}, nodes={
-          create_toggle{col = true, label = 'Versus', label_scale = 0.5, w = 0, scale = 0.7, ref_table = G, ref_value = 'host_versus_mode', func = 'false_ret'}
-        }},
-      }
-    },
-    {n=G.UIT.R, config={align = "cm", minh = 0.5}, nodes={}},
-    {n=G.UIT.R, config={align = "cm", padding = 0.05, minh = 0.9}, nodes={
-        {n=G.UIT.C, config={align = "cm", minw = 4, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.GREEN, button = "start_server", shadow = true}, nodes={
-          {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
-            {n=G.UIT.T, config={text = 'HOST', scale = 0.8, colour = G.C.UI.TEXT_LIGHT, func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
-          }}
-        }}
-      }
-    }}
-  }
-  return t
-end
-
-function G.UIDEF.run_setup_join()
-  local t = {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR, minh = 3, minw = 6}, nodes={
-    {n=G.UIT.R, config={align = "cm", padding = 0.05}, nodes={
-      {n=G.UIT.C, config={align = "cm", minw = 0.1}, nodes={
-        create_text_input({max_length = 6, all_caps = true, ref_table = G, ref_value = 'join_room_code', prompt_text = "Room code"}),
+      {n=G.UIT.C, config={align = "cm", minw = 1}, nodes={
+        create_text_input({ref_table = G.MULTIPLAYER, extended_corpus = true, keep_zeroes = true, ref_value = 'address', prompt_text = "Server address"}),
         {n=G.UIT.C, config={align = "cm", minw = 0.1}, nodes={}},
         UIBox_button({label = {"Paste"}, minw = 1, minh = 0.6, button = 'paste_seed', colour = G.C.BLUE, scale = 0.3, col = true})
       }},
