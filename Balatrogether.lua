@@ -30,23 +30,10 @@ function love.update(dt)
   G.FUNCS.tcp_listen()
 end
 
-G.FUNCS.start_server = function()
-  sendDebugMessage("Starting server!")
-  G.FUNCS.tcp_connect()
-  local command = {
-    cmd = "CREATE", 
-    versus = false,
-  }
-  G.FUNCS.tcp_send(command)
-end
-
 G.FUNCS.join_server = function()
   sendDebugMessage("Joining server!")
   G.FUNCS.tcp_connect()
-  local command = {
-    cmd = "JOIN",
-  }
-  G.FUNCS.tcp_send(command)
+  G.FUNCS.tcp_send({ cmd = "JOIN" })
 end
 
 G.FUNCS.change_player_list_page = function(args)
@@ -71,6 +58,33 @@ G.FUNCS.copy_server_code = function(e)
   else
     love.system.setClipboardText(G.MULTIPLAYER.address)
   end 
+end
+
+G.FUNCS.start_setup_run = function(e)
+  if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
+  if G.SETTINGS.current_setup == 'New Run' then 
+    if not G.GAME or (not G.GAME.won and not G.GAME.seeded) then
+      if G.SAVED_GAME ~= nil then
+        if not G.SAVED_GAME.GAME.won then 
+          G.PROFILES[G.SETTINGS.profile].high_scores.current_streak.amt = 0
+        end
+        G:save_settings()
+      end
+    end
+    local _seed = G.run_setup_seed and G.setup_seed or G.forced_seed or nil
+    local _challenge = G.challenge_tab or nil
+    local _stake = G.forced_stake or G.PROFILES[G.SETTINGS.profile].MEMORY.stake or 1
+    G.FUNCS.start_run(e, {stake = _stake, seed = _seed, challenge = _challenge})
+  
+  elseif G.SETTINGS.current_setup == 'Multiplayer Run' then
+    local _stake = G.forced_stake or G.PROFILES[G.SETTINGS.profile].MEMORY.stake or 1
+    G.FUNCS.tcp_send({cmd = "START", stake = _stake, seed = generate_starting_seed(), challenge = nil, deck = G.GAME.viewed_back.name})
+
+  elseif G.SETTINGS.current_setup == 'Continue' then
+    if G.SAVED_GAME ~= nil then
+      G.FUNCS.start_run(nil, {savetext = G.SAVED_GAME})
+    end
+  end
 end
 
 ----------------------------------------------

@@ -80,7 +80,7 @@ function G.UIDEF.server_config(is_host)
         create_tabs(
         {tabs = {
             {
-              label = 'Invite',
+              label = 'Players',
               chosen = true,
               tab_definition_function = G.UIDEF.player_list,
             },
@@ -88,7 +88,7 @@ function G.UIDEF.server_config(is_host)
               label = 'Start Run',
               chosen = false,
               tab_definition_function = G.UIDEF.run_setup_option,
-              tab_definition_function_args = 'New Run'
+              tab_definition_function_args = 'Multiplayer Run'
             } or nil,
         },
         snap_to_nav = true}),
@@ -110,10 +110,10 @@ function G.UIDEF.player_list()
   local t = {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR, minh = 7, minw = 4.2}, nodes={
     {n=G.UIT.R, config={align = "cm", padding = 0.0}, nodes={
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        {n=G.UIT.T, config={text = 'IP', scale = 0.5, colour = G.C.WHITE}},
+        {n=G.UIT.T, config={text = 'IP Address', scale = 0.5, colour = G.C.WHITE}},
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        UIBox_button({id = 'server_code', col = true, label = {G.MULTIPLAYER.address}, button = 'nil', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
+        UIBox_button({id = 'server_code', col = true, label = {G.MULTIPLAYER.address}, button = 'nil', colour = G.C.BLUE, scale = 0.5, minw = 4, minh = 0.6}),
         UIBox_button({id = 'copy_code', col = true, label = {'Copy'}, button = 'copy_server_code', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.3}, nodes={}},
@@ -129,7 +129,7 @@ function G.UIDEF.player_list()
       {n=G.UIT.R, config={align = "cm", padding = 0.05, minh = 0.9}, nodes={
           {n=G.UIT.C, config={align = "cm", minw = 4, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.RED, button = "room_leave", shadow = true}, nodes={
             {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
-              {n=G.UIT.T, config={text = 'LEAVE', scale = 0.8, colour = G.C.UI.TEXT_LIGHT, func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
+              {n=G.UIT.T, config={text = 'Leave', scale = 0.8, colour = G.C.UI.TEXT_LIGHT, func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
             }}
           }}
         }

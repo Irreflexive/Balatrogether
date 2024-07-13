@@ -31,6 +31,7 @@ G.FUNCS.tcp_listen = function()
 end
 
 G.FUNCS.tcp_close = function()
+  if not G.MULTIPLAYER.tcp then return end
   G.MULTIPLAYER.tcp:close()
   G.MULTIPLAYER.tcp = nil
   G.MULTIPLAYER.enabled = false
