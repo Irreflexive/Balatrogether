@@ -116,6 +116,8 @@ function Card:click()
           or self.area == G.jokers and "jokers" 
           or self.area == G.consumeables and "consumeables" 
           or self.area == G.shop_jokers and "shop_jokers"
+          or self.area == G.shop_booster and "shop_booster"
+          or self.area == G.shop_vouchers and "shop_vouchers"
           or nil
         if self.highlighted ~= true then 
             if G.MULTIPLAYER.enabled and areaType then
@@ -133,6 +135,17 @@ function Card:click()
     if self.area and self.area == G.deck and self.area.cards[1] == self then 
         G.FUNCS.deck_info()
     end
+end
+
+local old_card_open = Card.open
+function Card:open()
+  if self.ability.set == "Booster" then
+    if G.MULTIPLAYER.enabled then
+      G.FUNCS.tcp_send({ cmd = "BUY", index = self.index })
+    else
+      old_card_open(self)
+    end
+  end
 end
 
 function Controller:queue_R_cursor_press(x, y)
