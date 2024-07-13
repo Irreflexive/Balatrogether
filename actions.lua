@@ -321,5 +321,13 @@ G.FUNCS.buy_from_shop = function(e)
   end
 end
 
+G.FUNCS.reroll_shop = function(...)
+  if G.MULTIPLAYER.enabled then
+    G.FUNCS.tcp_send({ cmd = "REROLL" })
+  else
+    reroll(...)
+  end
+end
+
 ----------------------------------------------
 ------------MOD CODE END----------------------
