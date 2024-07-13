@@ -4,6 +4,9 @@
 ----------------------------------------------
 ------------MOD CODE--------------------------
 
+local play_hand = G.FUNCS.play_cards_from_highlighted
+local discard_hand = G.FUNCS.discard_cards_from_highlighted
+
 G.MULTIPLAYER.actions = {
 
   JOIN = function(data)
@@ -40,11 +43,11 @@ G.MULTIPLAYER.actions = {
   end,
 
   PLAY_HAND = function(data)
-    G.FUNCS.play_cards_from_highlighted()
+    play_hand()
   end,
 
   DISCARD_HAND = function(data)
-    G.FUNCS.discard_cards_from_highlighted()
+    discard_hand()
   end,
 
   HIGHLIGHT = function(data)
@@ -60,6 +63,22 @@ G.MULTIPLAYER.actions = {
   end,
 
 }
+
+G.FUNCS.play_cards_from_highlighted = function(e)
+  if G.MULTIPLAYER.enabled then
+    G.FUNCS.tcp_send({ cmd = "PLAY_HAND" })
+  else
+    play_hand(e)
+  end
+end
+
+G.FUNCS.discard_cards_from_highlighted = function(e)
+  if G.MULTIPLAYER.enabled then
+    G.FUNCS.tcp_send({ cmd = "DISCARD_HAND" })
+  else
+    discard_hand(e)
+  end
+end
 
 ----------------------------------------------
 ------------MOD CODE END----------------------

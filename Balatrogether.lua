@@ -103,5 +103,30 @@ G.FUNCS.go_to_menu = function(e)
   go_to_menu(e)
 end
 
+function Card:click() 
+    if self.area and self.area:can_highlight(self) then
+        if (self.area == G.hand) and (G.STATE == G.STATES.HAND_PLAYED) then return end
+        local index = 1
+        for k,v in ipairs(G.hand.cards) do
+          if v == self then index = k end
+        end
+        if self.highlighted ~= true then 
+            if (G.MULTIPLAYER.enabled) then
+              G.FUNCS.tcp_send({ cmd = "HIGHLIGHT", index = index, type = "hand" })
+            end
+            self.area:add_to_highlighted(self)
+        else
+            if (G.MULTIPLAYER.enabled) then
+              G.FUNCS.tcp_send({ cmd = "UNHIGHLIGHT", index = index, type = "hand" })
+            end
+            self.area:remove_from_highlighted(self)
+            play_sound('cardSlide2', nil, 0.3)
+        end
+    end
+    if self.area and self.area == G.deck and self.area.cards[1] == self then 
+        G.FUNCS.deck_info()
+    end
+end
+
 ----------------------------------------------
 ------------MOD CODE END----------------------
