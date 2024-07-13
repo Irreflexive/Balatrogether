@@ -8,6 +8,8 @@ local play_hand = G.FUNCS.play_cards_from_highlighted
 local discard_hand = G.FUNCS.discard_cards_from_highlighted
 local sort_by_value = G.FUNCS.sort_hand_value
 local sort_by_suit = G.FUNCS.sort_hand_suit
+local select_blind = G.FUNCS.select_blind
+local skip_blind = G.FUNCS.skip_blind
 
 G.MULTIPLAYER.actions = {
 
@@ -72,37 +74,63 @@ G.MULTIPLAYER.actions = {
     end
   end,
 
+  SELECT_BLIND = function(data)
+    local e = G.blind_select:get_UIE_by_ID(G.GAME.blind_on_deck)
+    select_blind(e)
+  end,
+
+  SKIP_BLIND = function(data)
+    local e = G.blind_select:get_UIE_by_ID(G.GAME.blind_on_deck)
+    skip_blind(e)
+  end,
+
 }
 
-G.FUNCS.play_cards_from_highlighted = function(e)
+G.FUNCS.play_cards_from_highlighted = function(...)
   if G.MULTIPLAYER.enabled then
     G.FUNCS.tcp_send({ cmd = "PLAY_HAND" })
   else
-    play_hand(e)
+    play_hand(...)
   end
 end
 
-G.FUNCS.discard_cards_from_highlighted = function(e)
+G.FUNCS.discard_cards_from_highlighted = function(...)
   if G.MULTIPLAYER.enabled then
     G.FUNCS.tcp_send({ cmd = "DISCARD_HAND" })
   else
-    discard_hand(e)
+    discard_hand(...)
   end
 end
 
-G.FUNCS.sort_hand_suit = function(e)
+G.FUNCS.sort_hand_suit = function(...)
   if G.MULTIPLAYER.enabled then
     G.FUNCS.tcp_send({ cmd = "SORT_HAND", type = "suit" })
   else
-    sort_by_suit(e)
+    sort_by_suit(...)
   end
 end
 
-G.FUNCS.sort_hand_value = function(e)
+G.FUNCS.sort_hand_value = function(...)
   if G.MULTIPLAYER.enabled then
     G.FUNCS.tcp_send({ cmd = "SORT_HAND", type = "value" })
   else
-    sort_by_value(e)
+    sort_by_value(...)
+  end
+end
+
+G.FUNCS.select_blind = function(...)
+  if G.MULTIPLAYER.enabled then
+    G.FUNCS.tcp_send({ cmd = "SELECT_BLIND" })
+  else
+    select_blind(...)
+  end
+end
+
+G.FUNCS.skip_blind = function(...)
+  if G.MULTIPLAYER.enabled then
+    G.FUNCS.tcp_send({ cmd = "SKIP_BLIND" })
+  else
+    skip_blind(...)
   end
 end
 
