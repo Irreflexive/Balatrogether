@@ -143,7 +143,7 @@ function G.UIDEF.player_list_page(_page)
       {n=G.UIT.C, config={align = 'cl', minw = 0.8}, nodes = {
         {n=G.UIT.T, config={text = k..'', scale = 0.4, colour = G.C.WHITE}},
       }},
-      UIBox_button({id = k, col = true, label = {v and G.STEAM.friends.getFriendPersonaName(v) or ''}, button = 'nil', colour = v and (k == G.MULTIPLAYER.id and G.C.IMPORTANT or G.C.RED) or G.C.GREY, minw = 4, scale = 0.4, minh = 0.6, focus_args = {snap_to = not snapped}}),
+      UIBox_button({id = k, col = true, label = {v and G.STEAM.friends.getFriendPersonaName(G.STEAM.extra.parseUint64(v)) or ''}, button = 'nil', colour = v and (G.MULTIPLAYER.id == k and G.C.IMPORTANT or G.C.RED) or G.C.GREY, minw = 4, scale = 0.4, minh = 0.6, focus_args = {snap_to = not snapped}}),
     }}      
     snapped = true
   end

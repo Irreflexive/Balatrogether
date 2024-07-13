@@ -8,9 +8,12 @@
 ----------------------------------------------
 ------------MOD CODE -------------------------
 
+local socket = require("socket")
+
 function SMODS.INIT.Balatrogether()
 	local mod = SMODS.findModByID("Balatrogether")
   sendDebugMessage("Launching Balatrogether!")
+	assert(load(love.filesystem.read(mod.path .. "json.lua")))()
 	assert(load(love.filesystem.read(mod.path .. "UI_definitions.lua")))()
 end
 
@@ -20,21 +23,44 @@ G.MULTIPLAYER = {
   players = {},
   id = 0,
   in_game = false,
+  tcp = nil,
 }
 
 G.FUNCS.start_server = function()
   sendDebugMessage("Starting server!")
-  local chars = "0123456789ABCDEF"
-  local code = ""
-  for i = 1, 6 do
-    local index = math.random(1, #chars)
-    code = code .. chars:sub(index, index)
+
+  local host, port = "127.0.0.1", 7063
+  local tcp = assert(socket.tcp())
+
+  tcp:connect(host, port);
+  local command = {
+    cmd = "CREATE", 
+    versus = false, 
+    steam_id = tostring(G.STEAM.user.getSteamID())
+  }
+  tcp:send(G.JSON.encode(command) .. "\n");
+
+  while true do
+      local s, status, partial = tcp:receive()
+      if status == "closed" then
+        break
+      end
+      local res = G.JSON.decode(s)
+      if res.success then
+        sendDebugMessage(s)
+        local data = res.data
+        G.MULTIPLAYER.started = true
+        G.MULTIPLAYER.versus = data.versus
+        G.MULTIPLAYER.code = data.code
+        G.MULTIPLAYER.players = data.players
+        G.MULTIPLAYER.id = 1
+        G.MULTIPLAYER.tcp = tcp
+      else
+        sendDebugMessage("Failed to start server: " .. res.error)
+        tcp:close()
+        break
+      end
   end
-  sendDebugMessage("Code: " .. code)
-  G.MULTIPLAYER.started = true
-  G.MULTIPLAYER.code = code
-  G.MULTIPLAYER.players = {G.STEAM.user.getSteamID()}
-  G.MULTIPLAYER.id = 1
   -- Load UI
   G.SETTINGS.paused = true
   G.FUNCS.overlay_menu{
