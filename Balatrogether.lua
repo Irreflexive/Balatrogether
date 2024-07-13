@@ -48,8 +48,8 @@ function G.UIDEF.run_setup(from_game_over)
               chosen = _challenge_chosen
             } or nil,
             {
-              label = "Balatrogether",
-              tab_definition_function = G.UIDEF.Balatrogether,
+              label = "Host",
+              tab_definition_function = G.UIDEF.run_setup_host,
               chosen = false,
             }
         },
@@ -59,8 +59,15 @@ function G.UIDEF.run_setup(from_game_over)
   return t
 end
 
-function G.UIDEF.Balatrogether()
-  return G.UIDEF.run_setup_option('New Run')
+function G.UIDEF.run_setup_host()
+  local t = G.UIDEF.run_setup_option('New Run')
+  t.nodes[3].nodes = {
+    {n=G.UIT.C, config={align = "cm", minw = 2.4, id = 'run_setup_seed'}, nodes={
+      create_toggle{col = true, label = 'Versus', label_scale = 0.5, w = 0, scale = 0.7, ref_table = G, ref_value = 'run_setup_seed'}
+    }},
+  }
+  table.remove(t.nodes[4].nodes, 1)
+  return t
 end
 
 ----------------------------------------------
