@@ -14,6 +14,7 @@ function SMODS.INIT.Balatrogether()
 	assert(load(NFS.read(mod.path .. "json.lua")))()
 	assert(load(NFS.read(mod.path .. "UI_definitions.lua")))()
 	assert(load(NFS.read(mod.path .. "connection.lua")))()
+	assert(load(NFS.read(mod.path .. "actions.lua")))()
 end
 
 G.MULTIPLAYER = {
