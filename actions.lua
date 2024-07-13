@@ -210,7 +210,7 @@ G.MULTIPLAYER.actions = {
 
   BUY = function(data)
     if data.type == "shop_jokers" then
-      local e = findDescendantOfElementByConfig(G.shop_jokers.cards[data.index], "id", "buy")
+      local e = findDescendantOfElementByConfig(G.shop_jokers.cards[data.index], "func", "can_buy")
       buy_card(e)
     else
       local card = G[data.type].cards[data.index]
