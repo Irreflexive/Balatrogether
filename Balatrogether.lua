@@ -12,6 +12,7 @@ function SMODS.INIT.Balatrogether()
 	local mod = SMODS.findModByID("Balatrogether")
   sendDebugMessage("Launching Balatrogether!")
 	assert(load(NFS.read(mod.path .. "json.lua")))()
+	assert(load(NFS.read(mod.path .. "util.lua")))()
 	assert(load(NFS.read(mod.path .. "UI_definitions.lua")))()
 	assert(load(NFS.read(mod.path .. "connection.lua")))()
 	assert(load(NFS.read(mod.path .. "actions.lua")))()
@@ -19,7 +20,8 @@ end
 
 G.MULTIPLAYER = {
   enabled = false,
-  address = "",
+  -- address = "",
+  address = "192.9.250.154",
   players = {},
   tcp = nil,
 }
@@ -110,14 +112,15 @@ function Card:click()
         for k,v in ipairs(G.hand.cards) do
           if v == self then index = k end
         end
+        local areaType = self.area == G.hand and "hand" or self.area == G.jokers and "jokers" or self.area == G.consumeables and "consumeables" or nil
         if self.highlighted ~= true then 
-            if (G.MULTIPLAYER.enabled) then
-              G.FUNCS.tcp_send({ cmd = "HIGHLIGHT", index = index, type = "hand" })
+            if G.MULTIPLAYER.enabled and areaType then
+              G.FUNCS.tcp_send({ cmd = "HIGHLIGHT", index = index, type = areaType })
             end
             self.area:add_to_highlighted(self)
         else
-            if (G.MULTIPLAYER.enabled) then
-              G.FUNCS.tcp_send({ cmd = "UNHIGHLIGHT", index = index, type = "hand" })
+            if G.MULTIPLAYER.enabled and areaType then
+              G.FUNCS.tcp_send({ cmd = "UNHIGHLIGHT", index = index, type = areaType })
             end
             self.area:remove_from_highlighted(self)
             play_sound('cardSlide2', nil, 0.3)

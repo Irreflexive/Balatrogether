@@ -56,7 +56,7 @@ function G.UIDEF.multiplayer_join()
   local t = {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR, minh = 3, minw = 6}, nodes={
     {n=G.UIT.R, config={align = "cm", padding = 0.05}, nodes={
       {n=G.UIT.C, config={align = "cm", minw = 1}, nodes={
-        create_text_input({ref_table = G.MULTIPLAYER, extended_corpus = true, keep_zeroes = true, ref_value = 'address', prompt_text = "Server address"}),
+        create_text_input({ref_table = G.MULTIPLAYER, extended_corpus = true, keep_zeroes = true, ref_value = 'address', prompt_text = "IP Address"}),
         {n=G.UIT.C, config={align = "cm", minw = 0.1}, nodes={}},
         UIBox_button({label = {"Paste"}, minw = 1, minh = 0.6, button = 'paste_seed', colour = G.C.BLUE, scale = 0.3, col = true})
       }},
@@ -114,7 +114,7 @@ function G.UIDEF.player_list()
         {n=G.UIT.T, config={text = 'IP Address', scale = 0.5, colour = G.C.WHITE}},
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        UIBox_button({id = 'server_code', col = true, label = {G.MULTIPLAYER.address}, button = 'nil', colour = G.C.BLUE, scale = 0.5, minw = 4, minh = 0.6}),
+        UIBox_button({id = 'server_code', col = true, label = {G.MULTIPLAYER.address}, button = 'nil', colour = G.C.BLUE, scale = 0.5, minw = 3, minh = 0.6}),
         UIBox_button({id = 'copy_code', col = true, label = {'Copy'}, button = 'copy_server_code', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.3}, nodes={}},
