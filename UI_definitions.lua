@@ -245,3 +245,22 @@ function create_UIBox_win()
 
   return t
 end
+
+local create_UIBox_game_over_ref = create_UIBox_game_over
+function create_UIBox_game_over()
+  local t = create_UIBox_game_over_ref()
+
+  if G.MULTIPLAYER.enabled then
+    local new_run_button = findDescendantOfNodeTreeByConfig(t, 'id', 'from_game_over')
+    if new_run_button then
+      new_run_button.config.button = 'setup_run_multiplayer'
+    end
+
+    local main_menu_button = findDescendantOfNodeTreeByConfig(t, 'button', 'go_to_menu')
+    if main_menu_button then
+      main_menu_button.config.button = 'quit_server'
+    end
+  end
+
+  return t
+end
