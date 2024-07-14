@@ -221,3 +221,27 @@ function create_UIBox_options()
     }})
   return t
 end
+
+local create_UIBox_win_ref = create_UIBox_win
+function create_UIBox_win()
+  local t = create_UIBox_win_ref()
+
+  if G.MULTIPLAYER.enabled then
+    local new_run_button = findDescendantOfNodeTreeByConfig(t, 'id', 'from_game_won')
+    if new_run_button then
+      new_run_button.config.button = 'setup_run_multiplayer'
+    end
+
+    local main_menu_button = findDescendantOfNodeTreeByConfig(t, 'button', 'go_to_menu')
+    if main_menu_button then
+      main_menu_button.config.button = 'quit_server'
+    end
+
+    local endless_button = findDescendantOfNodeTreeByConfig(t, 'button', 'exit_overlay_menu')
+    if endless_button then
+      endless_button.config.button = 'endless_multiplayer'
+    end
+  end
+
+  return t
+end

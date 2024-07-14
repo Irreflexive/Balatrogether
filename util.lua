@@ -12,3 +12,18 @@ function findDescendantOfElementByConfig(element, property, value)
   end
   return nil
 end
+
+function findDescendantOfNodeTreeByConfig(t, property, value)
+  if not t or not t.nodes then return nil end
+  for k, child in pairs(t.nodes) do
+    if child.config[property] == value then
+      return child
+    else
+      local result = findDescendantOfNodeTreeByConfig(child, property, value)
+      if result then 
+        return result 
+      end
+    end
+  end
+  return nil
+end

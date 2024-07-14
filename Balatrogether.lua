@@ -109,43 +109,6 @@ G.FUNCS.quit_server = function(e)
   G.FUNCS.tcp_close()
 end
 
-local drag_card = Card.drag
-local current_card_dragging = nil
-local old_card_index = nil
-function Card:drag()
-  if self.area and (self.area == G.hand or self.area == G.jokers or self.area == G.consumeables) and current_card_dragging ~= self.ID then
-    for k,card in ipairs(self.area.cards) do
-      if card.ID == self.ID then
-        old_card_index = k
-      end
-    end
-    current_card_dragging = self.ID
-  end
-  drag_card(self)
-end
-
-function Card:stop_drag()
-  Node.stop_drag(self)
-  if self.area and self.area == G.hand or self.area == G.jokers or self.area == G.consumeables then
-    local new_card_index = nil
-    for k,card in ipairs(self.area.cards) do
-      if card.ID == self.ID then
-        new_card_index = k
-      end
-    end
-
-    local orderChanged = new_card_index ~= old_card_index
-    if G.MULTIPLAYER.enabled and orderChanged then
-      local areaType = self.area == G.hand and "hand" 
-        or self.area == G.jokers and "jokers" 
-        or self.area == G.consumeables and "consumeables" 
-        or nil
-      G.FUNCS.tcp_send({ cmd = "REORDER", type = areaType, from = old_card_index, to = new_card_index })
-    end
-  end
-  current_card_dragging = nil
-end
-
 function Controller:queue_R_cursor_press(x, y)
   if self.locks.frame then return end
   if not G.SETTINGS.paused and G.hand and G.hand.highlighted[1] then 

@@ -1,3 +1,7 @@
+G.FUNCS.endless_multiplayer = function(e)
+  G.FUNCS.tcp_send({ cmd = "ENDLESS" })
+end
+
 G.MULTIPLAYER.actions.JOIN = function(data)
   G.MULTIPLAYER.enabled = true
   G.MULTIPLAYER.versus = false
@@ -54,4 +58,8 @@ G.MULTIPLAYER.actions.START = function(data)
     }
   }
   G.FUNCS.start_run(nil, { seed = data.seed, stake = data.stake, challenge = G.MULTIPLAYER.debug and debug_challenge or nil })
+end
+
+G.MULTIPLAYER.actions.ENDLESS = function(data)
+  G.FUNCS.exit_overlay_menu()
 end
