@@ -221,5 +221,102 @@ function Controller:key_hold_update(key, dt)
   end
 end
 
+G.FUNCS.text_input_key = function(args)
+  args = args or {}
+
+  if args.key == '[' or args.key == ']' then return end
+
+  --shortcut to hook config
+  local hook_config = G.CONTROLLER.text_input_hook.config.ref_table
+  hook_config.orig_colour = hook_config.orig_colour or copy_table(hook_config.colour)
+
+  args.key = args.key or '%'
+  args.caps = args.caps or G.CONTROLLER.capslock or hook_config.all_caps --capitalize if caps lock or hook requires
+
+  --Some special keys need to be mapped accordingly before passing through the corpus
+  local keymap = {
+    space = ' ',
+    backspace = 'BACKSPACE',
+    delete = 'DELETE',
+    ['return'] = 'RETURN',
+    right = 'RIGHT',
+    left = 'LEFT'
+  }
+  local hook = G.CONTROLLER.text_input_hook
+  local corpus = '123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'..(hook.config.ref_table.extended_corpus and " 0!$&()<>?:{}+-=,.[]_" or '')
+  
+  if hook.config.ref_table.extended_corpus then 
+    local lower_ext = '1234567890-=;\',./'
+    local upper_ext = '!@#$%^&*()_+:"<>?'
+    if string.find(lower_ext, args.key) and args.caps then 
+      args.key = string.sub(string.sub(upper_ext,string.find(lower_ext, args.key)), 0, 1)
+    end
+  end
+  local text = hook_config.text
+
+  --set key to mapped key or upper if caps is true
+  args.key = keymap[args.key] or (args.caps and string.upper(args.key) or args.key)
+  
+  --Start by setting the cursor position to the correct location
+  TRANSPOSE_TEXT_INPUT(0)
+
+  if string.len(text.ref_table[text.ref_value]) > 0 and args.key == 'BACKSPACE' then --If not at start, remove preceding letter
+    MODIFY_TEXT_INPUT{
+      letter = '',
+      text_table = text,
+      pos = text.current_position,
+      delete = true
+    }
+    TRANSPOSE_TEXT_INPUT(-1)
+  elseif string.len(text.ref_table[text.ref_value]) > 0 and args.key == 'DELETE' then --if not at end, remove following letter
+    MODIFY_TEXT_INPUT{
+      letter = '',
+      text_table = text,
+      pos = text.current_position+1,
+      delete = true
+    }
+    TRANSPOSE_TEXT_INPUT(0)
+  elseif args.key == 'RETURN' then --Release the hook
+    if hook.config.ref_table.callback then hook.config.ref_table.callback() end
+    hook.parent.parent.config.colour = hook_config.colour
+    local temp_colour = copy_table(hook_config.orig_colour)
+    hook_config.colour[1] = G.C.WHITE[1]
+    hook_config.colour[2] = G.C.WHITE[2]
+    hook_config.colour[3] = G.C.WHITE[3]
+    ease_colour(hook_config.colour, temp_colour)
+    G.CONTROLLER.text_input_hook = nil
+  elseif args.key == 'LEFT' then --Move cursor position to the left
+    TRANSPOSE_TEXT_INPUT(-1)
+  elseif args.key == 'RIGHT' then --Move cursor position to the right
+    TRANSPOSE_TEXT_INPUT(1)
+  elseif hook_config.max_length > string.len(text.ref_table[text.ref_value]) and
+        (string.len(args.key) == 1) and
+        string.find( corpus,  args.key , 1, true) then --check to make sure the key is in the valid corpus, add it to the string
+    MODIFY_TEXT_INPUT{
+      letter = args.key,
+      text_table = text,
+      pos = text.current_position+1
+    }
+    TRANSPOSE_TEXT_INPUT(1)
+  end
+end
+
+G.FUNCS.paste_address = function(e)
+  G.CONTROLLER.text_input_hook = e.UIBox:get_UIE_by_ID('text_input').children[1].children[1]
+  for i = 1, 16 do
+    G.FUNCS.text_input_key({key = 'right'})
+  end
+  for i = 1, 16 do
+      G.FUNCS.text_input_key({key = 'backspace'})
+  end
+  local clipboard = (G.F_LOCAL_CLIPBOARD and G.CLIPBOARD or love.system.getClipboardText()) or ''
+  clipboard = clipboard:gsub("[^%w%.]", "")
+  for i = 1, #clipboard do
+    local c = clipboard:sub(i,i)
+    G.FUNCS.text_input_key({key = c})
+  end
+  G.FUNCS.text_input_key({key = 'return'})
+end
+
 ----------------------------------------------
 ------------MOD CODE END----------------------

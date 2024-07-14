@@ -58,7 +58,7 @@ function G.UIDEF.multiplayer_join()
       {n=G.UIT.C, config={align = "cm", minw = 1}, nodes={
         create_text_input({ref_table = G.MULTIPLAYER, extended_corpus = true, keep_zeroes = true, ref_value = 'address', prompt_text = "IP Address"}),
         {n=G.UIT.C, config={align = "cm", minw = 0.1}, nodes={}},
-        UIBox_button({label = {"Paste"}, minw = 1, minh = 0.6, button = 'paste_seed', colour = G.C.BLUE, scale = 0.3, col = true})
+        UIBox_button({label = {"Paste"}, minw = 1, minh = 0.6, button = 'paste_address', colour = G.C.BLUE, scale = 0.3, col = true})
       }},
     }},
     {n=G.UIT.R, config={align = "cm", minh = 0.5}, nodes={}},
