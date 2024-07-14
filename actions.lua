@@ -1,9 +1,3 @@
---- STEAMODDED HEADER
---- SECONDARY MOD FILE
-
-----------------------------------------------
-------------MOD CODE--------------------------
-
 local play_hand = G.FUNCS.play_cards_from_highlighted
 local discard_hand = G.FUNCS.discard_cards_from_highlighted
 local sort_by_value = G.FUNCS.sort_hand_value
@@ -546,6 +540,3 @@ function add_round_eval_row(config)
       }))
   end
 end
-
-----------------------------------------------
-------------MOD CODE END----------------------

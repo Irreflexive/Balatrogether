@@ -1,9 +1,3 @@
---- STEAMODDED HEADER
---- SECONDARY MOD FILE
-
-----------------------------------------------
-------------MOD CODE--------------------------
-
 function findDescendantOfElementByConfig(element, property, value) 
   if not element or not element.children then return nil end
   for k, child in pairs(element.children) do
@@ -18,6 +12,3 @@ function findDescendantOfElementByConfig(element, property, value)
   end
   return nil
 end
-
-----------------------------------------------
-------------MOD CODE END----------------------

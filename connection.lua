@@ -1,9 +1,3 @@
---- STEAMODDED HEADER
---- SECONDARY MOD FILE
-
-----------------------------------------------
-------------MOD CODE--------------------------
-
 local socket = require("socket")
 
 G.FUNCS.tcp_connect = function()

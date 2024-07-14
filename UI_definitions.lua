@@ -1,9 +1,3 @@
---- STEAMODDED HEADER
---- SECONDARY MOD FILE
-
-----------------------------------------------
-------------MOD CODE--------------------------
-
 local run_setup_ref = G.UIDEF.run_setup
 function G.UIDEF.run_setup(from_game_over)
   if not G.STEAM then return run_setup_ref(from_game_over) end
@@ -227,6 +221,3 @@ function create_UIBox_options()
     }})
   return t
 end
-
-----------------------------------------------
-------------MOD CODE END----------------------
