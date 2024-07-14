@@ -1,0 +1,11 @@
+G.FUNCS.discard_cards_from_highlighted = function(e, hook)
+  if G.MULTIPLAYER.enabled and not hook then
+    G.FUNCS.tcp_send({ cmd = "DISCARD_HAND" })
+  else
+    G.SINGLEPLAYER_FUNCS.discard_hand(e, hook)
+  end
+end
+
+G.MULTIPLAYER.actions.DISCARD_HAND = function(data)
+  G.SINGLEPLAYER_FUNCS.discard_hand()
+end
