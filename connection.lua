@@ -38,6 +38,13 @@ G.FUNCS.tcp_close = function()
   G.MULTIPLAYER.tcp = nil
   G.MULTIPLAYER.enabled = false
   G.MULTIPLAYER.players = {}
+  if G.STAGE == G.STAGES.MAIN_MENU then
+    sendDebugMessage("Exiting overlay menu")
+    G.FUNCS.exit_overlay_menu()
+  else
+    sendDebugMessage("Going to main menu")
+    G.FUNCS.go_to_menu()
+  end
   if G.MULTIPLAYER.debug then sendDebugMessage("TCP connection closed") end
 end
 
@@ -67,14 +74,16 @@ G.FUNCS.tcp_receive = function()
   return res
 end
 
-G.FUNCS.room_disconnect = function()
-  G.FUNCS.tcp_close()
-  G.SETTINGS.paused = false
-  G.FUNCS:exit_overlay_menu()
-end
-
-G.FUNCS.is_host = function()
-  return tostring(G.STEAM.user.getSteamID()) == G.MULTIPLAYER.players[1]
+G.FUNCS.is_host = function(e)
+  if e.config.func then
+    local _is_host = tostring(G.STEAM.user.getSteamID()) == G.MULTIPLAYER.players[1]
+    if not _is_host then
+      e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+      e.config.button = nil
+    end
+    e.config.func = nil
+    return _is_host
+  end
 end
 
 ----------------------------------------------

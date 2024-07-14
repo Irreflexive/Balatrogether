@@ -105,6 +105,7 @@ G.MULTIPLAYER.actions = {
     G.FUNCS.overlay_menu{
       definition = G.UIDEF.server_config(),
     }
+    G.OVERLAY_MENU.config.no_esc = true
   end,
 
   LEAVE = function(data)

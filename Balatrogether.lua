@@ -96,12 +96,9 @@ G.FUNCS.setup_run_multiplayer = function(e)
   }
 end
 
-local go_to_menu = G.FUNCS.go_to_menu
-G.FUNCS.go_to_menu = function(e)
-  if G.MULTIPLAYER.enabled then
-    G.FUNCS.tcp_close()
-  end
-  go_to_menu(e)
+G.FUNCS.quit_server = function(e)
+  remove_save()
+  G.FUNCS.go_to_menu()
 end
 
 function Card:click() 

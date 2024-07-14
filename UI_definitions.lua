@@ -76,7 +76,7 @@ end
 
 function G.UIDEF.server_config(e, in_game)
   local no_escape = e and (e.config.id == 'from_game_over' or e.config.id == 'from_game_won')
-  local t =   create_UIBox_generic_options({no_esc = not in_game or no_escape, no_back = no_escape, back_func = not in_game and "room_disconnect" or nil, contents ={
+  local t =   create_UIBox_generic_options({no_esc = not in_game or no_escape, no_back = no_escape, back_func = not in_game and "go_to_menu" or nil, contents ={
       {n=G.UIT.R, config={align = "cm", padding = 0, draw_layer = 1}, nodes={
         create_tabs(
         {tabs = {
@@ -170,16 +170,12 @@ function create_UIBox_options()
 
   if G.STAGE == G.STAGES.RUN then
     if G.MULTIPLAYER.enabled then
-      if G.FUNCS.is_host() then
-        restart = UIBox_button{id = 'restart_button', label = {localize('b_start_new_run')}, button = "setup_run_multiplayer", minw = 5}
-      else
-        restart = nil
-      end
+      restart = UIBox_button{id = 'server_settings_button', label = {"Server Settings"}, button = "setup_run_multiplayer", minw = 5}
     else
       restart = UIBox_button{id = 'restart_button', label = {localize('b_start_new_run')}, button = "setup_run", minw = 5}
     end
     if G.MULTIPLAYER.enabled then
-      main_menu = UIBox_button{ label = {"Leave Server"}, button = "go_to_menu", minw = 5}
+      main_menu = UIBox_button{ label = {"Leave Server"}, button = "quit_server", minw = 5}
     else
       main_menu = UIBox_button{ label = {localize('b_main_menu')}, button = "go_to_menu", minw = 5}
     end
