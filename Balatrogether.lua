@@ -92,13 +92,13 @@ end
 
 G.FUNCS.setup_run_multiplayer = function(e)
   G.FUNCS.overlay_menu{
-    definition = G.UIDEF.server_config(e, true),
+    definition = G.UIDEF.server_config(e),
   }
 end
 
 G.FUNCS.quit_server = function(e)
   remove_save()
-  G.FUNCS.go_to_menu()
+  G.FUNCS.tcp_close()
 end
 
 function Card:click() 

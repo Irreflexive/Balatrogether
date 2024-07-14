@@ -74,9 +74,10 @@ function G.UIDEF.multiplayer_join()
   return t
 end
 
-function G.UIDEF.server_config(e, in_game)
+function G.UIDEF.server_config(e)
+  local in_game = G.STAGE ~= G.STAGES.MAIN_MENU
   local no_escape = e and (e.config.id == 'from_game_over' or e.config.id == 'from_game_won')
-  local t =   create_UIBox_generic_options({no_esc = not in_game or no_escape, no_back = no_escape, back_func = not in_game and "go_to_menu" or nil, contents ={
+  local t =   create_UIBox_generic_options({no_esc = not in_game or no_escape, no_back = no_escape, back_func = not in_game and "tcp_close" or nil, contents ={
       {n=G.UIT.R, config={align = "cm", padding = 0, draw_layer = 1}, nodes={
         create_tabs(
         {tabs = {
@@ -109,7 +110,7 @@ function G.UIDEF.player_list()
     G.FUNCS.change_player_list_page{cycle_config = {current_option = 1}}
   return true end)}))
 
-  local t = {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR, minh = 7, minw = 4.2}, nodes={
+  local t = {n=G.UIT.ROOT, config={id = 'balatrogether_player_list', align = "cm", colour = G.C.CLEAR, minh = 7, minw = 4.2}, nodes={
     {n=G.UIT.R, config={align = "cm", padding = 0.0}, nodes={
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
         {n=G.UIT.T, config={text = 'IP Address', scale = 0.5, colour = G.C.WHITE}},

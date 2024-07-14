@@ -101,19 +101,21 @@ G.MULTIPLAYER.actions = {
     G.MULTIPLAYER.versus = false
     G.MULTIPLAYER.players = data.players
     -- Load UI
-    G.SETTINGS.paused = true
-    G.FUNCS.overlay_menu{
-      definition = G.UIDEF.server_config(),
-    }
+    if (G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('balatrogether_player_list')) or data.players[#data.players] == tostring(G.STEAM.user.getSteamID()) then
+      G.FUNCS.overlay_menu{
+        definition = G.UIDEF.server_config(),
+      }
+    end
     G.OVERLAY_MENU.config.no_esc = true
   end,
 
   LEAVE = function(data)
     G.MULTIPLAYER.players = data.players
-    G.SETTINGS.paused = true
-    G.FUNCS.overlay_menu{
-      definition = G.UIDEF.server_config(),
-    }
+    if G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('balatrogether_player_list') then
+      G.FUNCS.overlay_menu{
+        definition = G.UIDEF.server_config(),
+      }
+    end
   end,
 
   START = function(data)
