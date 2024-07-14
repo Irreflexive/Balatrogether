@@ -105,7 +105,6 @@ G.MULTIPLAYER.actions = {
     G.FUNCS.overlay_menu{
       definition = G.UIDEF.server_config(),
     }
-    G.OVERLAY_MENU.config.no_esc = true
   end,
 
   LEAVE = function(data)
@@ -114,12 +113,11 @@ G.MULTIPLAYER.actions = {
     G.FUNCS.overlay_menu{
       definition = G.UIDEF.server_config(),
     }
-    G.OVERLAY_MENU.config.no_esc = true
   end,
 
   START = function(data)
     G.GAME.selected_back = Back(get_deck_from_name(data.deck))
-    G.FUNCS.start_run(nil, { seed = data.seed, stake = data.stake, challenge = {
+    local debug_challenge = {
       name = 'Multiplayer Test',
       id = 'c_multiplayer_test',
       rules = {
@@ -155,7 +153,8 @@ G.MULTIPLAYER.actions = {
           banned_other = {
           }
       }
-    }})
+    }
+    G.FUNCS.start_run(nil, { seed = data.seed, stake = data.stake, challenge = G.MULTIPLAYER.debug and debug_challenge or nil })
   end,
 
   PLAY_HAND = function(data)
