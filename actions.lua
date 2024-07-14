@@ -259,11 +259,11 @@ G.FUNCS.play_cards_from_highlighted = function(...)
   end
 end
 
-G.FUNCS.discard_cards_from_highlighted = function(...)
-  if G.MULTIPLAYER.enabled then
+G.FUNCS.discard_cards_from_highlighted = function(e, hook)
+  if G.MULTIPLAYER.enabled and not hook then
     G.FUNCS.tcp_send({ cmd = "DISCARD_HAND" })
   else
-    discard_hand(...)
+    discard_hand(e, hook)
   end
 end
 
