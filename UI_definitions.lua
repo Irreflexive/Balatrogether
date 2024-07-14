@@ -89,14 +89,26 @@ function G.UIDEF.server_config(e)
             {
               label = 'Start Run',
               chosen = false,
-              tab_definition_function = G.UIDEF.run_setup_option,
-              tab_definition_function_args = 'Multiplayer Run',
+              tab_definition_function = G.UIDEF.run_setup_multiplayer,
               func = 'is_host'
             },
         },
         snap_to_nav = true}),
       }},
   }})
+  return t
+end
+
+function G.UIDEF.run_setup_multiplayer()
+  local t = G.UIDEF.run_setup_option('Multiplayer Run')
+  table.insert(t.nodes, 1, create_toggle({
+    label = "Versus Mode",
+    ref_table = G.MULTIPLAYER.new_run_config,
+    ref_value = "versus",
+    callback = function(_set_toggle)
+      G.MULTIPLAYER.new_run_config.versus = _set_toggle
+    end,
+  }))
   return t
 end
 

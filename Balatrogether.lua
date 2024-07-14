@@ -22,6 +22,9 @@ G.MULTIPLAYER = {
   enabled = false,
   address = "",
   players = {},
+  new_run_config = {
+    versus = false,
+  },
   tcp = nil,
   debug = false,
 }
