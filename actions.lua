@@ -15,6 +15,7 @@ local use_card = G.FUNCS.use_card
 local reroll = G.FUNCS.reroll_shop
 local next_round = G.FUNCS.toggle_shop
 local go_to_shop = G.FUNCS.cash_out
+local skip_booster = G.FUNCS.skip_booster
 
 local buy_card = function(e)
   local c1 = e.config.ref_table
@@ -225,6 +226,10 @@ G.MULTIPLAYER.actions = {
     buy_card(e)
   end,
 
+  SKIP_BOOSTER = function(data)
+    skip_booster()
+  end,
+
   REROLL = function(data)
     reroll()
   end,
@@ -335,6 +340,14 @@ G.FUNCS.buy_from_shop = function(e)
     G.FUNCS.tcp_send({ cmd = e.config.id == 'buy_and_use' and "BUY_AND_USE" or "BUY", index = index, type = "shop_jokers" })
   else
     buy_card(e)
+  end
+end
+
+G.FUNCS.skip_booster = function(e)
+  if G.MULTIPLAYER.enabled then
+    G.FUNCS.tcp_send({ cmd = "SKIP_BOOSTER" })
+  else
+    skip_booster(e)
   end
 end
 
