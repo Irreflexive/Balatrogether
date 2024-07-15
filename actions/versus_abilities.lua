@@ -5,7 +5,12 @@ end
 G.MULTIPLAYER.actions.ANNIE_AND_HALLIE = function(data)
   local jokers = {}
   for k, v in pairs(G.jokers.cards) do
-      table.insert(jokers, v)
+    table.insert(jokers, {
+      T = {x = v.T.x, y = v.T.y},
+      config = {center = v.config.center, card = v.config.card},
+      ability = v.ability,
+      edition = v.edition,
+    })
   end
   local _first_dissolve = nil
   G.E_MANAGER:add_event(Event({trigger = 'before', delay = 0.75, func = function()
