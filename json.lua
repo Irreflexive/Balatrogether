@@ -117,6 +117,7 @@ local type_func_map = {
   [ "table"   ] = encode_table,
   [ "string"  ] = encode_string,
   [ "number"  ] = encode_number,
+  [ "function" ] = encode_nil,
   [ "boolean" ] = tostring,
 }
 

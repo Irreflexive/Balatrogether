@@ -25,8 +25,7 @@ SMODS.Joker{
       for k, v in pairs(G.jokers.cards) do
         if v.ID ~= card.ID then
           table.insert(jokers, {
-            T = {x = v.T.x, y = v.T.y},
-            config = {center = v.config.center, card = v.config.card},
+            joker = v.key,
             ability = v.ability,
             edition = v.edition,
           })
