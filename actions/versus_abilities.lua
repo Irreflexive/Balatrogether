@@ -25,7 +25,7 @@ G.MULTIPLAYER.actions.ANNIE_AND_HALLIE = function(data)
   G.E_MANAGER:add_event(Event({trigger = 'before', delay = 0.4, func = function()
       for k, v in pairs(data.jokers) do
         local card = add_joker(v.joker, v.edition, _first_materialize)
-        self.ability = v.ability
+        card.ability = v.ability
       end
       return true end }))
 end
