@@ -31,7 +31,7 @@ SMODS.Joker{
           })
         end
       end
-      G.FUNCS.tcp_send({ cmd = "ANNIE_AND_HALLIE", jokers = jokers })
+      G.FUNCS.tcp_send({ cmd = "ANNIE_AND_HALLIE", jokers = jokers, responding = false })
     end
   end,
   in_pool = function(self)
