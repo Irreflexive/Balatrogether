@@ -7,25 +7,6 @@
 ----------------------------------------------
 ------------MOD CODE -------------------------
 
-function SMODS.INIT.Balatrogether()
-	local mod = SMODS.findModByID("Balatrogether")
-  sendDebugMessage("Launching Balatrogether!")
-	assert(load(NFS.read(mod.path .. "json.lua")))()
-	assert(load(NFS.read(mod.path .. "util.lua")))()
-	assert(load(NFS.read(mod.path .. "singleplayer_funcs.lua")))()
-	assert(load(NFS.read(mod.path .. "UI_definitions.lua")))()
-	assert(load(NFS.read(mod.path .. "connection.lua")))()
-  assert(load(NFS.read(mod.path .. "versus_items.lua")))()
-  for _,file in ipairs(NFS.getDirectoryItems(mod.path .. "actions")) do
-    sendDebugMessage("Loading network actions: " .. file)
-    assert(load(NFS.read(mod.path .. "actions/" .. file)))()
-  end
-  for _,file in ipairs(NFS.getDirectoryItems(mod.path .. "items")) do
-    assert(load(NFS.read(mod.path .. "items/" .. file)))()
-  end
-  G.FUNCS.load_versus_items(mod.path)
-end
-
 G.MULTIPLAYER = {
   enabled = false,
   address = "",
@@ -39,6 +20,27 @@ G.MULTIPLAYER = {
 G.new_multiplayer_run_config = {
   versus = false,
 }
+
+local mod = SMODS.Mods["Balatrogether"]
+sendDebugMessage("Launching Balatrogether!")
+assert(load(NFS.read(mod.path .. "json.lua")))()
+assert(load(NFS.read(mod.path .. "util.lua")))()
+assert(load(NFS.read(mod.path .. "singleplayer_funcs.lua")))()
+assert(load(NFS.read(mod.path .. "UI_definitions.lua")))()
+assert(load(NFS.read(mod.path .. "connection.lua")))()
+for _,file in ipairs(NFS.getDirectoryItems(mod.path .. "actions")) do
+  assert(load(NFS.read(mod.path .. "actions/" .. file)))()
+end
+
+SMODS.Atlas{
+  key = "Balatrogether",
+  path = "sprites.png",
+  px = 71,
+  py = 95
+}
+for _,file in ipairs(NFS.getDirectoryItems(mod.path .. "items")) do
+  assert(load(NFS.read(mod.path .. "items/" .. file)))()
+end
 
 local old_update = love.update
 function love.update(dt)
