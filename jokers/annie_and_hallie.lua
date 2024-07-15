@@ -25,14 +25,14 @@ function load_annie_and_hallie()
     {x = 1, y = 0}
   )
 
-  annie_and_hallie:register()
+  local function calculate(self, context)
+    if context.selling_self and G.MULTIPLAYER.enabled then
+      G.FUNCS.tcp_send({ cmd = "JOKER", joker = "annie_and_hallie" })
+    end
+  end
 
   return {
     joker = annie_and_hallie,
-    calculate = function(self,context)
-      if context.selling_self and G.MULTIPLAYER.enabled then
-        G.FUNCS.tcp_send({ cmd = "JOKER", joker = "annie_and_hallie" })
-      end
-    end
+    calculate = calculate
   }
 end
