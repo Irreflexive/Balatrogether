@@ -39,7 +39,7 @@ G.MULTIPLAYER = {
 
 G.new_multiplayer_run_config = {
   versus = false,
-},
+}
 
 local old_update = love.update
 function love.update(dt)
