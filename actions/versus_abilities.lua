@@ -6,7 +6,7 @@ G.MULTIPLAYER.actions.ANNIE_AND_HALLIE = function(data)
   local jokers = {}
   for k, v in pairs(G.jokers.cards) do
     table.insert(jokers, {
-      joker = v.key,
+      joker = v.config.center.key,
       ability = v.ability,
       edition = v.edition,
     })
