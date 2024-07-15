@@ -3,7 +3,6 @@
 --- MOD_ID: Balatrogether
 --- MOD_AUTHOR: [Irreflexive]
 --- MOD_DESCRIPTION: Play co-op Balatro with your friends!
---- BADGE_COLOUR: 00FF64
 
 ----------------------------------------------
 ------------MOD CODE -------------------------
@@ -16,10 +15,16 @@ function SMODS.INIT.Balatrogether()
 	assert(load(NFS.read(mod.path .. "singleplayer_funcs.lua")))()
 	assert(load(NFS.read(mod.path .. "UI_definitions.lua")))()
 	assert(load(NFS.read(mod.path .. "connection.lua")))()
+  assert(load(NFS.read(mod.path .. "versus_jokers.lua")))()
   for _,file in ipairs(NFS.getDirectoryItems(mod.path .. "actions")) do
     sendDebugMessage("Loading network actions: " .. file)
     assert(load(NFS.read(mod.path .. "actions/" .. file)))()
   end
+  for _,file in ipairs(NFS.getDirectoryItems(mod.path .. "jokers")) do
+    sendDebugMessage("Loading joker: " .. file)
+    assert(load(NFS.read(mod.path .. "jokers/" .. file)))()
+  end
+  G.FUNCS.load_versus_jokers(mod.path)
 end
 
 G.MULTIPLAYER = {
