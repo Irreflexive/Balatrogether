@@ -122,7 +122,7 @@ G.FUNCS.start_setup_run = function(e)
       seed = generate_starting_seed(), 
       challenge = nil, 
       deck = _deck, 
-      versus = G.start_multiplayer_run_config.versus
+      versus = G.new_multiplayer_run_config.versus
     })
 
   elseif G.SETTINGS.current_setup == 'Continue' then
