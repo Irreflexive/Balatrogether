@@ -14,11 +14,9 @@ G.MULTIPLAYER.actions.ANNIE_AND_HALLIE = function(data)
           _first_dissolve = true
       end
       return true end }))
-  G.FUNCS.tcp_send({ cmd = "GIVE_JOKERS", jokers = jokers, player = data.user })
-  G.MULTIPLAYER.actions.GIVE_JOKERS({ jokers = data.jokers })
-end
-
-G.MULTIPLAYER.actions.GIVE_JOKERS = function(data)
+  if data.user then
+    G.FUNCS.tcp_send({ cmd = "ANNIE_AND_HELLIE", jokers = jokers, player = data.user })
+  end
   local _first_materialize = nil
   G.E_MANAGER:add_event(Event({trigger = 'before', delay = 0.4, func = function()
       for k, v in pairs(data.jokers) do

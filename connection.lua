@@ -35,7 +35,8 @@ G.FUNCS.tcp_close = function()
   if G.STAGE == G.STAGES.MAIN_MENU then
     G.FUNCS.exit_overlay_menu()
   else
-    G.FUNCS.quit_server()
+    remove_save()
+    G.FUNCS.go_to_menu()
   end
   if G.MULTIPLAYER.debug then sendDebugMessage("TCP connection closed") end
 end

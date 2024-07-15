@@ -137,11 +137,6 @@ G.FUNCS.setup_run_multiplayer = function(e)
   }
 end
 
-G.FUNCS.quit_server = function(e)
-  remove_save()
-  G.FUNCS.tcp_close()
-end
-
 function Controller:queue_R_cursor_press(x, y)
   if self.locks.frame then return end
   if not G.SETTINGS.paused and G.hand and G.hand.highlighted[1] then 

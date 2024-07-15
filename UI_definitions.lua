@@ -182,7 +182,7 @@ function create_UIBox_options()
       restart = UIBox_button{id = 'restart_button', label = {localize('b_start_new_run')}, button = "setup_run", minw = 5}
     end
     if G.MULTIPLAYER.enabled then
-      main_menu = UIBox_button{ label = {"Leave Server"}, button = "quit_server", minw = 5}
+      main_menu = UIBox_button{ label = {"Leave Server"}, button = "tcp_close", minw = 5}
     else
       main_menu = UIBox_button{ label = {localize('b_main_menu')}, button = "go_to_menu", minw = 5}
     end
@@ -234,7 +234,7 @@ function create_UIBox_win()
 
     local main_menu_button = findDescendantOfNodeTreeByConfig(t, 'button', 'go_to_menu')
     if main_menu_button then
-      main_menu_button.config.button = 'quit_server'
+      main_menu_button.config.button = 'tcp_close'
     end
 
     local endless_button = findDescendantOfNodeTreeByConfig(t, 'button', 'exit_overlay_menu')
@@ -258,7 +258,7 @@ function create_UIBox_game_over()
 
     local main_menu_button = findDescendantOfNodeTreeByConfig(t, 'button', 'go_to_menu')
     if main_menu_button then
-      main_menu_button.config.button = 'quit_server'
+      main_menu_button.config.button = 'tcp_close'
     end
   end
 
