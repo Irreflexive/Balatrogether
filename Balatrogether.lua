@@ -15,16 +15,15 @@ function SMODS.INIT.Balatrogether()
 	assert(load(NFS.read(mod.path .. "singleplayer_funcs.lua")))()
 	assert(load(NFS.read(mod.path .. "UI_definitions.lua")))()
 	assert(load(NFS.read(mod.path .. "connection.lua")))()
-  assert(load(NFS.read(mod.path .. "versus_jokers.lua")))()
+  assert(load(NFS.read(mod.path .. "versus_items.lua")))()
   for _,file in ipairs(NFS.getDirectoryItems(mod.path .. "actions")) do
     sendDebugMessage("Loading network actions: " .. file)
     assert(load(NFS.read(mod.path .. "actions/" .. file)))()
   end
-  for _,file in ipairs(NFS.getDirectoryItems(mod.path .. "jokers")) do
-    sendDebugMessage("Loading joker: " .. file)
-    assert(load(NFS.read(mod.path .. "jokers/" .. file)))()
+  for _,file in ipairs(NFS.getDirectoryItems(mod.path .. "items")) do
+    assert(load(NFS.read(mod.path .. "items/" .. file)))()
   end
-  G.FUNCS.load_versus_jokers(mod.path)
+  G.FUNCS.load_versus_items(mod.path)
 end
 
 G.MULTIPLAYER = {
