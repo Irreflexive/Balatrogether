@@ -39,7 +39,7 @@ G.FUNCS.sort_hand_suit = function(...)
   if G.FUNCS.is_coop_game() then
     G.FUNCS.tcp_send({ cmd = "SORT_HAND", type = "suit" })
   else
-    G.FUNCS.SINGLEPLAYER_FUNCS.sort_by_suit(...)
+    G.SINGLEPLAYER_FUNCS.sort_by_suit(...)
   end
 end
 
@@ -47,7 +47,7 @@ G.FUNCS.sort_hand_value = function(...)
   if G.FUNCS.is_coop_game() then
     G.FUNCS.tcp_send({ cmd = "SORT_HAND", type = "value" })
   else
-    G.FUNCS.SINGLEPLAYER_FUNCS.sort_by_value(...)
+    G.SINGLEPLAYER_FUNCS.sort_by_value(...)
   end
 end
 
