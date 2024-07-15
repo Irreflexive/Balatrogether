@@ -10,7 +10,7 @@ function load_the_cup(mod_path)
 
   local the_cup = SMODS.Tarot:new(
     "The Cup", 
-    "the_cup", 
+    "cup", 
     {}, 
     {x = 0, y = 1}, 
     loc_def, 
@@ -21,7 +21,7 @@ function load_the_cup(mod_path)
     "Balatrogether" 
   )
 
-  SMODS.Sprite:new("c_the_cup", mod_path, "sprites.png", 71, 95, "asset_atli"):register();
+  SMODS.Sprite:new("c_cup", mod_path, "sprites.png", 71, 95, "asset_atli"):register();
   the_cup:register()
 
   local function use(self)

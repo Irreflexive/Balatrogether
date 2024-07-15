@@ -41,12 +41,13 @@ G.MULTIPLAYER.actions.START = function(data)
       {id = 'j_joker'},
       {id = 'j_joker'},
       {id = 'j_joker'},
-      {id = 'j_joker'},
+      {id = 'j_annie_and_hallie'},
     },
     consumeables = {
       {id = 'c_heirophant'},
       {id = 'c_high_priestess'},
       {id = 'c_pluto'},
+      {id = 'c_cup'},
     },
     vouchers = {},
     deck = {

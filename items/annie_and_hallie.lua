@@ -27,7 +27,18 @@ function load_annie_and_hallie(mod_path)
 
   local function calculate(self, context)
     if context.selling_self and G.FUNCS.is_versus_game() then
-      G.FUNCS.tcp_send({ cmd = "ANNIE_AND_HALLIE" })
+      local jokers = {}
+      for k, v in pairs(G.jokers.cards) do
+        if v.ID ~= self.ID then
+          table.insert(jokers, {
+            T = {x = v.T.x, y = v.T.y},
+            config = {center = v.config.center, card = v.config.card},
+            ability = v.ability,
+            edition = v.edition,
+          })
+        end
+      end
+      G.FUNCS.tcp_send({ cmd = "ANNIE_AND_HALLIE", jokers = jokers })
     end
   end
 

@@ -32,7 +32,7 @@ G.MULTIPLAYER = {
   players = {},
   versus = false,
   tcp = nil,
-  debug = false,
+  debug = true,
   actions = {},
 }
 
