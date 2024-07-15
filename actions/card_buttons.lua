@@ -25,7 +25,7 @@ G.FUNCS.use_card = function(e, ...)
       or nil
     G.FUNCS.tcp_send({ cmd = card.area == G.consumeables and "USE" or "BUY", index = index, type = areaType })
   else
-    use_card(e, ...)
+    G.SINGLEPLAYER_FUNCS.use_card(e, ...)
   end
 end
 
@@ -38,7 +38,7 @@ G.FUNCS.buy_from_shop = function(e)
     end
     G.FUNCS.tcp_send({ cmd = e.config.id == 'buy_and_use' and "BUY_AND_USE" or "BUY", index = index, type = "shop_jokers" })
   else
-    buy_card(e)
+    G.SINGLEPLAYER_FUNCS.buy_card(e)
   end
 end
 
