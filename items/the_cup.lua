@@ -24,7 +24,14 @@ function load_the_cup(mod_path)
   SMODS.Sprite:new("c_the_cup", mod_path, "sprites.png", 71, 95, "asset_atli"):register();
   the_cup:register()
 
+  local function use(self)
+    if G.FUNCS.is_versus_game() then
+      G.FUNCS.tcp_send({ cmd = "THE_CUP" })
+    end
+  end
+
   return {
-    tarot = the_cup
+    tarot = the_cup,
+    use = use
   }
 end
