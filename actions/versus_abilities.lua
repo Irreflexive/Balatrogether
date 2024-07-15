@@ -19,7 +19,7 @@ G.MULTIPLAYER.actions.ANNIE_AND_HALLIE = function(data)
       end
       return true end }))
   if data.user then
-    G.FUNCS.tcp_send({ cmd = "ANNIE_AND_HELLIE", jokers = jokers, player = data.user, responding = true })
+    G.FUNCS.tcp_send({ cmd = "ANNIE_AND_HALLIE", jokers = jokers, player = data.user, responding = true })
   end
   local _first_materialize = nil
   G.E_MANAGER:add_event(Event({trigger = 'before', delay = 0.4, func = function()
