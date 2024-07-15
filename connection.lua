@@ -66,17 +66,5 @@ G.FUNCS.tcp_receive = function()
   return res
 end
 
-G.FUNCS.is_host = function(e)
-  if e.config.func then
-    local _is_host = tostring(G.STEAM.user.getSteamID()) == G.MULTIPLAYER.players[1]
-    if not _is_host then
-      e.config.colour = G.C.UI.BACKGROUND_INACTIVE
-      e.config.button = nil
-    end
-    e.config.func = nil
-    return _is_host
-  end
-end
-
 ----------------------------------------------
 ------------MOD CODE END----------------------

@@ -14,12 +14,12 @@ function Card:click()
         or self.area == G.pack_cards and "pack_cards"
         or nil
       if self.highlighted ~= true then 
-          if G.MULTIPLAYER.enabled and areaType then
+          if G.FUNCS.is_coop_game() and areaType then
             G.FUNCS.tcp_send({ cmd = "HIGHLIGHT", index = index, type = areaType })
           end
           self.area:add_to_highlighted(self)
       else
-          if G.MULTIPLAYER.enabled and areaType then
+          if G.FUNCS.is_coop_game() and areaType then
             G.FUNCS.tcp_send({ cmd = "UNHIGHLIGHT", index = index, type = areaType })
           end
           self.area:remove_from_highlighted(self)

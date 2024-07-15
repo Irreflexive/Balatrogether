@@ -31,13 +31,15 @@ G.MULTIPLAYER = {
   enabled = false,
   address = "",
   players = {},
-  new_run_config = {
-    versus = false,
-  },
+  versus = false,
   tcp = nil,
   debug = false,
   actions = {},
 }
+
+G.new_multiplayer_run_config = {
+  versus = false,
+},
 
 local old_update = love.update
 function love.update(dt)
@@ -49,6 +51,26 @@ G.FUNCS.join_server = function()
   sendDebugMessage("Joining server!")
   G.FUNCS.tcp_connect()
   G.FUNCS.tcp_send({ cmd = "JOIN" })
+end
+
+G.FUNCS.is_coop_game = function()
+  return G.MULTIPLAYER.enabled and not G.MULTIPLAYER.versus
+end
+
+G.FUNCS.is_versus_game = function()
+  return G.MULTIPLAYER.enabled and G.MULTIPLAYER.versus
+end
+
+G.FUNCS.is_host = function(e)
+  local _is_host = tostring(G.STEAM.user.getSteamID()) == G.MULTIPLAYER.players[1]
+  if e.config.func then
+    if not _is_host then
+      e.config.colour = G.C.UI.BACKGROUND_INACTIVE
+      e.config.button = nil
+    end
+    e.config.func = nil
+  end
+  return _is_host
 end
 
 G.FUNCS.change_player_list_page = function(args)
@@ -94,7 +116,14 @@ G.FUNCS.start_setup_run = function(e)
   elseif G.SETTINGS.current_setup == 'Multiplayer Run' then
     local _stake = G.forced_stake or G.PROFILES[G.SETTINGS.profile].MEMORY.stake or 1
     local _deck = G.PROFILES[G.SETTINGS.profile].MEMORY.deck or "Red Deck"
-    G.FUNCS.tcp_send({cmd = "START", stake = _stake, seed = generate_starting_seed(), challenge = nil, deck = _deck})
+    G.FUNCS.tcp_send({
+      cmd = "START", 
+      stake = _stake, 
+      seed = generate_starting_seed(), 
+      challenge = nil, 
+      deck = _deck, 
+      versus = G.start_multiplayer_run_config.versus
+    })
 
   elseif G.SETTINGS.current_setup == 'Continue' then
     if G.SAVED_GAME ~= nil then
@@ -121,7 +150,7 @@ function Controller:queue_R_cursor_press(x, y)
       (self.locked) or 
       (self.locks.frame) or
       (G.GAME.STOP_USE and G.GAME.STOP_USE > 0) then return end
-      if G.MULTIPLAYER.enabled then
+      if G.FUNCS.is_coop_game() then
         G.FUNCS.tcp_send({ cmd = "UNHIGHLIGHT_ALL" })
       end
       G.hand:unhighlight_all()

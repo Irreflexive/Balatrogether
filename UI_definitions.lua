@@ -97,10 +97,10 @@ function G.UIDEF.run_setup_multiplayer()
   local t = G.UIDEF.run_setup_option('Multiplayer Run')
   table.insert(t.nodes, 1, create_toggle({
     label = "Versus Mode",
-    ref_table = G.MULTIPLAYER.new_run_config,
+    ref_table = G.new_multiplayer_run_config,
     ref_value = "versus",
     callback = function(_set_toggle)
-      G.MULTIPLAYER.new_run_config.versus = _set_toggle
+      G.new_multiplayer_run_config.versus = _set_toggle
     end,
   }))
   return t

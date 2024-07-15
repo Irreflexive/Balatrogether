@@ -24,7 +24,7 @@ function Card:stop_drag()
     end
 
     local orderChanged = new_card_index ~= old_card_index
-    if G.MULTIPLAYER.enabled and orderChanged then
+    if G.FUNCS.is_coop_game() and orderChanged then
       local areaType = self.area == G.hand and "hand" 
         or self.area == G.jokers and "jokers" 
         or self.area == G.consumeables and "consumeables" 
@@ -36,7 +36,7 @@ function Card:stop_drag()
 end
 
 G.FUNCS.sort_hand_suit = function(...)
-  if G.MULTIPLAYER.enabled then
+  if G.FUNCS.is_coop_game() then
     G.FUNCS.tcp_send({ cmd = "SORT_HAND", type = "suit" })
   else
     sort_by_suit(...)
@@ -44,7 +44,7 @@ G.FUNCS.sort_hand_suit = function(...)
 end
 
 G.FUNCS.sort_hand_value = function(...)
-  if G.MULTIPLAYER.enabled then
+  if G.FUNCS.is_coop_game() then
     G.FUNCS.tcp_send({ cmd = "SORT_HAND", type = "value" })
   else
     sort_by_value(...)

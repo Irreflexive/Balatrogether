@@ -1,5 +1,5 @@
 G.FUNCS.select_blind = function(...)
-  if G.MULTIPLAYER.enabled then
+  if G.FUNCS.is_coop_game() then
     G.FUNCS.tcp_send({ cmd = "SELECT_BLIND" })
   else
     G.SINGLEPLAYER_FUNCS.select_blind(...)
@@ -7,7 +7,7 @@ G.FUNCS.select_blind = function(...)
 end
 
 G.FUNCS.skip_blind = function(...)
-  if G.MULTIPLAYER.enabled then
+  if G.FUNCS.is_coop_game() then
     G.FUNCS.tcp_send({ cmd = "SKIP_BLIND" })
   else
     G.SINGLEPLAYER_FUNCS.skip_blind(...)

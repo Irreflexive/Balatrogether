@@ -1,5 +1,5 @@
 G.FUNCS.skip_booster = function(...)
-  if G.MULTIPLAYER.enabled then
+  if G.FUNCS.is_coop_game() then
     G.FUNCS.tcp_send({ cmd = "SKIP_BOOSTER" })
   else
     G.SINGLEPLAYER_FUNCS.skip_booster(...)
@@ -7,7 +7,7 @@ G.FUNCS.skip_booster = function(...)
 end
 
 G.FUNCS.reroll_shop = function(...)
-  if G.MULTIPLAYER.enabled then
+  if G.FUNCS.is_coop_game() then
     G.FUNCS.tcp_send({ cmd = "REROLL" })
   else
     G.SINGLEPLAYER_FUNCS.reroll(...)
@@ -15,7 +15,7 @@ G.FUNCS.reroll_shop = function(...)
 end
 
 G.FUNCS.toggle_shop = function(...)
-  if G.MULTIPLAYER.enabled then
+  if G.FUNCS.is_coop_game() then
     G.FUNCS.tcp_send({ cmd = "NEXT_ROUND" })
   else
     G.SINGLEPLAYER_FUNCS.next_round(...)
@@ -23,7 +23,7 @@ G.FUNCS.toggle_shop = function(...)
 end
 
 G.FUNCS.cash_out = function(...)
-  if G.MULTIPLAYER.enabled then
+  if G.FUNCS.is_coop_game() then
     G.FUNCS.tcp_send({ cmd = "GO_TO_SHOP" })
   else
     G.SINGLEPLAYER_FUNCS.go_to_shop(...)
@@ -37,7 +37,7 @@ function add_round_eval_row(config)
   local num_dollars = config.dollars or 1
   local scale = 0.9
 
-  if config.name == "bottom" and G.MULTIPLAYER.enabled then
+  if config.name == "bottom" and G.FUNCS.is_coop_game() then
     delay(0.4)
     G.E_MANAGER:add_event(Event({
       trigger = 'before',delay = 0.5,

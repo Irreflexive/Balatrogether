@@ -1,6 +1,6 @@
 G.FUNCS.sell_card = function(e, ...)
   local card = e.config.ref_table
-  if G.MULTIPLAYER.enabled and card.area then
+  if G.FUNCS.is_coop_game() and card.area then
     local index = 1
     for k,v in ipairs(card.area.cards) do
       if v.ID == card.ID then index = k end
@@ -13,7 +13,7 @@ end
 
 G.FUNCS.use_card = function(e, ...)
   local card = e.config.ref_table
-  if G.MULTIPLAYER.enabled then
+  if G.FUNCS.is_coop_game() then
     local index = 1
     for k,v in ipairs(card.area.cards) do
       if v.ID == card.ID then index = k end
@@ -31,7 +31,7 @@ end
 
 G.FUNCS.buy_from_shop = function(e)
   local card = e.config.ref_table
-  if G.MULTIPLAYER.enabled then
+  if G.FUNCS.is_coop_game() then
     local index = 1
     for k,v in ipairs(G.shop_jokers.cards) do
       if v.ID == card.ID then index = k end

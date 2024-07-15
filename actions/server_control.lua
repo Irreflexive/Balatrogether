@@ -24,6 +24,7 @@ G.MULTIPLAYER.actions.LEAVE = function(data)
 end
 
 G.MULTIPLAYER.actions.START = function(data)
+  G.MULTIPLAYER.versus = data.versus
   G.GAME.selected_back = Back(get_deck_from_name(data.deck))
   local debug_challenge = {
     name = 'Multiplayer Test',
