@@ -33,10 +33,18 @@ for _,file in ipairs(NFS.getDirectoryItems(mod.path .. "actions")) do
 end
 
 SMODS.Atlas{
-  key = "Balatrogether",
+  key = "Balatrogether_cards",
   path = "sprites.png",
   px = 71,
   py = 95
+}
+SMODS.Atlas{
+  key = "Balatrogether_blinds",
+  path = "blinds.png",
+  atlas_table = "ANIMATION_ATLAS",
+  frames = 21,
+  px = 34,
+  py = 34
 }
 for _,file in ipairs(NFS.getDirectoryItems(mod.path .. "items")) do
   assert(load(NFS.read(mod.path .. "items/" .. file)))()

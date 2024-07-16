@@ -15,7 +15,7 @@ SMODS.Tarot{
   loc_txt = loc_def, 
   unlocked = true, 
   discovered = true, 
-  atlas = "Balatrogether",
+  atlas = "Balatrogether_cards",
   use = function(self)
     if G.FUNCS.is_versus_game() then
       G.FUNCS.tcp_send({ cmd = "THE_CUP" })

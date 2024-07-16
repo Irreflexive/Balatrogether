@@ -17,7 +17,7 @@ SMODS.Joker{
   cost = 20, 
   config = {},
   loc_txt = loc_def, 
-  atlas = "Balatrogether", 
+  atlas = "Balatrogether_cards", 
   soul_pos = {x = 1, y = 0},
   calculate = function(self, card, context)
     if context.selling_self and G.FUNCS.is_versus_game() then
