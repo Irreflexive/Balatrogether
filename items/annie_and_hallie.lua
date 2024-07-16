@@ -12,7 +12,7 @@ SMODS.Joker{
   key = "annie_and_hallie", 
   rarity = 4, 
   unlocked = true,
-  discovered = true,
+  discovered = false,
   pos = {x = 0, y = 0}, 
   cost = 20, 
   config = {},
@@ -23,7 +23,7 @@ SMODS.Joker{
     if context.selling_self and G.FUNCS.is_versus_game() then
       local jokers = {}
       for k, v in pairs(G.jokers.cards) do
-        if v.ID ~= card.ID and (not v.edition or v.edition.type ~= "bala_secure") then
+        if v.ID ~= card.ID and (not v.edition or v.edition.type ~= SMODS.Mods["Balatrogether"].prefix .. "_secure") then
           table.insert(jokers, {
             joker = v.config.center.key,
             ability = v.ability,

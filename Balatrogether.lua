@@ -4,6 +4,7 @@
 --- MOD_AUTHOR: [Irreflexive]
 --- MOD_DESCRIPTION: Play co-op Balatro with your friends!
 --- VERSION: 1.0.0
+--- PREFIX: btgr
 --- LOADER_VERSION_GEQ: 1.0.0
 
 ----------------------------------------------

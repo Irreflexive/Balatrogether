@@ -23,7 +23,7 @@ SMODS.Edition{
   shader = "secure",
   loc_txt = loc_def,
   config = {},
-  discovered = true,
+  discovered = false,
   weight = 14,
   extra_cost = 3,
   -- TODO: Switch when SMODS Sound API is ready

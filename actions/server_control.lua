@@ -37,16 +37,16 @@ G.MULTIPLAYER.actions.START = function(data)
       }
     },
     jokers = {
-      {id = 'j_joker', edition = data.versus and 'bala_secure' or nil},
+      {id = 'j_joker', edition = data.versus and SMODS.Mods["Balatrogether"].prefix .. '_secure' or nil},
       {id = 'j_joker'},
       {id = 'j_joker'},
-      {id = data.versus and 'j_bala_annie_and_hallie' or 'j_joker'},
-      {id = data.versus and 'j_bala_annie_and_hallie' or 'j_joker'},
+      {id = data.versus and 'j_' .. SMODS.Mods["Balatrogether"].prefix .. '_annie_and_hallie' or 'j_joker'},
+      {id = data.versus and 'j_' .. SMODS.Mods["Balatrogether"].prefix .. '_annie_and_hallie' or 'j_joker'},
     },
     consumeables = {
       {id = 'c_high_priestess'},
       {id = 'c_pluto'},
-      {id = data.versus and 'c_bala_cup' or 'c_heirophant'},
+      {id = data.versus and 'c_' .. SMODS.Mods["Balatrogether"].prefix .. '_cup' or 'c_heirophant'},
     },
     vouchers = {},
     deck = {

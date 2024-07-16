@@ -14,7 +14,7 @@ SMODS.Tarot{
   pos = {x = 0, y = 1}, 
   loc_txt = loc_def, 
   unlocked = true, 
-  discovered = true, 
+  discovered = false, 
   atlas = "Balatrogether_cards",
   use = function(self)
     if G.FUNCS.is_versus_game() then
