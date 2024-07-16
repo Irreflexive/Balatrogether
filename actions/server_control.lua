@@ -44,10 +44,9 @@ G.MULTIPLAYER.actions.START = function(data)
       {id = data.versus and 'j_bala_annie_and_hallie' or 'j_joker'},
     },
     consumeables = {
-      {id = 'c_ankh'},
       {id = 'c_high_priestess'},
       {id = 'c_pluto'},
-      {id = 'c_bala_cup'},
+      {id = data.versus and 'c_bala_cup' or 'c_heirophant'},
     },
     vouchers = {},
     deck = {
