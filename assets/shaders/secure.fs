@@ -40,11 +40,12 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     float aspect_ratio = sprite_width / sprite_height;
 
     float radius = sqrt(pow(uv.x - 1, 2.) + pow((uv.y - 1) * aspect_ratio, 2.));
-    float angle = atan((uv.y - 1) * aspect_ratio, uv.x - 1) + secure.y*0.1 / (radius + 1);
-    float strength = pow(pow(sin(radius*40. + sin(angle * 2. * 3.141592)*0.5 + secure.x*3. - secure.y*5.), 2.), 2.);
+    float angle = atan((uv.y - 1) * aspect_ratio, uv.x - 1) + sin(secure.y) / (radius + 1);
+    float strength = pow(pow(sin(radius*40. + sin(angle * 2. * 3.141592)*radius*0.5 + secure.x - secure.y), 2.), 2.);
 
-    tex.r = tex.r * strength + (tex.r * 0.3) * (1. - strength);
-    tex.b = tex.b * strength + (tex.b * 0.5) * (1. - strength);
+    tex.r = tex.r * strength + (tex.r * 0.5) * (1. - strength);
+    tex.g = tex.g * strength + (tex.g * 0.5 + 0.5) * (1. - strength);
+    tex.b = tex.b * strength + (tex.b * 0.6) * (1. - strength);
 
     return dissolve_mask(tex*colour, texture_coords, uv);
 }

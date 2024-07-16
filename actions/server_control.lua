@@ -37,11 +37,11 @@ G.MULTIPLAYER.actions.START = function(data)
       }
     },
     jokers = {
+      {id = 'j_joker', edition = data.versus and 'bala_secure' or nil},
       {id = 'j_joker'},
       {id = 'j_joker'},
-      {id = 'j_joker'},
-      {id = 'j_bala_annie_and_hallie'},
-      {id = 'j_bala_annie_and_hallie'},
+      {id = data.versus and 'j_bala_annie_and_hallie' or 'j_joker'},
+      {id = data.versus and 'j_bala_annie_and_hallie' or 'j_joker'},
     },
     consumeables = {
       {id = 'c_ankh'},

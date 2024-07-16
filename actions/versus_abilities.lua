@@ -5,17 +5,21 @@ end
 G.MULTIPLAYER.actions.ANNIE_AND_HALLIE = function(data)
   local jokers = {}
   for k, v in pairs(G.jokers.cards) do
-    table.insert(jokers, {
-      joker = v.config.center.key,
-      ability = v.ability,
-      edition = v.edition,
-    })
+    if not v.edition or v.edition.type ~= "bala_secure" then
+      table.insert(jokers, {
+        joker = v.config.center.key,
+        ability = v.ability,
+        edition = v.edition,
+      })
+    end
   end
   local _first_dissolve = nil
   G.E_MANAGER:add_event(Event({trigger = 'before', delay = 0.75, func = function()
       for k, v in pairs(G.jokers.cards) do
-          v:start_dissolve(nil, _first_dissolve)
-          _first_dissolve = true
+          if not v.edition or v.edition.type ~= "bala_secure" then
+            v:start_dissolve(nil, _first_dissolve)
+            _first_dissolve = true
+          end
       end
       return true end }))
   if data.user then
