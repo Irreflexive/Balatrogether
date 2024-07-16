@@ -3,6 +3,8 @@
 --- MOD_ID: Balatrogether
 --- MOD_AUTHOR: [Irreflexive]
 --- MOD_DESCRIPTION: Play co-op Balatro with your friends!
+--- VERSION: 1.0.0
+--- LOADER_VERSION_GEQ: 1.0.0
 
 ----------------------------------------------
 ------------MOD CODE -------------------------

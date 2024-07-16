@@ -1,19 +1,19 @@
 local loc_def = {
-  name = "The Duel",
+  name = "Final Showdown",
   text = {
-      "Player with the lowest",
-      "round score is eliminated",
+      "Player with the highest",
+      "round score wins",
   }
 }
 
 SMODS.Blind{
-  name = "The Duel",
-  key = "the_duel",
-  pos = {x = 0, y = 0},
+  name = "Final Showdown",
+  key = "final_showdown",
+  pos = {x = 0, y = 1},
   discovered = true,
   loc_txt = loc_def,
   boss_colour = {21/255, 203/255, 92/255, 1},
-  boss = { min = 2, max = 6 },
+  showdown = true,
   atlas = "Balatrogether_blinds",
   in_pool = function(self)
     return G.FUNCS.is_versus_game()
