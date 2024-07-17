@@ -14,6 +14,7 @@ SMODS.Blind{
   loc_txt = loc_def,
   boss_colour = {21/255, 203/255, 92/255, 1},
   showdown = true,
+  dollars = 8,
   atlas = "Balatrogether_blinds",
   in_pool = function(self)
     return G.FUNCS.is_versus_game()
