@@ -1,22 +1,40 @@
-local loc_def = {
-  name = "Final Showdown",
-  text = {
-      "Player with the highest",
-      "round score wins",
-  }
-}
+-- local loc_def = {
+--   name = "Final Showdown",
+--   text = {
+--       "Player with the highest",
+--       "round score wins",
+--   }
+-- }
 
-SMODS.Blind{
-  name = "Final Showdown",
-  key = "final_showdown",
-  pos = {x = 0, y = 1},
-  discovered = false,
-  loc_txt = loc_def,
-  boss_colour = {21/255, 203/255, 92/255, 1},
-  showdown = true,
-  dollars = 8,
-  atlas = "Balatrogether_blinds",
-  in_pool = function(self)
-    return G.FUNCS.is_versus_game()
-  end,
-}
+-- SMODS.Blind{
+--   name = "Final Showdown",
+--   key = "final_showdown",
+--   pos = {x = 0, y = 1},
+--   discovered = false,
+--   loc_txt = loc_def,
+--   boss_colour = {21/255, 203/255, 92/255, 1},
+--   showdown = true,
+--   dollars = 8,
+--   atlas = "Balatrogether_blinds",
+--   in_pool = function(self)
+--     return G.FUNCS.is_versus_game()
+--   end,
+-- }
+
+-- for k, v in pairs(G.P_BLINDS) do
+--   local blind_key = v.key:match("bl_(.*)")
+--   if not blind_key:match("final_showdown") and v.boss and blind_key:match("final") then
+--     local in_pool = v.in_pool
+--     SMODS.Blind:take_ownership(blind_key, {
+--       in_pool = function(self)
+--         if G.FUNCS.is_versus_game() then
+--           return false
+--         end
+--         if in_pool then
+--           return in_pool(self)
+--         end
+--         return true
+--       end
+--     })
+--   end
+-- end

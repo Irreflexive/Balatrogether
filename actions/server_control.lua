@@ -37,16 +37,16 @@ G.MULTIPLAYER.actions.START = function(data)
       }
     },
     jokers = {
-      {id = 'j_joker', edition = data.versus and SMODS.Mods["Balatrogether"].prefix .. '_secure' or nil},
+      {id = 'j_joker', edition = data.versus and SMODS.current_mod.prefix .. '_secure' or nil},
       {id = 'j_joker'},
       {id = 'j_joker'},
-      {id = data.versus and 'j_' .. SMODS.Mods["Balatrogether"].prefix .. '_annie_and_hallie' or 'j_joker'},
-      {id = data.versus and 'j_' .. SMODS.Mods["Balatrogether"].prefix .. '_annie_and_hallie' or 'j_joker'},
+      {id = data.versus and 'j_' .. SMODS.current_mod.prefix .. '_annie_and_hallie' or 'j_joker'},
+      {id = data.versus and 'j_' .. SMODS.current_mod.prefix .. '_annie_and_hallie' or 'j_joker'},
     },
     consumeables = {
       {id = 'c_high_priestess'},
       {id = 'c_pluto'},
-      {id = data.versus and 'c_' .. SMODS.Mods["Balatrogether"].prefix .. '_cup' or 'c_heirophant'},
+      {id = data.versus and 'c_' .. SMODS.current_mod.prefix .. '_cup' or 'c_heirophant'},
     },
     vouchers = {},
     deck = {
@@ -55,10 +55,16 @@ G.MULTIPLAYER.actions.START = function(data)
     restrictions = {
       banned_cards = {},
       banned_tags = {},
-      banned_other = {}
+      banned_other = G.FUNCS.is_versus_game() and disabled_blinds or {}
     }
   }
-  G.FUNCS.start_run(nil, { seed = data.seed, stake = data.stake, challenge = G.MULTIPLAYER.debug and debug_challenge or nil })
+  G.FUNCS.start_run(nil, { 
+    seed = data.seed, 
+    stake = data.stake, 
+    challenge = G.MULTIPLAYER.debug and 
+      debug_challenge or 
+      nil,
+  })
 end
 
 G.MULTIPLAYER.actions.ENDLESS = function(data)

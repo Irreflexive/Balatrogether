@@ -23,7 +23,7 @@ SMODS.Joker{
     if context.selling_self and G.FUNCS.is_versus_game() then
       local jokers = {}
       for k, v in pairs(G.jokers.cards) do
-        if v.ID ~= card.ID and (not v.edition or v.edition.type ~= SMODS.Mods["Balatrogether"].prefix .. "_secure") then
+        if v.ID ~= card.ID and (not v.edition or v.edition.type ~= SMODS.current_mod.prefix .. "_secure") then
           table.insert(jokers, {
             joker = v.config.center.key,
             ability = v.ability,

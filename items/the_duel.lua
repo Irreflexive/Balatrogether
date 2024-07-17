@@ -13,21 +13,21 @@ SMODS.Blind{
   discovered = false,
   loc_txt = loc_def,
   boss_colour = {21/255, 203/255, 92/255, 1},
-  boss = { min = 2, max = 6 },
   atlas = "Balatrogether_blinds",
   in_pool = function(self)
-    return G.FUNCS.is_versus_game() and G.GAME.round_resets.ante % 2 == 0
+    local ante = G.GAME.round_resets.ante
+    return G.FUNCS.is_versus_game() and ante % 2 == 0 and ante < G.GAME.win_ante
   end,
 }
 
 for k, v in pairs(G.P_BLINDS) do
   local blind_key = v.key:match("bl_(.*)")
-  if not blind_key:match("the_duel") and v.boss and not v.boss.showdown then
+  if not blind_key:match("the_duel") and v.boss and not blind_key:match("final") then
     local in_pool = v.in_pool
     SMODS.Blind:take_ownership(blind_key, {
       in_pool = function(self)
         local ante = G.GAME.round_resets.ante
-        if G.FUNCS.is_versus_game() and ante % 2 == 0 then
+        if G.FUNCS.is_versus_game() and ante % 2 == 0 and ante < G.GAME.win_ante then
           return false
         end
         if in_pool then

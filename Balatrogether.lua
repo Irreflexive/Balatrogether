@@ -24,7 +24,7 @@ G.new_multiplayer_run_config = {
   versus = false,
 }
 
-local mod = SMODS.Mods["Balatrogether"]
+local mod = SMODS.current_mod
 sendDebugMessage("Launching Balatrogether!")
 assert(load(NFS.read(mod.path .. "json.lua")))()
 assert(load(NFS.read(mod.path .. "util.lua")))()
