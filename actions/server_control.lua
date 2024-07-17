@@ -44,7 +44,8 @@ G.MULTIPLAYER.actions.START = function(data)
       {id = data.versus and 'j_' .. SMODS.current_mod.prefix .. '_annie_and_hallie' or 'j_joker'},
     },
     consumeables = {
-      {id = 'c_high_priestess'},
+      {id = 'c_wheel_of_fortune'},
+      {id = 'c_aura'},
       {id = 'c_pluto'},
       {id = data.versus and 'c_' .. SMODS.current_mod.prefix .. '_cup' or 'c_heirophant'},
     },

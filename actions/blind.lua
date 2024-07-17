@@ -25,3 +25,5 @@ G.MULTIPLAYER.actions.SKIP_BLIND = function(data)
   local e = findDescendantOfElementByConfig(G.blind_select:get_UIE_by_ID(G.GAME.blind_on_deck), "button", "skip_blind")
   if e then G.SINGLEPLAYER_FUNCS.skip_blind() end
 end
+
+G.MULTIPLAYER.actions.START_BOSS = G.MULTIPLAYER.actions.SELECT_BLIND
