@@ -294,5 +294,19 @@ G.FUNCS.paste_address = function(e)
   G.FUNCS.text_input_key({key = 'return'})
 end
 
+local get_new_boss_ref = get_new_boss
+function get_new_boss()
+  if G.FUNCS.is_versus_game() then
+    local the_duel = 'bl_' .. SMODS.current_mod.prefix .. '_the_duel'
+    local the_showdown = 'bl_' .. SMODS.current_mod.prefix .. '_final_showdown'
+    local old_perscribed = G.GAME.perscribed_bosses
+    G.GAME.perscribed_bosses = {nil, the_duel, nil, the_duel, nil, the_duel, nil, the_showdown}
+    local boss = get_new_boss_ref()
+    G.GAME.perscribed_bosses = old_perscribed
+    return boss
+  end
+  return get_new_boss_ref()
+end
+
 ----------------------------------------------
 ------------MOD CODE END----------------------

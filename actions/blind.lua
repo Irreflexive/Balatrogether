@@ -1,6 +1,8 @@
 G.FUNCS.select_blind = function(...)
   if G.FUNCS.is_coop_game() then
     G.FUNCS.tcp_send({ cmd = "SELECT_BLIND" })
+  elseif G.FUNCS.is_versus_game() and G.GAME.blind_on_deck == "Boss" and G.GAME.round_resets.ante % 2 == 0 then
+    G.FUNCS.tcp_send({ cmd = "READY_FOR_BOSS" })
   else
     G.SINGLEPLAYER_FUNCS.select_blind(...)
   end

@@ -39,7 +39,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     float sprite_height = texture_details.a / image_details.y; // Normalized height
     float aspect_ratio = sprite_width / sprite_height;
 
-    float radius = sqrt(pow(uv.x - 1, 2.) + pow((uv.y - 1) * aspect_ratio, 2.));
+    float radius = sqrt(pow(uv.x - 0.5, 2.) + pow((uv.y - 1) * aspect_ratio, 2.));
     float angle = atan((uv.y - 1) * aspect_ratio, uv.x - 1) + sin(secure.y) / (radius + 1);
     float strength = pow(pow(sin(radius*40. + sin(angle * 2. * 3.141592)*radius*0.5 + secure.x - secure.y), 2.), 2.);
 
