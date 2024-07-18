@@ -18,7 +18,7 @@ SMODS.Blind{
   dollars = 8,
   atlas = "Balatrogether_blinds",
   in_pool = function(self)
-    return G.FUNCS.is_versus_game()
+    return G.FUNCS.is_versus_game() and G.GAME.round_resets.ante == G.GAME.win_ante
   end,
   defeat = function(self)
     G.FUNCS.tcp_send({ cmd = "DEFEATED_BOSS", score = G.GAME.chips })
