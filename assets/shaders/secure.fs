@@ -37,17 +37,13 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     vec2 adjusted_uv = uv - vec2(0.5, 1.);
     adjusted_uv.x = adjusted_uv.x*texture_details.b/texture_details.a;
 
-    float sprite_width = texture_details.z / image_details.x; // Normalized width
-    float sprite_height = texture_details.a / image_details.y; // Normalized height
-    float aspect_ratio = 95. / 71.;
-
     float radius = sqrt(pow(adjusted_uv.x, 2.) + pow(adjusted_uv.y, 2.));
-    float angle = atan(adjusted_uv.y, adjusted_uv.x) + sin(secure.y) / (radius + 1);
-    float strength = pow(pow(sin(radius*40. + sin(angle * 2. * 3.141592)*radius*0.5 + secure.x - secure.y), 2.), 2.);
+    float angle = atan(adjusted_uv.y, adjusted_uv.x);
+    float strength = pow(pow(sin(radius*40. + cos(angle - 3.14159 / 2.)*radius*20. + secure.x - secure.y), 2.), 2.);
 
-    tex.r = tex.r * strength + (tex.r * 0.5) * (1. - strength);
-    tex.g = tex.g * strength + (tex.g * 0.5 + 0.5) * (1. - strength);
-    tex.b = tex.b * strength + (tex.b * 0.6) * (1. - strength);
+    tex.r = tex.r * strength;
+    tex.g = tex.g;
+    tex.b = tex.b * strength + (tex.g * 0.5) * (1. - strength);
 
     return dissolve_mask(tex*colour, texture_coords, uv);
 }
