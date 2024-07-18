@@ -32,9 +32,11 @@ G.FUNCS.tcp_receive = function()
   local res = receive_and_parse()
   if res.success then
     if not res.data then return end
-    local func = G.MULTIPLAYER.actions[res.cmd]
-    if func then
-      func(res.data)
+    local funcs = G.MULTIPLAYER.actions[res.cmd]
+    if funcs then
+      for _, func in ipairs(funcs) do
+        func(res.data)
+      end
     else
       if G.MULTIPLAYER.debug then sendDebugMessage("Unknown action: " .. res.cmd) end
     end
