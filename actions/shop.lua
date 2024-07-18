@@ -66,19 +66,19 @@ function add_round_eval_row(config)
   end
 end
 
-G.MULTIPLAYER.actions.SKIP_BOOSTER = function(data)
+G.FUNCS.tcp_listen("SKIP_BOOSTER", function(data)
   G.SINGLEPLAYER_FUNCS.skip_booster()
-end
+end)
 
-G.MULTIPLAYER.actions.REROLL = function(data)
+G.FUNCS.tcp_listen("REROLL", function(data)
   G.SINGLEPLAYER_FUNCS.reroll()
-end
+end)
 
-G.MULTIPLAYER.actions.NEXT_ROUND = function(data)
+G.FUNCS.tcp_listen("NEXT_ROUND", function(data)
   G.SINGLEPLAYER_FUNCS.next_round()
-end
+end)
 
-G.MULTIPLAYER.actions.GO_TO_SHOP = function(data)
+G.FUNCS.tcp_listen("GO_TO_SHOP", function(data)
   local e = G.next_round_button:get_UIE_by_ID('cash_out_button')
   G.SINGLEPLAYER_FUNCS.go_to_shop(e)
-end
+end)

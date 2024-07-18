@@ -42,7 +42,7 @@ G.FUNCS.buy_from_shop = function(e)
   end
 end
 
-G.MULTIPLAYER.actions.SELL = function(data)
+G.FUNCS.tcp_listen("SELL", function(data)
   local card = G[data.type].cards[data.index]
   card:sell_card()
   for i = 1, #G.jokers.cards do
@@ -50,14 +50,14 @@ G.MULTIPLAYER.actions.SELL = function(data)
       G.jokers.cards[i]:calculate_joker({selling_card = true, card = card})
     end
   end
-end
+end)
 
-G.MULTIPLAYER.actions.USE = function(data)
+G.FUNCS.tcp_listen("USE", function(data)
   local card = G.consumeables.cards[data.index]
   G.SINGLEPLAYER_FUNCS.use_card({config = {ref_table = card}})
-end
+end)
 
-G.MULTIPLAYER.actions.BUY = function(data)
+G.FUNCS.tcp_listen("BUY", function(data)
   if data.type == "shop_jokers" then
     local e = findDescendantOfElementByConfig(G.shop_jokers.cards[data.index], "func", "can_buy")
     G.SINGLEPLAYER_FUNCS.buy_card(e)
@@ -65,9 +65,9 @@ G.MULTIPLAYER.actions.BUY = function(data)
     local card = G[data.type].cards[data.index]
     G.SINGLEPLAYER_FUNCS.use_card({config = {ref_table = card}})
   end
-end
+end)
 
-G.MULTIPLAYER.actions.BUY_AND_USE = function(data)
+G.FUNCS.tcp_listen("BUY_AND_USE", function(data)
   local e = findDescendantOfElementByConfig(G.shop_jokers.cards[data.index], "id", "buy_and_use")
   G.SINGLEPLAYER_FUNCS.buy_card(e)
-end
+end)

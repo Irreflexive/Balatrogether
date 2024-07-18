@@ -2,7 +2,7 @@ G.FUNCS.endless_multiplayer = function(e)
   G.FUNCS.tcp_send({ cmd = "ENDLESS" })
 end
 
-G.MULTIPLAYER.actions.JOIN = function(data)
+G.FUNCS.tcp_listen("JOIN", function(data)
   G.MULTIPLAYER.enabled = true
   G.MULTIPLAYER.versus = false
   G.MULTIPLAYER.players = data.players
@@ -12,18 +12,18 @@ G.MULTIPLAYER.actions.JOIN = function(data)
     }
   end
   G.OVERLAY_MENU.config.no_esc = true
-end
+end)
 
-G.MULTIPLAYER.actions.LEAVE = function(data)
+G.FUNCS.tcp_listen("LEAVE", function(data)
   G.MULTIPLAYER.players = data.players
   if G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('balatrogether_player_list') then
     G.FUNCS.overlay_menu{
       definition = G.UIDEF.server_config(),
     }
   end
-end
+end)
 
-G.MULTIPLAYER.actions.START = function(data)
+G.FUNCS.tcp_listen("START", function(data)
   G.MULTIPLAYER.versus = data.versus
   G.GAME.selected_back = Back(get_deck_from_name(data.deck))
   local debug_challenge = {
@@ -66,8 +66,8 @@ G.MULTIPLAYER.actions.START = function(data)
       debug_challenge or 
       nil,
   })
-end
+end)
 
-G.MULTIPLAYER.actions.ENDLESS = function(data)
+G.FUNCS.tcp_listen("ENDLESS", function(data)
   G.FUNCS.exit_overlay_menu()
-end
+end)

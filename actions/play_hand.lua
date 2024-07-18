@@ -6,6 +6,6 @@ G.FUNCS.play_cards_from_highlighted = function(...)
   end
 end
 
-G.MULTIPLAYER.actions.PLAY_HAND = function(data)
+G.FUNCS.tcp_listen("PLAY_HAND", function(data)
   G.SINGLEPLAYER_FUNCS.play_hand()
-end
+end)

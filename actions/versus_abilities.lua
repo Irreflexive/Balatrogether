@@ -1,8 +1,8 @@
-G.MULTIPLAYER.actions.THE_CUP = function(data)
+G.FUNCS.tcp_listen("THE_CUP", function(data)
   ease_dollars(data.eliminated * 8)
-end
+end)
 
-G.MULTIPLAYER.actions.ANNIE_AND_HALLIE = function(data)
+G.FUNCS.tcp_listen("ANNIE_AND_HALLIE", function(data)
   local jokers = {}
   for k, v in pairs(G.jokers.cards) do
     if not v.edition or v.edition.type ~= SMODS.current_mod.prefix .. "_secure" then
@@ -32,4 +32,4 @@ G.MULTIPLAYER.actions.ANNIE_AND_HALLIE = function(data)
         card.ability = v.ability
       end
       return true end }))
-end
+end)

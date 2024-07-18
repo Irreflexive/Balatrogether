@@ -51,16 +51,16 @@ G.FUNCS.sort_hand_value = function(...)
   end
 end
 
-G.MULTIPLAYER.actions.REORDER = function(data)
+G.FUNCS.tcp_listen("REORDER", function(data)
   local card = G[data.type].cards[data.from]
   table.remove(G[data.type].cards, data.from)
   table.insert(G[data.type].cards, data.to, card)
-end
+end)
 
-G.MULTIPLAYER.actions.SORT_HAND = function(data)
+G.FUNCS.tcp_listen("SORT_HAND", function(data)
   if data.type == "suit" then
     G.SINGLEPLAYER_FUNCS.sort_by_suit()
   elseif data.type == "value" then
     G.SINGLEPLAYER_FUNCS.sort_by_value()
   end
-end
+end)

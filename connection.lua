@@ -9,9 +9,27 @@ G.FUNCS.tcp_connect = function()
   if G.MULTIPLAYER.debug then sendDebugMessage("TCP connection opened") end
 end
 
-G.FUNCS.tcp_listen = function()
+local function receive_and_parse()
+  local res = nil
+  local s, status, partial = G.MULTIPLAYER.tcp:receive()
+  if status == "timeout" then
+    res = { success = true }
+  elseif status == "closed" or s == nil then
+    res = { success = false, error = "Connection closed" }
+  else
+    local success, json = pcall(G.JSON.decode, s)
+    if success then
+      res = json
+    else
+      res = { success = false, error = "Failed to parse packet" }
+    end
+  end
+  return res
+end
+
+G.FUNCS.tcp_receive = function()
   if not G.MULTIPLAYER.tcp then return end
-  local res = G.FUNCS.tcp_receive()
+  local res = receive_and_parse()
   if res.success then
     if not res.data then return end
     local func = G.MULTIPLAYER.actions[res.cmd]
@@ -49,22 +67,11 @@ G.FUNCS.tcp_send = function(data)
   G.MULTIPLAYER.tcp:send(G.JSON.encode(data))
 end
 
-G.FUNCS.tcp_receive = function()
-  local res = nil
-  local s, status, partial = G.MULTIPLAYER.tcp:receive()
-  if status == "timeout" then
-    res = { success = true }
-  elseif status == "closed" or s == nil then
-    res = { success = false, error = "Connection closed" }
-  else
-    local success, json = pcall(G.JSON.decode, s)
-    if success then
-      res = json
-    else
-      res = { success = false, error = "Failed to parse packet" }
-    end
+G.FUNCS.tcp_listen = function(event, callback)
+  if not G.MULTIPLAYER.actions[event] then
+    G.MULTIPLAYER.actions[event] = {}
   end
-  return res
+  table.insert(G.MULTIPLAYER.actions[event], callback)
 end
 
 ----------------------------------------------

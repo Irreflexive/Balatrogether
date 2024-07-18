@@ -56,7 +56,7 @@ end
 local old_update = love.update
 function love.update(dt)
   old_update(dt)
-  G.FUNCS.tcp_listen()
+  G.FUNCS.tcp_receive()
 end
 
 G.FUNCS.join_server = function()

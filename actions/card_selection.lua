@@ -31,14 +31,14 @@ function Card:click()
   end
 end
 
-G.MULTIPLAYER.actions.HIGHLIGHT = function(data)
+G.FUNCS.tcp_listen("HIGHLIGHT", function(data)
   G[data.type]:add_to_highlighted(G[data.type].cards[data.index])
-end
+end)
 
-G.MULTIPLAYER.actions.UNHIGHLIGHT = function(data)
+G.FUNCS.tcp_listen("UNHIGHLIGHT", function(data)
   G[data.type]:remove_from_highlighted(G[data.type].cards[data.index])
-end
+end)
 
-G.MULTIPLAYER.actions.UNHIGHLIGHT_ALL = function(data)
+G.FUNCS.tcp_listen("UNHIGHLIGHT_ALL", function(data)
   G.hand:unhighlight_all()
-end
+end)
