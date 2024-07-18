@@ -251,6 +251,10 @@ function create_UIBox_game_over()
   local t = create_UIBox_game_over_ref()
 
   if G.MULTIPLAYER.enabled then
+    if G.FUNCS.is_versus_game() then
+      G.FUNCS.tcp_send({cmd = "ELIMINATED"})
+    end
+
     local new_run_button = findDescendantOfNodeTreeByConfig(t, 'id', 'from_game_over')
     if new_run_button then
       new_run_button.config.button = 'setup_run_multiplayer'

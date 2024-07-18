@@ -19,4 +19,7 @@ SMODS.Blind{
     local ante = G.GAME.round_resets.ante
     return G.FUNCS.is_versus_game() and ante % 2 == 0 and ante < G.GAME.win_ante
   end,
+  defeat = function(self)
+    G.FUNCS.tcp_send({ cmd = "DEFEATED_BOSS", score = G.GAME.chips })
+  end
 }
