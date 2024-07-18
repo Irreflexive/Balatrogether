@@ -1,5 +1,6 @@
 local loc_def = {
   name = "Network Pack",
+  group_name = "Network Pack",
   text = {
       "Choose {C:attention}#1#{} of up to",
       "{C:attention}#2#{} Playing or Joker",
