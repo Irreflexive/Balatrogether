@@ -34,13 +34,15 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     vec4 tex = Texel(texture, texture_coords);
     // Position of a pixel within the sprite
 	vec2 uv = (((texture_coords)*(image_details)) - texture_details.xy*texture_details.ba)/texture_details.ba;
+    vec2 adjusted_uv = uv - vec2(0.5, 1.);
+    adjusted_uv.x = adjusted_uv.x*texture_details.b/texture_details.a;
 
     float sprite_width = texture_details.z / image_details.x; // Normalized width
     float sprite_height = texture_details.a / image_details.y; // Normalized height
-    float aspect_ratio = sprite_width / sprite_height;
+    float aspect_ratio = 95. / 71.;
 
-    float radius = sqrt(pow(uv.x - 0.5, 2.) + pow((uv.y - 1) * aspect_ratio, 2.));
-    float angle = atan((uv.y - 1) * aspect_ratio, uv.x - 1) + sin(secure.y) / (radius + 1);
+    float radius = sqrt(pow(adjusted_uv.x, 2.) + pow(adjusted_uv.y, 2.));
+    float angle = atan(adjusted_uv.y, adjusted_uv.x) + sin(secure.y) / (radius + 1);
     float strength = pow(pow(sin(radius*40. + sin(angle * 2. * 3.141592)*radius*0.5 + secure.x - secure.y), 2.), 2.);
 
     tex.r = tex.r * strength + (tex.r * 0.5) * (1. - strength);
