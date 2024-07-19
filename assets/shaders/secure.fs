@@ -43,7 +43,7 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
 
     tex.r = tex.r * strength;
     tex.g = tex.g;
-    tex.b = tex.b * strength + (tex.g * 0.5) * (1. - strength);
+    tex.b = tex.b * strength + (tex.g * 0.4) * (1. - strength);
 
     return dissolve_mask(tex*colour, texture_coords, uv);
 }
