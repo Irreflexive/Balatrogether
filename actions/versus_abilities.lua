@@ -2,6 +2,10 @@ G.FUNCS.tcp_listen("THE_CUP", function(data)
   ease_dollars(data.eliminated * 8)
 end)
 
+G.FUNCS.tcp_listen("GREEN_SEAL", function(data)
+  ease_dollars(-1)
+end)
+
 G.FUNCS.tcp_listen("ANNIE_AND_HALLIE", function(data)
   local jokers = {}
   for k, v in pairs(G.jokers.cards) do
