@@ -31,6 +31,20 @@ function Card:click()
   end
 end
 
+function Controller:queue_R_cursor_press(x, y)
+  if self.locks.frame then return end
+  if not G.SETTINGS.paused and G.hand and G.hand.highlighted[1] then 
+      if (G.play and #G.play.cards > 0) or
+      (self.locked) or 
+      (self.locks.frame) or
+      (G.GAME.STOP_USE and G.GAME.STOP_USE > 0) then return end
+      if G.FUNCS.is_coop_game() then
+        G.FUNCS.tcp_send({ cmd = "UNHIGHLIGHT_ALL" })
+      end
+      G.hand:unhighlight_all()
+  end
+end
+
 G.FUNCS.tcp_listen("HIGHLIGHT", function(data)
   G[data.type]:add_to_highlighted(G[data.type].cards[data.index])
 end)
