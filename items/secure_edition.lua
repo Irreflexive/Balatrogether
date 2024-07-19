@@ -46,6 +46,11 @@ SMODS.Consumable:take_ownership("wheel_of_fortune", {
         "a random {C:attention}Joker"
     }
   },
+  loc_vars = function(self, info_queue)
+    local secure = 'e_' .. SMODS.current_mod.prefix .. '_secure'
+    info_queue[#info_queue+1] = G.P_CENTERS[secure]
+    return {}
+  end,
 })
 
 SMODS.Consumable:take_ownership("aura", {
@@ -57,11 +62,16 @@ SMODS.Consumable:take_ownership("aura", {
       "to {C:attention}1{} selected card in hand"
     }
   },
+  loc_vars = function(self, info_queue)
+    local secure = 'e_' .. SMODS.current_mod.prefix .. '_secure'
+    info_queue[#info_queue+1] = G.P_CENTERS[secure]
+    return {}
+  end,
 })
 
 local poll_edition_ref = poll_edition
 function poll_edition(_key, _mod, _no_neg, _guaranteed, _options)
-  if _key == "wheel_of_fortune" or _key == "aura" then
+  if (_key == "wheel_of_fortune" or _key == "aura") and G.FUNCS.is_versus_game() then
     local secure = 'e_' .. SMODS.current_mod.prefix .. '_secure'
     _options = { 'e_negative', 'e_polychrome', 'e_holo', 'e_foil', secure }
   end
