@@ -75,7 +75,7 @@ end
 
 G.FUNCS.is_host = function(e)
   local _is_host = tostring(G.STEAM.user.getSteamID()) == G.MULTIPLAYER.players[1]
-  if e.config.func then
+  if e and e.config and e.config.func then
     if not _is_host then
       e.config.colour = G.C.UI.BACKGROUND_INACTIVE
       e.config.button = nil

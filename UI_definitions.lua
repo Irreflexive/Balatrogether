@@ -239,7 +239,12 @@ function create_UIBox_win()
 
     local endless_button = findDescendantOfNodeTreeByConfig(t, 'button', 'exit_overlay_menu')
     if endless_button then
-      endless_button.config.button = 'endless_multiplayer'
+      if G.FUNCS.is_versus_game() then
+        endless_button.config.colour = G.C.UI.BACKGROUND_INACTIVE
+        endless_button.config.button = nil
+      else
+        endless_button.config.button = 'endless_multiplayer'
+      end
     end
   end
 

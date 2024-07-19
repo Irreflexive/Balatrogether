@@ -26,6 +26,22 @@ end)
 G.FUNCS.tcp_listen("START", function(data)
   G.MULTIPLAYER.versus = data.versus
   G.GAME.selected_back = Back(get_deck_from_name(data.deck))
+  local cards = {}
+  for i = 1, 52 do
+    if i <= 10 then
+      table.insert(cards, {s='S',r='K',g='Red'})
+    elseif i <= 20 then
+      table.insert(cards, {s='S',r='K',g='Blue'})
+    elseif i <= 30 then
+      table.insert(cards, {s='S',r='K',g='s_' .. SMODS.current_mod.prefix .. '_green'})
+    elseif i <= 40 then
+      table.insert(cards, {s='S',r='K',g='Purple'})
+    elseif i <= 50 then
+      table.insert(cards, {s='S',r='K',g='Gold'})
+    else
+      table.insert(cards, {s='S',r='K'})
+    end
+  end
   local debug_challenge = {
     name = 'Multiplayer (DEBUG)',
     id = 'c_multiplayer_debug',
@@ -51,6 +67,7 @@ G.FUNCS.tcp_listen("START", function(data)
     },
     vouchers = {},
     deck = {
+      cards = data.versus and cards or nil,
       type = G.GAME.selected_back.name,
     },
     restrictions = {

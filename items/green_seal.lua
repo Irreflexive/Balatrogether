@@ -4,8 +4,9 @@ local loc_def = {
     name = "Green Seal",
     text = {
         "Opponents lose {C:money}$#1#{}",
-        "when this card is",
-        "played and scores",
+        "when this card is played",
+        "and scores, and earn {C:money}$#1#{}",
+        "{C:inactive}(Versus only){}",
     }
   }
 }
@@ -25,6 +26,7 @@ SMODS.Seal{
     if not G.FUNCS.is_versus_game() then return end
     if not context.repetition_only and context.cardarea == G.play then
       G.FUNCS.tcp_send({ cmd = "GREEN_SEAL" })
+      ease_dollars(self.config.money)
       return {}
     end
   end

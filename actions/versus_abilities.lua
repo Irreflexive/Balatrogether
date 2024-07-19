@@ -3,7 +3,8 @@ G.FUNCS.tcp_listen("THE_CUP", function(data)
 end)
 
 G.FUNCS.tcp_listen("GREEN_SEAL", function(data)
-  ease_dollars(-1)
+  local money = G.P_SEALS['s_' .. SMODS.current_mod.prefix .. '_green_seal'].config.money
+  ease_dollars(-money)
 end)
 
 G.FUNCS.tcp_listen("ANNIE_AND_HALLIE", function(data)
