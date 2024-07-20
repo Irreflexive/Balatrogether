@@ -48,6 +48,7 @@ end
 
 function G.UIDEF.multiplayer_join()
   local t = {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR, minh = 3, minw = 6}, nodes={
+    G.UIDEF.saved_servers(),
     {n=G.UIT.R, config={align = "cm", padding = 0.05}, nodes={
       {n=G.UIT.C, config={align = "cm", minw = 1}, nodes={
         create_text_input({ref_table = G.MULTIPLAYER, extended_corpus = true, keep_zeroes = true, ref_value = 'address', prompt_text = "IP Address"}),
@@ -107,10 +108,10 @@ function G.UIDEF.run_setup_multiplayer()
 end
 
 function G.UIDEF.player_list()
-  G.SERVER_PLAYERS_PAGE_SIZE = 4
+  local player_page_size = 4
   local player_pages = {}
-  for i = 1, math.ceil(#G.MULTIPLAYER.players/G.SERVER_PLAYERS_PAGE_SIZE) do
-    table.insert(player_pages, localize('k_page')..' '..tostring(i)..'/'..tostring(math.ceil(#G.MULTIPLAYER.players/G.SERVER_PLAYERS_PAGE_SIZE)))
+  for i = 1, math.ceil(#G.MULTIPLAYER.players/player_page_size) do
+    table.insert(player_pages, localize('k_page')..' '..tostring(i)..'/'..tostring(math.ceil(#G.MULTIPLAYER.players/player_page_size)))
   end
   G.E_MANAGER:add_event(Event({func = (function()
     G.FUNCS.change_player_list_page{cycle_config = {current_option = 1}}
@@ -124,6 +125,9 @@ function G.UIDEF.player_list()
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
         UIBox_button({id = 'server_code', col = true, label = {G.MULTIPLAYER.address}, button = 'nil', colour = G.C.BLUE, scale = 0.5, minw = 3, minh = 0.6}),
         UIBox_button({id = 'copy_code', col = true, label = {'Copy'}, button = 'copy_server_code', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
+      }},
+      {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
+        UIBox_button({id = 'save_server', col = true, label = {'Save'}, button = 'save_server', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.3}, nodes={}},
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
@@ -141,9 +145,10 @@ function G.UIDEF.player_list()
 end
 
 function G.UIDEF.player_list_page(_page)
+  local player_page_size = 4
   local snapped = false
   local player_list = {}
-  for k = G.SERVER_PLAYERS_PAGE_SIZE*(_page or 0) + 1, G.SERVER_PLAYERS_PAGE_SIZE*((_page or 0) + 1) do
+  for k = player_page_size*(_page or 0) + 1, player_page_size*((_page or 0) + 1) do
     v = G.MULTIPLAYER.players[k]
     if G.CONTROLLER.focused.target and G.CONTROLLER.focused.target.config.id == 'player_page' then snapped = true end
 
@@ -320,4 +325,55 @@ function create_UIBox_game_over()
   end
 
   return t
+end
+
+function G.UIDEF.saved_servers()
+  G.PROFILES[G.SETTINGS.profile].saved_servers = G.PROFILES[G.SETTINGS.profile].saved_servers or {}
+
+  local server_page_size = 4
+  local server_pages = {}
+  for i = 1, math.ceil(#G.PROFILES[G.SETTINGS.profile].saved_servers/server_page_size) do
+    table.insert(server_pages, localize('k_page')..' '..tostring(i)..'/'..tostring(math.ceil(#G.PROFILES[G.SETTINGS.profile].saved_servers/server_page_size)))
+  end
+  if #server_pages == 0 then server_pages = {localize('k_page')..' 1/0'} end
+  G.E_MANAGER:add_event(Event({func = (function()
+    G.FUNCS.change_server_list_page{cycle_config = {current_option = 1}}
+  return true end)}))
+
+  local t = {n=G.UIT.R, config={align = "cm", colour = G.C.CLEAR}, nodes={
+    {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
+      {n=G.UIT.T, config={text = 'Saved Servers', scale = 0.5, colour = G.C.WHITE}},
+    }},
+    {n=G.UIT.R, config={align = "cm", padding = 0.1, minh = 2.8, minw = 4.2}, nodes={
+      {n=G.UIT.O, config={id = 'saved_servers_list', object = Moveable()}},
+    }},
+    {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
+      create_option_cycle({id = 'server_list_page',scale = 0.9, h = 0.3, w = 3.5, options = server_pages, cycle_shoulders = true, opt_callback = 'change_server_list_page', current_option = 1, colour = G.C.RED, no_pips = true, focus_args = {snap_to = true}})
+    }},
+  }}
+
+  return t
+end
+
+function G.UIDEF.saved_servers_page(_page)
+  local server_page_size = 4
+  local snapped = false
+  local saved_servers = {}
+  for k = server_page_size*(_page or 0) + 1, server_page_size*((_page or 0) + 1) do
+    v = G.PROFILES[G.SETTINGS.profile].saved_servers[k]
+    if G.CONTROLLER.focused.target and G.CONTROLLER.focused.target.config.id == 'server_list_page' then snapped = true end
+
+    saved_servers[#saved_servers+1] = 
+    {n=G.UIT.R, config={align = "cm"}, nodes={
+      {n=G.UIT.C, config={align = 'cl', minw = 0.8}, nodes = {
+        {n=G.UIT.T, config={text = k..'', scale = 0.4, colour = G.C.WHITE}},
+      }},
+      UIBox_button({id = v, col = true, label = {v or ""}, button = v and 'join_saved_server' or 'nil', colour = v and G.C.BLUE or G.C.GREY, minw = 4, scale = 0.4, minh = 0.6, focus_args = {snap_to = not snapped}}),
+      {n=G.UIT.C, config={align = 'cm', minw = 0.1}, nodes = {}},
+      UIBox_button({id = v and 'remove_'..v or nil, col = true, label = {'X'}, button = v and 'remove_server' or 'nil', colour = v and G.C.RED or G.C.GREY, scale = 0.4, minw = 0.6, minh = 0.6, focus_args = {snap_to = not snapped}}),
+    }}      
+    snapped = true
+  end
+
+  return {n=G.UIT.ROOT, config={align = "cm", padding = 0.1, colour = G.C.CLEAR}, nodes=saved_servers}
 end

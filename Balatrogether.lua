@@ -66,6 +66,11 @@ G.FUNCS.join_server = function()
   G.FUNCS.tcp_send({ cmd = "JOIN" })
 end
 
+G.FUNCS.join_saved_server = function(e)
+  G.MULTIPLAYER.address = e.config.id
+  G.FUNCS.join_server()
+end
+
 G.FUNCS.is_coop_game = function()
   return G.MULTIPLAYER.enabled and not G.MULTIPLAYER.versus
 end
@@ -102,12 +107,51 @@ G.FUNCS.change_player_list_page = function(args)
   end
 end
 
+G.FUNCS.change_server_list_page = function(args)
+  if not args or not args.cycle_config then return end
+  if G.OVERLAY_MENU then
+    local pl_list = G.OVERLAY_MENU:get_UIE_by_ID('saved_servers_list')
+    if pl_list then 
+      if pl_list.config.object then 
+        pl_list.config.object:remove() 
+      end
+      pl_list.config.object = UIBox{
+        definition =  G.UIDEF.saved_servers_page(args.cycle_config.current_option-1),
+        config = {offset = {x=0,y=0}, align = 'cm', parent = pl_list}
+      }
+    end
+  end
+end
+
 G.FUNCS.copy_server_code = function(e)
   if G.F_LOCAL_CLIPBOARD then
     G.CLIPBOARD = G.MULTIPLAYER.address
   else
     love.system.setClipboardText(G.MULTIPLAYER.address)
   end 
+end
+
+G.FUNCS.save_server = function(e)
+  local servers = G.PROFILES[G.SETTINGS.profile].saved_servers
+  for _,server in ipairs(servers) do
+    if server == G.MULTIPLAYER.address then
+      return
+    end
+  end
+  servers[#servers+1] = G.MULTIPLAYER.address
+  G.PROFILES[G.SETTINGS.profile].saved_servers = servers
+end
+
+G.FUNCS.remove_server = function(e)
+  local servers = G.PROFILES[G.SETTINGS.profile].saved_servers
+  local id = e.config.id:match("remove_(.*)")
+  for i,server in ipairs(servers) do
+    if server == id then
+      table.remove(servers, i)
+      G.PROFILES[G.SETTINGS.profile].saved_servers = servers
+      return
+    end
+  end
 end
 
 G.FUNCS.setup_run_multiplayer = function(e)
