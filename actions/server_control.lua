@@ -75,9 +75,7 @@ G.FUNCS.tcp_listen("JOIN", function(data)
   G.MULTIPLAYER.versus = false
   G.MULTIPLAYER.players = data.players
   if (G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('balatrogether_player_list')) or data.players[#data.players] == tostring(G.STEAM.user.getSteamID()) then
-    G.FUNCS.overlay_menu{
-      definition = G.UIDEF.server_config(),
-    }
+    G.FUNCS.setup_run_multiplayer()
   end
   G.OVERLAY_MENU.config.no_esc = true
 end)

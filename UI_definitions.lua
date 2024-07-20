@@ -222,6 +222,54 @@ function create_UIBox_options()
   return t
 end
 
+function G.UIDEF.boss_leaderboard(leaderboard)
+  local list = {}
+  for k = 1, 8 do
+    local row = leaderboard[k]
+    local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5)
+    list[#list+1] = row and {n=G.UIT.R, config={align = "cm"}, nodes={
+      {n=G.UIT.C, config={align = "cl", minw = 0.5}, nodes = {
+        {n=G.UIT.T, config={text = k..'', scale = 0.4, colour = G.C.WHITE}},
+      }},
+      {n=G.UIT.C, config={align = "cm", minw = 7.5, minh = 0.6, r = 0.1, colour = row.score and G.C.BLUE or G.C.GREY}, nodes = {
+        {n=G.UIT.C, config={align = "cl", minw = 4, minh = 0.6, padding = 0.1}, nodes={
+          {n=G.UIT.T, config={text = row.name or G.STEAM.friends.getFriendPersonaName(G.STEAM.extra.parseUint64(row.player)), scale = 0.4, colour = G.C.WHITE, shadow = true}},
+        }},
+        {n=G.UIT.C, config={align = "cr", minw = 3.5, minh = 0.6, padding = 0.1}, nodes=row.score and {
+          {n=G.UIT.T, config={text = number_format(row.score), lang = G.LANGUAGES['en-us'], scale = 0.4, colour = G.C.WHITE, shadow = true}},
+          {n=G.UIT.O, config={w=0.4,h=0.4, object = stake_sprite, hover = true, can_collide = false}},
+        } or {
+          {n=G.UIT.T, config={text = "ELIMINATED", scale = 0.4, colour = G.C.WHITE, shadow = true}},
+        }},
+      }},
+    }} or {n=G.UIT.R, config={align = "cm"}, nodes={
+      {n=G.UIT.C, config={align = "cl", minw = 0.5}, nodes = {
+        {n=G.UIT.T, config={text = k..'', scale = 0.4, colour = G.C.WHITE}},
+      }},
+      {n=G.UIT.C, config={align = "cm", minw = 7.5, minh = 0.6, r = 0.1, colour = G.C.GREY}, nodes = {}},
+    }}
+  end
+
+  local t = create_UIBox_generic_options({ contents = {
+      {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
+        {n=G.UIT.T, config={text = "Boss Results", scale = 0.5, colour = G.C.WHITE}},
+      }},
+      {
+        n = G.UIT.R,
+        config = {
+          emboss = 0.05,
+          r = 0.1,
+          minw = 8,
+          align = "cm",
+          padding = 0.2,
+          colour = G.C.BLACK
+        },
+        nodes = list
+      },
+    }})
+  return t
+end
+
 local create_UIBox_win_ref = create_UIBox_win
 function create_UIBox_win()
   local t = create_UIBox_win_ref()
