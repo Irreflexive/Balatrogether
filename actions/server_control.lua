@@ -91,6 +91,8 @@ end)
 
 G.FUNCS.tcp_listen("START", function(data)
   G.MULTIPLAYER.versus = data.versus
+  G.MULTIPLAYER.leaderboard_blind = false
+  G.MULTIPLAYER.leaderboard = nil
   G.GAME.selected_back = Back(get_deck_from_name(data.deck))
   local cards = {}
   for i = 1, 52 do

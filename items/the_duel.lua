@@ -20,6 +20,7 @@ SMODS.Blind{
     return G.FUNCS.is_versus_game() and ante % 2 == 0 and ante < G.GAME.win_ante
   end,
   defeat = function(self)
+    G.MULTIPLAYER.leaderboard_blind = true
     G.FUNCS.tcp_send({ cmd = "DEFEATED_BOSS", score = G.GAME.chips })
   end
 }

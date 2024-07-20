@@ -52,6 +52,8 @@ G.FUNCS.tcp_close = function()
   G.MULTIPLAYER.tcp = nil
   G.MULTIPLAYER.enabled = false
   G.MULTIPLAYER.players = {}
+  G.MULTIPLAYER.leaderboard_blind = false
+  G.MULTIPLAYER.leaderboard = nil
   if G.STAGE == G.STAGES.MAIN_MENU then
     G.FUNCS.exit_overlay_menu()
   else

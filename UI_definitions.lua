@@ -250,7 +250,7 @@ function G.UIDEF.boss_leaderboard(leaderboard)
     }}
   end
 
-  local t = create_UIBox_generic_options({ contents = {
+  local t = create_UIBox_generic_options({ back_label = 'Continue', back_func = 'close_leaderboard', contents = {
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
         {n=G.UIT.T, config={text = "Boss Results", scale = 0.5, colour = G.C.WHITE}},
       }},

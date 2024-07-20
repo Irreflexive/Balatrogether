@@ -115,6 +115,20 @@ G.FUNCS.setup_run_multiplayer = function(e)
   }
 end
 
+G.FUNCS.view_leaderboard = function(e)
+  G.FUNCS.overlay_menu{
+    definition = G.UIDEF.boss_leaderboard(G.MULTIPLAYER.leaderboard),
+  }
+  G.OVERLAY_MENU.config.no_esc = true
+  G.MULTIPLAYER.leaderboard_blind = false
+  G.MULTIPLAYER.leaderboard = nil
+end
+
+G.FUNCS.close_leaderboard = function(e)
+  G.FUNCS.exit_overlay_menu()
+  G.FUNCS.cash_out(e)
+end
+
 G.FUNCS.paste_address = function(e)
   G.CONTROLLER.text_input_hook = e.UIBox:get_UIE_by_ID('text_input').children[1].children[1]
   for i = 1, 16 do

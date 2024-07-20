@@ -37,14 +37,18 @@ function add_round_eval_row(config)
   local num_dollars = config.dollars or 1
   local scale = 0.9
 
-  if config.name == "bottom" and G.FUNCS.is_coop_game() then
+  if config.name == "bottom" and G.MULTIPLAYER.enabled then
     delay(0.4)
     G.E_MANAGER:add_event(Event({
       trigger = 'before',delay = 0.5,
       func = function()
-        G.next_round_button = UIBox{
+        local is_wait_boss = G.FUNCS.is_versus_game() and G.MULTIPLAYER.leaderboard_blind
+        local should_wait = is_wait_boss and not G.MULTIPLAYER.leaderboard
+        local color = should_wait and G.C.UI.BACKGROUND_INACTIVE or G.C.ORANGE
+        local button_func = is_wait_boss and (should_wait and 'nil' or 'view_leaderboard') or 'cash_out'
+        G.NEXT_ROUND_BUTTON = UIBox{
             definition = {n=G.UIT.ROOT, config={align = 'cm', colour = G.C.CLEAR}, nodes={
-                {n=G.UIT.R, config={id = 'cash_out_button', align = "cm", padding = 0.1, minw = 7, r = 0.15, colour = G.C.ORANGE, shadow = true, hover = true, one_press = true, button = 'cash_out', focus_args = {snap_to = true}}, nodes={
+                {n=G.UIT.R, config={id = 'cash_out_button', align = "cm", padding = 0.1, minw = 7, r = 0.15, colour = color, shadow = true, hover = true, one_press = true, button = button_func, focus_args = {snap_to = true}}, nodes={
                     {n=G.UIT.T, config={text = localize('b_cash_out')..": ", scale = 1, colour = G.C.UI.TEXT_LIGHT, shadow = true}},
                     {n=G.UIT.T, config={text = localize('$')..config.dollars, scale = 1.2*scale, colour = G.C.WHITE, shadow = true, juice = true}}
             }},}},
@@ -79,6 +83,14 @@ G.FUNCS.tcp_listen("NEXT_ROUND", function(data)
 end)
 
 G.FUNCS.tcp_listen("GO_TO_SHOP", function(data)
-  local e = G.next_round_button:get_UIE_by_ID('cash_out_button')
+  local e = G.NEXT_ROUND_BUTTON:get_UIE_by_ID('cash_out_button')
   G.SINGLEPLAYER_FUNCS.go_to_shop(e)
+end)
+
+G.FUNCS.tcp_listen("LEADERBOARD", function(data)
+  G.MULTIPLAYER.leaderboard = data.leaderboard
+  local e = G.NEXT_ROUND_BUTTON and G.NEXT_ROUND_BUTTON:get_UIE_by_ID('cash_out_button')
+  if not e then return end
+  e.config.button = "view_leaderboard"
+  e.config.colour = G.C.ORANGE
 end)
