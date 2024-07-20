@@ -67,8 +67,20 @@ G.FUNCS.tcp_send = function(data)
   if data.cmd == "JOIN" then
     data.steam_id = tostring(G.STEAM.user.getSteamID())
   end
-  if G.MULTIPLAYER.debug then sendDebugMessage("Sending data: " .. G.JSON.encode(data)) end
-  G.MULTIPLAYER.tcp:send(G.JSON.encode(data))
+  table.insert(G.MULTIPLAYER.send_queue, G.JSON.encode(data))
+end
+
+local time_since_last_send = 0
+G.FUNCS.tcp_update = function(dt)
+  G.FUNCS.tcp_receive()
+  if not G.MULTIPLAYER.tcp then return end
+  time_since_last_send = time_since_last_send + dt
+  if #G.MULTIPLAYER.send_queue == 0 or time_since_last_send < 0.1 then return end
+  time_since_last_send = 0
+  local data = G.MULTIPLAYER.send_queue[1]
+  table.remove(G.MULTIPLAYER.send_queue, 1)
+  if G.MULTIPLAYER.debug then sendDebugMessage("Sending data: " .. data) end
+  G.MULTIPLAYER.tcp:send(data)
 end
 
 G.FUNCS.tcp_listen = function(event, callback)

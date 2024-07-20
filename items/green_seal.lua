@@ -26,8 +26,7 @@ SMODS.Seal{
     if not G.FUNCS.is_versus_game() then return end
     if not context.repetition_only and context.cardarea == G.play then
       G.FUNCS.tcp_send({ cmd = "GREEN_SEAL" })
-      ease_dollars(self.config.money)
-      return {}
+      return { dollars = self.config.money }
     end
   end
 }

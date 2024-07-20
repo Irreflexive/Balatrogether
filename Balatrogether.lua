@@ -16,6 +16,7 @@ G.MULTIPLAYER = {
   players = {},
   versus = false,
   tcp = nil,
+  send_queue = {},
   debug = true,
   actions = {},
 }
@@ -56,7 +57,7 @@ end
 local old_update = love.update
 function love.update(dt)
   old_update(dt)
-  G.FUNCS.tcp_receive()
+  G.FUNCS.tcp_update(dt)
 end
 
 G.FUNCS.join_server = function()
