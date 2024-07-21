@@ -44,12 +44,7 @@ end
 
 G.FUNCS.tcp_listen("SELL", function(data)
   local card = G[data.type].cards[data.index]
-  card:sell_card()
-  for i = 1, #G.jokers.cards do
-    if G.jokers.cards[i] ~= card then 
-      G.jokers.cards[i]:calculate_joker({selling_card = true, card = card})
-    end
-  end
+  G.SINGLEPLAYER_FUNCS.sell_card({config = {ref_table = card}})
 end)
 
 G.FUNCS.tcp_listen("USE", function(data)
@@ -60,6 +55,7 @@ end)
 G.FUNCS.tcp_listen("BUY", function(data)
   if data.type == "shop_jokers" then
     local e = findDescendantOfElementByConfig(G.shop_jokers.cards[data.index], "func", "can_buy")
+    if not e then return end
     G.SINGLEPLAYER_FUNCS.buy_card(e)
   else
     local card = G[data.type].cards[data.index]
@@ -69,5 +65,6 @@ end)
 
 G.FUNCS.tcp_listen("BUY_AND_USE", function(data)
   local e = findDescendantOfElementByConfig(G.shop_jokers.cards[data.index], "id", "buy_and_use")
+  if not e then return end
   G.SINGLEPLAYER_FUNCS.buy_card(e)
 end)

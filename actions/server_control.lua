@@ -141,13 +141,13 @@ G.FUNCS.tcp_listen("START", function(data)
     restrictions = {
       banned_cards = {},
       banned_tags = {},
-      banned_other = G.FUNCS.is_versus_game() and disabled_blinds or {}
+      banned_other = {}
     }
   }
   G.FUNCS.start_run(nil, { 
     seed = data.seed, 
     stake = data.stake, 
-    challenge = G.MULTIPLAYER.debug and 
+    challenge = data.debug and 
       debug_challenge or 
       nil,
   })

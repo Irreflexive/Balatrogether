@@ -46,11 +46,13 @@ G.FUNCS.tcp_receive = function()
   end
 end
 
+local receive_requests = false
 G.FUNCS.tcp_close = function()
   if not G.MULTIPLAYER.tcp then return end
   G.MULTIPLAYER.tcp:close()
   G.MULTIPLAYER.tcp = nil
   G.MULTIPLAYER.enabled = false
+  receive_requests = false
   G.MULTIPLAYER.players = {}
   G.MULTIPLAYER.leaderboard_blind = false
   G.MULTIPLAYER.leaderboard = nil
@@ -66,13 +68,16 @@ end
 G.FUNCS.tcp_send = function(data)
   if data.cmd == "JOIN" then
     data.steam_id = tostring(G.STEAM.user.getSteamID())
+    receive_requests = true
   end
   table.insert(G.MULTIPLAYER.send_queue, G.JSON.encode(data))
 end
 
 local time_since_last_send = 0
 G.FUNCS.tcp_update = function(dt)
-  G.FUNCS.tcp_receive()
+  if receive_requests then
+    G.FUNCS.tcp_receive()
+  end 
   if not G.MULTIPLAYER.tcp then return end
   time_since_last_send = time_since_last_send + dt
   if #G.MULTIPLAYER.send_queue == 0 or time_since_last_send < 0.1 then return end
