@@ -27,6 +27,32 @@ extern PRECISION vec4 burn_colour_2;
 // Apply dissolve effect (when card is being "burnt", e.g. when consumable is used)
 vec4 dissolve_mask(vec4 tex, vec2 texture_coords, vec2 uv);
 
+vec4 laminate(vec4 oldtex, vec2 uv)
+{
+    vec4 tex = oldtex.wxyz;
+    number low = min(tex.r, min(tex.g, tex.b));
+    number high = max(tex.r, max(tex.g, tex.b));
+	number delta = high-low -0.1;
+
+    number fac = 0.8 + 0.9*sin(11.*uv.x+4.32*uv.y + secure.r*12. + cos(secure.r*5.3 + uv.y*4.2 - uv.x*4.));
+    number fac2 = 0.5 + 0.5*sin(8.*uv.x+2.32*uv.y + secure.r*5. - cos(secure.r*2.3 + uv.x*8.2));
+    number fac3 = 0.5 + 0.5*sin(10.*uv.x+5.32*uv.y + secure.r*6.111 + sin(secure.r*5.3 + uv.y*3.2));
+    number fac4 = 0.5 + 0.5*sin(3.*uv.x+2.32*uv.y + secure.r*8.111 + sin(secure.r*1.3 + uv.y*11.2));
+    number fac5 = sin(0.9*16.*uv.x+5.32*uv.y + secure.r*12. + cos(secure.r*5.3 + uv.y*4.2 - uv.x*4.));
+
+    number maxfac = 0.7*max(max(fac, max(fac2, max(fac3,0.0))) + (fac+fac2+fac3*fac4), 0.);
+
+    tex.rgb = tex.rgb*0.5 + vec3(0.4, 0.4, 0.8);
+
+    float alpha = tex.a*(0.5*max(min(1., max(0.,0.3*max(low*0.2, delta)+ min(max(maxfac*0.1,0.), 0.4)) ), 0.) + 0.15*maxfac*(0.1+delta))*0.5;
+    tex.r = (tex.r-delta + delta*maxfac*(0.7 + fac5*0.27) - 0.1)*alpha + oldtex.r*(1 - alpha);
+    tex.g = (tex.g-delta + delta*maxfac*(0.7 - fac5*0.27) - 0.1)*alpha + oldtex.g*(1 - alpha);
+    tex.b = (tex.b-delta + delta*maxfac*0.7 - 0.1)*alpha + oldtex.b*(1 - alpha);
+    tex.a = oldtex.a;
+
+    return tex;
+}
+
 // This is what actually changes the look of card
 vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords )
 {
@@ -44,6 +70,8 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     tex.r = tex.r * strength;
     tex.g = tex.g;
     tex.b = tex.b * strength + (tex.g * 0.4) * (1. - strength);
+
+    tex = laminate(tex, uv);
 
     return dissolve_mask(tex*colour, texture_coords, uv);
 }
