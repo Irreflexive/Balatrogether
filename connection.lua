@@ -1,17 +1,20 @@
 local socket = require("socket")
 
+local tcp_thread
 G.FUNCS.tcp_connect = function()
-  if G.MULTIPLAYER.tcp then return end
-  local tcp = assert(socket.tcp())
-  G.MULTIPLAYER.tcp = tcp
-  tcp:connect(G.MULTIPLAYER.address, 7063)
-  tcp:settimeout(0)
+  if tcp_thread then return end
+  tcp_thread = love.thread.newThread(NFS.read(SMODS.current_mod.path .. "tcp_thread.lua"))
+  tcp_thread:start(G.MULTIPLAYER.address)
   if G.MULTIPLAYER.debug then sendDebugMessage("TCP connection opened") end
 end
 
 local function receive_and_parse()
   local res = nil
-  local s, status, partial = G.MULTIPLAYER.tcp:receive()
+  local popped = love.thread.getChannel("balatrogether_receive"):pop()
+  if not popped then
+    return { success = true }
+  end
+  local s, status, partial = popped.s, popped.status, popped.partial
   if status == "timeout" then
     res = { success = true }
   elseif status == "closed" or s == nil then
@@ -28,7 +31,7 @@ local function receive_and_parse()
 end
 
 G.FUNCS.tcp_receive = function()
-  if not G.MULTIPLAYER.tcp then return end
+  if not tcp_thread then return end
   local res = receive_and_parse()
   if res.success then
     if not res.data then return end
@@ -48,9 +51,10 @@ end
 
 local receive_requests = false
 G.FUNCS.tcp_close = function()
-  if not G.MULTIPLAYER.tcp then return end
-  G.MULTIPLAYER.tcp:close()
-  G.MULTIPLAYER.tcp = nil
+  if not tcp_thread then return end
+  love.thread.getChannel("balatrogether_send"):push("KILL")
+  tcp_thread:release()
+  tcp_thread = nil
   G.MULTIPLAYER.enabled = false
   receive_requests = false
   G.MULTIPLAYER.players = {}
@@ -78,14 +82,14 @@ G.FUNCS.tcp_update = function(dt)
   if receive_requests then
     G.FUNCS.tcp_receive()
   end 
-  if not G.MULTIPLAYER.tcp then return end
+  if not tcp_thread then return end
   time_since_last_send = time_since_last_send + dt
   if #G.MULTIPLAYER.send_queue == 0 or time_since_last_send < 0.1 then return end
   time_since_last_send = 0
   local data = G.MULTIPLAYER.send_queue[1]
   table.remove(G.MULTIPLAYER.send_queue, 1)
   if G.MULTIPLAYER.debug then sendDebugMessage("Sending data: " .. data) end
-  G.MULTIPLAYER.tcp:send(data)
+  love.thread.getChannel("balatrogether_send"):push(data)
 end
 
 G.FUNCS.tcp_listen = function(event, callback)
