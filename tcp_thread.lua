@@ -1,20 +1,12 @@
 local socket = require("socket")
 
-local address = ...
+local address, send_channel, receive_channel = ...
 local tcp = assert(socket.tcp())
 tcp:connect(address, 7063)
 tcp:settimeout(0)
 
 while true do
-  local s, status, partial = tcp:receive()
-  if status ~= "timeout" then
-    love.thread.getChannel("balatrogether_receive"):push({
-      s = s,
-      status = status,
-      partial = partial,
-    })
-  end
-  local data = love.thread.getChannel("balatrogether_send"):pop()
+  local data = send_channel:pop()
   if data then
     if data == "KILL" then
       tcp:close()
@@ -22,5 +14,13 @@ while true do
     else
       tcp:send(data)
     end
+  end
+  local s, status, partial = tcp:receive()
+  if status ~= "timeout" then
+    receive_channel:push({
+      s = s,
+      status = status,
+      partial = partial,
+    })
   end
 end
