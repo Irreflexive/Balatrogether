@@ -107,8 +107,10 @@ G.FUNCS.change_player_list_page = function(args)
   end
 end
 
+local current_server_list_page = 1
 G.FUNCS.change_server_list_page = function(args)
-  if not args or not args.cycle_config then return end
+  if not args or not args.cycle_config then args = {cycle_config = {current_option = current_server_list_page}} end
+  current_server_list_page = args.cycle_config.current_option
   if G.OVERLAY_MENU then
     local pl_list = G.OVERLAY_MENU:get_UIE_by_ID('saved_servers_list')
     if pl_list then 
@@ -149,6 +151,7 @@ G.FUNCS.remove_server = function(e)
     if server == id then
       table.remove(servers, i)
       G.PROFILES[G.SETTINGS.profile].saved_servers = servers
+      G.FUNCS.change_server_list_page()
       return
     end
   end

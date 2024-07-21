@@ -47,8 +47,11 @@ function G.UIDEF.run_setup(from_game_over)
 end
 
 function G.UIDEF.multiplayer_join()
-  local t = {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR, minh = 3, minw = 6}, nodes={
+  local t = {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR, minh = 5, minw = 6}, nodes={
     G.UIDEF.saved_servers(),
+    {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
+      {n=G.UIT.T, config={text = 'New Server', scale = 0.5, colour = G.C.WHITE}},
+    }},
     {n=G.UIT.R, config={align = "cm", padding = 0.05}, nodes={
       {n=G.UIT.C, config={align = "cm", minw = 1}, nodes={
         create_text_input({ref_table = G.MULTIPLAYER, extended_corpus = true, keep_zeroes = true, ref_value = 'address', prompt_text = "IP Address"}),
@@ -56,9 +59,9 @@ function G.UIDEF.multiplayer_join()
         UIBox_button({label = {"Paste"}, minw = 1, minh = 0.6, button = 'paste_address', colour = G.C.BLUE, scale = 0.3, col = true})
       }},
     }},
-    {n=G.UIT.R, config={align = "cm", minh = 0.5}, nodes={}},
+    {n=G.UIT.R, config={align = "cm", minh = 0.3}, nodes={}},
     {n=G.UIT.R, config={align = "cm", padding = 0.05, minh = 0.9}, nodes={
-        {n=G.UIT.C, config={align = "cm", minw = 4, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.GREEN, button = "join_server", shadow = true}, nodes={
+        {n=G.UIT.C, config={align = "cm", minw = 4, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.GREEN, button = "join_server", one_press = true, shadow = true}, nodes={
           {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
             {n=G.UIT.T, config={text = 'JOIN', scale = 0.8, colour = G.C.UI.TEXT_LIGHT, func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
           }}
@@ -123,7 +126,7 @@ function G.UIDEF.player_list()
         {n=G.UIT.T, config={text = 'IP Address', scale = 0.5, colour = G.C.WHITE}},
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        UIBox_button({id = 'server_code', col = true, label = {G.MULTIPLAYER.address}, button = 'nil', colour = G.C.BLUE, scale = 0.5, minw = 3, minh = 0.6}),
+        UIBox_button({id = 'server_code', col = true, label = {G.MULTIPLAYER.address}, button = 'nil', colour = G.C.BLUE, scale = 0.5, minw = 3, minh = 0.6, shadow = true}),
         UIBox_button({id = 'copy_code', col = true, label = {'Copy'}, button = 'copy_server_code', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
@@ -157,7 +160,18 @@ function G.UIDEF.player_list_page(_page)
       {n=G.UIT.C, config={align = 'cl', minw = 0.8}, nodes = {
         {n=G.UIT.T, config={text = k..'', scale = 0.4, colour = G.C.WHITE}},
       }},
-      UIBox_button({id = k, col = true, label = {v and G.STEAM.friends.getFriendPersonaName(G.STEAM.extra.parseUint64(v)) or ''}, button = 'nil', colour = v and (tostring(G.STEAM.user.getSteamID()) == v and G.C.IMPORTANT or G.C.RED) or G.C.GREY, minw = 4, scale = 0.4, minh = 0.6, focus_args = {snap_to = not snapped}}),
+      UIBox_button({
+        id = k, 
+        col = true, 
+        label = {v and G.STEAM.friends.getFriendPersonaName(G.STEAM.extra.parseUint64(v)) or ''}, 
+        button = 'nil', 
+        colour = v and (tostring(G.STEAM.user.getSteamID()) == v and G.C.IMPORTANT or G.C.RED) or G.C.GREY, 
+        minw = 4, 
+        scale = 0.4, 
+        minh = 0.6, 
+        focus_args = {snap_to = not snapped}, 
+        shadow = true
+      }),
     }}      
     snapped = true
   end
@@ -368,9 +382,9 @@ function G.UIDEF.saved_servers_page(_page)
       {n=G.UIT.C, config={align = 'cl', minw = 0.8}, nodes = {
         {n=G.UIT.T, config={text = k..'', scale = 0.4, colour = G.C.WHITE}},
       }},
-      UIBox_button({id = v, col = true, label = {v or ""}, button = v and 'join_saved_server' or 'nil', colour = v and G.C.BLUE or G.C.GREY, minw = 4, scale = 0.4, minh = 0.6, focus_args = {snap_to = not snapped}}),
+      UIBox_button({id = v, col = true, label = {v or ""}, button = v and 'join_saved_server' or 'nil', colour = v and G.C.BLUE or G.C.GREY, minw = 4, scale = 0.4, minh = 0.6, one_press = true, focus_args = {snap_to = not snapped}}),
       {n=G.UIT.C, config={align = 'cm', minw = 0.1}, nodes = {}},
-      UIBox_button({id = v and 'remove_'..v or nil, col = true, label = {'X'}, button = v and 'remove_server' or 'nil', colour = v and G.C.RED or G.C.GREY, scale = 0.4, minw = 0.6, minh = 0.6, focus_args = {snap_to = not snapped}}),
+      UIBox_button({id = v and 'remove_'..v or nil, col = true, label = {'X'}, button = v and 'remove_server' or 'nil', colour = v and G.C.RED or G.C.GREY, scale = 0.4, minw = 0.6, minh = 0.6, one_press = true, focus_args = {snap_to = not snapped}}),
     }}      
     snapped = true
   end
