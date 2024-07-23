@@ -27,7 +27,7 @@ SMODS.Edition{
   weight = 14,
   extra_cost = 3,
   in_shop = true,
-  sound = { sound = SMODS.current_mod.prefix .. "_secure", per = 1, vol = 0.4 },
+  sound = { sound = Balatrogether.prefix .. "_secure", per = 1, vol = 0.4 },
   get_weight = function(self, card, context)
     if G.FUNCS.is_versus_game() then
       return G.GAME.edition_rate * self.weight
@@ -47,7 +47,7 @@ SMODS.Consumable:take_ownership("wheel_of_fortune", {
     }
   },
   loc_vars = function(self, info_queue)
-    local secure = 'e_' .. SMODS.current_mod.prefix .. '_secure'
+    local secure = 'e_' .. Balatrogether.prefix .. '_secure'
     info_queue[#info_queue+1] = G.P_CENTERS[secure]
     return {}
   end,
@@ -63,7 +63,7 @@ SMODS.Consumable:take_ownership("aura", {
     }
   },
   loc_vars = function(self, info_queue)
-    local secure = 'e_' .. SMODS.current_mod.prefix .. '_secure'
+    local secure = 'e_' .. Balatrogether.prefix .. '_secure'
     info_queue[#info_queue+1] = G.P_CENTERS[secure]
     return {}
   end,
@@ -72,7 +72,7 @@ SMODS.Consumable:take_ownership("aura", {
 local poll_edition_ref = poll_edition
 function poll_edition(_key, _mod, _no_neg, _guaranteed, _options)
   if (_key == "wheel_of_fortune" or _key == "aura") and G.FUNCS.is_versus_game() then
-    local secure = 'e_' .. SMODS.current_mod.prefix .. '_secure'
+    local secure = 'e_' .. Balatrogether.prefix .. '_secure'
     _options = { 'e_negative', 'e_polychrome', 'e_holo', 'e_foil', secure }
   end
   return poll_edition_ref(_key, _mod, _no_neg, _guaranteed, _options)

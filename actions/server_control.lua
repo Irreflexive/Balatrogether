@@ -101,7 +101,7 @@ G.FUNCS.tcp_listen("START", function(data)
     elseif i <= 20 then
       table.insert(cards, {s='S',r='K',g='Blue'})
     elseif i <= 30 then
-      table.insert(cards, {s='S',r='K',g='s_' .. SMODS.current_mod.prefix .. '_green'})
+      table.insert(cards, {s='S',r='K',g='s_' .. Balatrogether.prefix .. '_green'})
     elseif i <= 40 then
       table.insert(cards, {s='S',r='K',g='Purple'})
     elseif i <= 50 then
@@ -121,17 +121,17 @@ G.FUNCS.tcp_listen("START", function(data)
       }
     },
     jokers = {
-      {id = 'j_joker', edition = data.versus and SMODS.current_mod.prefix .. '_secure' or nil},
+      {id = 'j_joker', edition = data.versus and Balatrogether.prefix .. '_secure' or nil},
       {id = 'j_joker'},
       {id = 'j_joker'},
-      {id = data.versus and 'j_' .. SMODS.current_mod.prefix .. '_annie_and_hallie' or 'j_joker'},
-      {id = data.versus and 'j_' .. SMODS.current_mod.prefix .. '_annie_and_hallie' or 'j_joker'},
+      {id = data.versus and 'j_' .. Balatrogether.prefix .. '_annie_and_hallie' or 'j_joker'},
+      {id = data.versus and 'j_' .. Balatrogether.prefix .. '_annie_and_hallie' or 'j_joker'},
     },
     consumeables = {
       {id = 'c_wheel_of_fortune'},
       {id = 'c_aura'},
       {id = 'c_pluto'},
-      {id = data.versus and 'c_' .. SMODS.current_mod.prefix .. '_cup' or 'c_heirophant'},
+      {id = data.versus and 'c_' .. Balatrogether.prefix .. '_cup' or 'c_heirophant'},
     },
     vouchers = {},
     deck = {
@@ -155,4 +155,8 @@ end)
 
 G.FUNCS.tcp_listen("ENDLESS", function(data)
   G.FUNCS.exit_overlay_menu()
+end)
+
+G.FUNCS.tcp_listen("STATE_INFO", function(data)
+  Balatrogether.server.remaining = data.remaining
 end)

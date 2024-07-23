@@ -245,7 +245,7 @@ function G.UIDEF.boss_leaderboard(leaderboard)
   local list = {}
   local survive_count = G.FUNCS.get_duel_threshold()
   local survived = false
-  for k = 1, 8 do
+  for k = 1, Balatrogether.server.max_players do
     local row = leaderboard[k]
     local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5)
     if row and tostring(G.STEAM.user.getSteamID()) == row.player and row.score and k <= survive_count then

@@ -26,7 +26,7 @@ Balatrogether.server = {
   debug = true,
   actions = {},
   max_players = 0,
-  remaining = 8, -- change to sync with server
+  remaining = 0,
 }
 
 sendDebugMessage("Launching Balatrogether!")
@@ -210,8 +210,8 @@ end
 local get_new_boss_ref = get_new_boss
 function get_new_boss()
   if G.FUNCS.is_versus_game() then
-    local the_duel = 'bl_' .. SMODS.current_mod.prefix .. '_the_duel'
-    local the_showdown = 'bl_' .. SMODS.current_mod.prefix .. '_final_showdown'
+    local the_duel = 'bl_' .. Balatrogether.prefix .. '_the_duel'
+    local the_showdown = 'bl_' .. Balatrogether.prefix .. '_final_showdown'
     local old_perscribed = G.GAME.perscribed_bosses
     G.GAME.perscribed_bosses = old_perscribed or {}
     local ante = G.GAME.round_resets.ante

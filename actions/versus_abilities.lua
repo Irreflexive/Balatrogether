@@ -3,14 +3,14 @@ G.FUNCS.tcp_listen("THE_CUP", function(data)
 end)
 
 G.FUNCS.tcp_listen("GREEN_SEAL", function(data)
-  local money = G.P_SEALS['s_' .. SMODS.current_mod.prefix .. '_green_seal'].config.money
+  local money = G.P_SEALS['s_' .. Balatrogether.prefix .. '_green_seal'].config.money
   ease_dollars(-money)
 end)
 
 G.FUNCS.tcp_listen("ANNIE_AND_HALLIE", function(data)
   local jokers = {}
   for k, v in pairs(G.jokers.cards) do
-    if not v.edition or v.edition.type ~= SMODS.current_mod.prefix .. "_secure" then
+    if not v.edition or v.edition.type ~= Balatrogether.prefix .. "_secure" then
       table.insert(jokers, {
         joker = v.config.center.key,
         ability = v.ability,
@@ -21,7 +21,7 @@ G.FUNCS.tcp_listen("ANNIE_AND_HALLIE", function(data)
   local _first_dissolve = nil
   G.E_MANAGER:add_event(Event({trigger = 'before', delay = 0.75, func = function()
       for k, v in pairs(G.jokers.cards) do
-          if not v.edition or v.edition.type ~= SMODS.current_mod.prefix .. "_secure" then
+          if not v.edition or v.edition.type ~= Balatrogether.prefix .. "_secure" then
             v:start_dissolve(nil, _first_dissolve)
             _first_dissolve = true
           end
