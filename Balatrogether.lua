@@ -15,10 +15,10 @@ G.MULTIPLAYER = {
   address = "",
   players = {},
   versus = false,
-  tcp = nil,
-  send_queue = {},
   debug = true,
   actions = {},
+  max_players = 0,
+  remaining = 8, -- change to sync with server
 }
 
 G.new_multiplayer_run_config = {
@@ -177,6 +177,12 @@ G.FUNCS.close_leaderboard = function(e)
   G.FUNCS.cash_out(e)
 end
 
+G.FUNCS.lose_duel_versus = function(e)
+  G.FUNCS.exit_overlay_menu()
+  G.STATE = G.STATES.GAME_OVER
+  G.STATE_COMPLETE = false
+end
+
 G.FUNCS.paste_address = function(e)
   G.CONTROLLER.text_input_hook = e.UIBox:get_UIE_by_ID('text_input').children[1].children[1]
   for i = 1, 16 do
@@ -194,13 +200,22 @@ G.FUNCS.paste_address = function(e)
   G.FUNCS.text_input_key({key = 'return'})
 end
 
+G.FUNCS.get_duel_threshold = function()
+  return math.ceil(G.MULTIPLAYER.remaining / 2)
+end
+
 local get_new_boss_ref = get_new_boss
 function get_new_boss()
   if G.FUNCS.is_versus_game() then
     local the_duel = 'bl_' .. SMODS.current_mod.prefix .. '_the_duel'
     local the_showdown = 'bl_' .. SMODS.current_mod.prefix .. '_final_showdown'
     local old_perscribed = G.GAME.perscribed_bosses
-    G.GAME.perscribed_bosses = {nil, the_duel, nil, the_duel, nil, the_duel, nil, the_showdown}
+    G.GAME.perscribed_bosses = old_perscribed or {}
+    local ante = G.GAME.round_resets.ante
+    if G.FUNCS.get_duel_threshold() >= 2 and ante % 2 == 0 then
+      G.GAME.perscribed_bosses[ante] = the_duel
+    end
+    G.GAME.perscribed_bosses[G.GAME.win_ante] = the_showdown
     local boss = get_new_boss_ref()
     G.GAME.perscribed_bosses = old_perscribed
     return boss

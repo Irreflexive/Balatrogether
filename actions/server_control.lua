@@ -74,6 +74,7 @@ G.FUNCS.tcp_listen("JOIN", function(data)
   G.MULTIPLAYER.enabled = true
   G.MULTIPLAYER.versus = false
   G.MULTIPLAYER.players = data.players
+  G.MULTIPLAYER.max_players = data.maxPlayers
   if (G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('balatrogether_player_list')) or data.players[#data.players] == tostring(G.STEAM.user.getSteamID()) then
     G.FUNCS.setup_run_multiplayer()
   end
@@ -83,14 +84,13 @@ end)
 G.FUNCS.tcp_listen("LEAVE", function(data)
   G.MULTIPLAYER.players = data.players
   if G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('balatrogether_player_list') then
-    G.FUNCS.overlay_menu{
-      definition = G.UIDEF.server_config(),
-    }
+    G.FUNCS.setup_run_multiplayer()
   end
 end)
 
 G.FUNCS.tcp_listen("START", function(data)
   G.MULTIPLAYER.versus = data.versus
+  G.new_multiplayer_run_config.versus = data.versus
   G.MULTIPLAYER.leaderboard_blind = false
   G.MULTIPLAYER.leaderboard = nil
   G.GAME.selected_back = Back(get_deck_from_name(data.deck))

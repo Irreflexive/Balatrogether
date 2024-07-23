@@ -5,6 +5,7 @@ local tcp = {
   thread = nil,
   send_channel = nil,
   receive_channel = nil,
+  send_queue = {},
 }
 
 G.FUNCS.tcp_connect = function()
@@ -13,6 +14,7 @@ G.FUNCS.tcp_connect = function()
   tcp.thread = love.thread.newThread(NFS.read(SMODS.current_mod.path .. "tcp_thread.lua"))
   tcp.send_channel = love.thread.newChannel()
   tcp.receive_channel = love.thread.newChannel()
+  tcp.send_queue = {}
   tcp.thread:start(G.MULTIPLAYER.address, tcp.send_channel, tcp.receive_channel)
   if G.MULTIPLAYER.debug then sendDebugMessage("TCP connection opened") end
 end
@@ -79,7 +81,7 @@ G.FUNCS.tcp_send = function(data)
   if data.cmd == "JOIN" then
     data.steam_id = tostring(G.STEAM.user.getSteamID())
   end
-  table.insert(G.MULTIPLAYER.send_queue, G.JSON.encode(data))
+  table.insert(tcp.send_queue, G.JSON.encode(data))
 end
 
 local time_since_last_send = 0
@@ -87,10 +89,10 @@ G.FUNCS.tcp_update = function(dt)
   G.FUNCS.tcp_receive()
   if not tcp.enabled then return end
   time_since_last_send = time_since_last_send + dt
-  if #G.MULTIPLAYER.send_queue == 0 or time_since_last_send < 0.1 then return end
+  if #tcp.send_queue == 0 or time_since_last_send < 0.1 then return end
   time_since_last_send = 0
-  local data = G.MULTIPLAYER.send_queue[1]
-  table.remove(G.MULTIPLAYER.send_queue, 1)
+  local data = tcp.send_queue[1]
+  table.remove(tcp.send_queue, 1)
   if G.MULTIPLAYER.debug then sendDebugMessage("Sending data: " .. data) end
   tcp.send_channel:push(data)
 end

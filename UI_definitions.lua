@@ -243,14 +243,19 @@ end
 
 function G.UIDEF.boss_leaderboard(leaderboard)
   local list = {}
+  local survive_count = G.FUNCS.get_duel_threshold()
+  local survived = false
   for k = 1, 8 do
     local row = leaderboard[k]
     local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5)
+    if row and tostring(G.STEAM.user.getSteamID()) == row.player and row.score and k <= survive_count then
+      survived = true
+    end
     list[#list+1] = row and {n=G.UIT.R, config={align = "cm"}, nodes={
       {n=G.UIT.C, config={align = "cl", minw = 0.5}, nodes = {
         {n=G.UIT.T, config={text = k..'', scale = 0.4, colour = G.C.WHITE}},
       }},
-      {n=G.UIT.C, config={align = "cm", minw = 7.5, minh = 0.6, r = 0.1, colour = row.score and G.C.BLUE or G.C.GREY}, nodes = {
+      {n=G.UIT.C, config={align = "cm", minw = 7.5, minh = 0.6, r = 0.1, colour = (row.score and k <= survive_count) and G.C.BLUE or G.C.GREY}, nodes = {
         {n=G.UIT.C, config={align = "cl", minw = 4, minh = 0.6, padding = 0.1}, nodes={
           {n=G.UIT.T, config={text = row.name or G.STEAM.friends.getFriendPersonaName(G.STEAM.extra.parseUint64(row.player)), scale = 0.4, colour = G.C.WHITE, shadow = true}},
         }},
@@ -269,7 +274,7 @@ function G.UIDEF.boss_leaderboard(leaderboard)
     }}
   end
 
-  local t = create_UIBox_generic_options({ back_label = 'Continue', back_func = 'close_leaderboard', contents = {
+  local t = create_UIBox_generic_options({ back_label = 'Continue', back_func = survived and 'close_leaderboard' or 'lose_duel_versus', contents = {
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
         {n=G.UIT.T, config={text = "Boss Results", scale = 0.5, colour = G.C.WHITE}},
       }},

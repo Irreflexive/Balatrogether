@@ -1,8 +1,8 @@
 local loc_def = {
   name = "The Duel",
   text = {
-      "Player with the lowest",
-      "round score is eliminated",
+      "The #1# highest",
+      "scorers survive",
   }
 }
 
@@ -17,7 +17,14 @@ SMODS.Blind{
   atlas = "Balatrogether_blinds",
   in_pool = function(self)
     local ante = G.GAME.round_resets.ante
-    return G.FUNCS.is_versus_game() and ante % 2 == 0 and ante < G.GAME.win_ante
+    return G.FUNCS.is_versus_game() and 
+      ante % 2 == 0 and 
+      ante < G.GAME.win_ante and 
+      G.FUNCS.get_duel_threshold() >= 2
+  end,
+  vars = {8},
+  loc_vars = function(self)
+    return {vars = { G.FUNCS.get_duel_threshold() }}
   end,
   defeat = function(self)
     G.MULTIPLAYER.leaderboard_blind = true
