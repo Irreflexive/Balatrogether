@@ -10,7 +10,15 @@
 ----------------------------------------------
 ------------MOD CODE -------------------------
 
-G.MULTIPLAYER = {
+Balatrogether = {
+  prefix = SMODS.current_mod.prefix,
+  file_path = SMODS.current_mod.path,
+  new_run_config = {
+    versus = false,
+  },
+}
+
+Balatrogether.server = {
   enabled = false,
   address = "",
   players = {},
@@ -21,19 +29,14 @@ G.MULTIPLAYER = {
   remaining = 8, -- change to sync with server
 }
 
-G.new_multiplayer_run_config = {
-  versus = false,
-}
-
-local mod = SMODS.current_mod
 sendDebugMessage("Launching Balatrogether!")
-assert(load(NFS.read(mod.path .. "json.lua")))()
-assert(load(NFS.read(mod.path .. "util.lua")))()
-assert(load(NFS.read(mod.path .. "singleplayer_funcs.lua")))()
-assert(load(NFS.read(mod.path .. "UI_definitions.lua")))()
-assert(load(NFS.read(mod.path .. "connection.lua")))()
-for _,file in ipairs(NFS.getDirectoryItems(mod.path .. "actions")) do
-  assert(load(NFS.read(mod.path .. "actions/" .. file)))()
+assert(load(NFS.read(Balatrogether.file_path .. "json.lua")))()
+assert(load(NFS.read(Balatrogether.file_path .. "util.lua")))()
+assert(load(NFS.read(Balatrogether.file_path .. "singleplayer_funcs.lua")))()
+assert(load(NFS.read(Balatrogether.file_path .. "UI_definitions.lua")))()
+assert(load(NFS.read(Balatrogether.file_path .. "connection.lua")))()
+for _,file in ipairs(NFS.getDirectoryItems(Balatrogether.file_path .. "actions")) do
+  assert(load(NFS.read(Balatrogether.file_path .. "actions/" .. file)))()
 end
 
 SMODS.Atlas{
@@ -50,8 +53,8 @@ SMODS.Atlas{
   px = 34,
   py = 34
 }
-for _,file in ipairs(NFS.getDirectoryItems(mod.path .. "items")) do
-  assert(load(NFS.read(mod.path .. "items/" .. file)))()
+for _,file in ipairs(NFS.getDirectoryItems(Balatrogether.file_path .. "items")) do
+  assert(load(NFS.read(Balatrogether.file_path .. "items/" .. file)))()
 end
 
 local old_update = love.update
@@ -67,20 +70,20 @@ G.FUNCS.join_server = function()
 end
 
 G.FUNCS.join_saved_server = function(e)
-  G.MULTIPLAYER.address = e.config.id
+  Balatrogether.server.address = e.config.id
   G.FUNCS.join_server()
 end
 
 G.FUNCS.is_coop_game = function()
-  return G.MULTIPLAYER.enabled and not G.MULTIPLAYER.versus
+  return Balatrogether.server.enabled and not Balatrogether.server.versus
 end
 
 G.FUNCS.is_versus_game = function()
-  return G.MULTIPLAYER.enabled and G.MULTIPLAYER.versus
+  return Balatrogether.server.enabled and Balatrogether.server.versus
 end
 
 G.FUNCS.is_host = function(e)
-  local _is_host = tostring(G.STEAM.user.getSteamID()) == G.MULTIPLAYER.players[1]
+  local _is_host = tostring(G.STEAM.user.getSteamID()) == Balatrogether.server.players[1]
   if e and e.config and e.config.func then
     if not _is_host then
       e.config.colour = G.C.UI.BACKGROUND_INACTIVE
@@ -127,20 +130,20 @@ end
 
 G.FUNCS.copy_server_code = function(e)
   if G.F_LOCAL_CLIPBOARD then
-    G.CLIPBOARD = G.MULTIPLAYER.address
+    G.CLIPBOARD = Balatrogether.server.address
   else
-    love.system.setClipboardText(G.MULTIPLAYER.address)
+    love.system.setClipboardText(Balatrogether.server.address)
   end 
 end
 
 G.FUNCS.save_server = function(e)
   local servers = G.PROFILES[G.SETTINGS.profile].saved_servers
   for _,server in ipairs(servers) do
-    if server == G.MULTIPLAYER.address then
+    if server == Balatrogether.server.address then
       return
     end
   end
-  servers[#servers+1] = G.MULTIPLAYER.address
+  servers[#servers+1] = Balatrogether.server.address
   G.PROFILES[G.SETTINGS.profile].saved_servers = servers
 end
 
@@ -165,11 +168,11 @@ end
 
 G.FUNCS.view_leaderboard = function(e)
   G.FUNCS.overlay_menu{
-    definition = G.UIDEF.boss_leaderboard(G.MULTIPLAYER.leaderboard),
+    definition = G.UIDEF.boss_leaderboard(Balatrogether.server.leaderboard),
   }
   G.OVERLAY_MENU.config.no_esc = true
-  G.MULTIPLAYER.leaderboard_blind = false
-  G.MULTIPLAYER.leaderboard = nil
+  Balatrogether.server.leaderboard_blind = false
+  Balatrogether.server.leaderboard = nil
 end
 
 G.FUNCS.close_leaderboard = function(e)
@@ -201,7 +204,7 @@ G.FUNCS.paste_address = function(e)
 end
 
 G.FUNCS.get_duel_threshold = function()
-  return math.ceil(G.MULTIPLAYER.remaining / 2)
+  return math.ceil(Balatrogether.server.remaining / 2)
 end
 
 local get_new_boss_ref = get_new_boss

@@ -54,7 +54,7 @@ function G.UIDEF.multiplayer_join()
     }},
     {n=G.UIT.R, config={align = "cm", padding = 0.05}, nodes={
       {n=G.UIT.C, config={align = "cm", minw = 1}, nodes={
-        create_text_input({ref_table = G.MULTIPLAYER, extended_corpus = true, keep_zeroes = true, ref_value = 'address', prompt_text = "IP Address"}),
+        create_text_input({ref_table = Balatrogether.server, extended_corpus = true, keep_zeroes = true, ref_value = 'address', prompt_text = "IP Address"}),
         {n=G.UIT.C, config={align = "cm", minw = 0.1}, nodes={}},
         UIBox_button({label = {"Paste"}, minw = 1, minh = 0.6, button = 'paste_address', colour = G.C.BLUE, scale = 0.3, col = true})
       }},
@@ -101,10 +101,10 @@ function G.UIDEF.run_setup_multiplayer()
   local t = G.UIDEF.run_setup_option('Multiplayer Run')
   table.insert(t.nodes, 1, create_toggle({
     label = "Versus Mode",
-    ref_table = G.new_multiplayer_run_config,
+    ref_table = Balatrogether.new_run_config,
     ref_value = "versus",
     callback = function(_set_toggle)
-      G.new_multiplayer_run_config.versus = _set_toggle
+      Balatrogether.new_run_config.versus = _set_toggle
     end,
   }))
   return t
@@ -113,8 +113,8 @@ end
 function G.UIDEF.player_list()
   local player_page_size = 4
   local player_pages = {}
-  for i = 1, math.ceil(#G.MULTIPLAYER.players/player_page_size) do
-    table.insert(player_pages, localize('k_page')..' '..tostring(i)..'/'..tostring(math.ceil(#G.MULTIPLAYER.players/player_page_size)))
+  for i = 1, math.ceil(#Balatrogether.server.players/player_page_size) do
+    table.insert(player_pages, localize('k_page')..' '..tostring(i)..'/'..tostring(math.ceil(#Balatrogether.server.players/player_page_size)))
   end
   G.E_MANAGER:add_event(Event({func = (function()
     G.FUNCS.change_player_list_page{cycle_config = {current_option = 1}}
@@ -126,7 +126,7 @@ function G.UIDEF.player_list()
         {n=G.UIT.T, config={text = 'IP Address', scale = 0.5, colour = G.C.WHITE}},
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        UIBox_button({id = 'server_code', col = true, label = {G.MULTIPLAYER.address}, button = 'nil', colour = G.C.BLUE, scale = 0.5, minw = 3, minh = 0.6, shadow = true}),
+        UIBox_button({id = 'server_code', col = true, label = {Balatrogether.server.address}, button = 'nil', colour = G.C.BLUE, scale = 0.5, minw = 3, minh = 0.6, shadow = true}),
         UIBox_button({id = 'copy_code', col = true, label = {'Copy'}, button = 'copy_server_code', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
@@ -152,7 +152,7 @@ function G.UIDEF.player_list_page(_page)
   local snapped = false
   local player_list = {}
   for k = player_page_size*(_page or 0) + 1, player_page_size*((_page or 0) + 1) do
-    v = G.MULTIPLAYER.players[k]
+    v = Balatrogether.server.players[k]
     if G.CONTROLLER.focused.target and G.CONTROLLER.focused.target.config.id == 'player_page' then snapped = true end
 
     player_list[#player_list+1] = 
@@ -195,12 +195,12 @@ function create_UIBox_options()
   }))
 
   if G.STAGE == G.STAGES.RUN then
-    if G.MULTIPLAYER.enabled then
+    if Balatrogether.server.enabled then
       restart = UIBox_button{id = 'server_settings_button', label = {"Server Settings"}, button = "setup_run_multiplayer", minw = 5}
     else
       restart = UIBox_button{id = 'restart_button', label = {localize('b_start_new_run')}, button = "setup_run", minw = 5}
     end
-    if G.MULTIPLAYER.enabled then
+    if Balatrogether.server.enabled then
       main_menu = UIBox_button{ label = {"Leave Server"}, button = "tcp_close", minw = 5}
     else
       main_menu = UIBox_button{ label = {localize('b_main_menu')}, button = "go_to_menu", minw = 5}
@@ -231,7 +231,7 @@ function create_UIBox_options()
 
   local t = create_UIBox_generic_options({ contents = {
       settings,
-      (G.GAME.seeded and not G.MULTIPLAYER.enabled) and current_seed or nil,
+      (G.GAME.seeded and not Balatrogether.server.enabled) and current_seed or nil,
       restart,
       main_menu,
       high_scores,
@@ -298,7 +298,7 @@ local create_UIBox_win_ref = create_UIBox_win
 function create_UIBox_win()
   local t = create_UIBox_win_ref()
 
-  if G.MULTIPLAYER.enabled then
+  if Balatrogether.server.enabled then
     local new_run_button = findDescendantOfNodeTreeByConfig(t, 'id', 'from_game_won')
     if new_run_button then
       new_run_button.config.button = 'setup_run_multiplayer'
@@ -327,7 +327,7 @@ local create_UIBox_game_over_ref = create_UIBox_game_over
 function create_UIBox_game_over()
   local t = create_UIBox_game_over_ref()
 
-  if G.MULTIPLAYER.enabled then
+  if Balatrogether.server.enabled then
     if G.FUNCS.is_versus_game() then
       G.FUNCS.tcp_send({cmd = "ELIMINATED"})
     end

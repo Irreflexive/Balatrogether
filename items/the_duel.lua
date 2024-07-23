@@ -27,7 +27,7 @@ SMODS.Blind{
     return {vars = { G.FUNCS.get_duel_threshold() }}
   end,
   defeat = function(self)
-    G.MULTIPLAYER.leaderboard_blind = true
+    Balatrogether.server.leaderboard_blind = true
     G.FUNCS.tcp_send({ cmd = "DEFEATED_BOSS", score = G.GAME.chips })
   end
 }

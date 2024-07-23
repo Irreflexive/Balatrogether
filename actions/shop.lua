@@ -37,13 +37,13 @@ function add_round_eval_row(config)
   local num_dollars = config.dollars or 1
   local scale = 0.9
 
-  if config.name == "bottom" and G.MULTIPLAYER.enabled then
+  if config.name == "bottom" and Balatrogether.server.enabled then
     delay(0.4)
     G.E_MANAGER:add_event(Event({
       trigger = 'before',delay = 0.5,
       func = function()
-        local is_wait_boss = G.FUNCS.is_versus_game() and G.MULTIPLAYER.leaderboard_blind
-        local should_wait = is_wait_boss and not G.MULTIPLAYER.leaderboard
+        local is_wait_boss = G.FUNCS.is_versus_game() and Balatrogether.server.leaderboard_blind
+        local should_wait = is_wait_boss and not Balatrogether.server.leaderboard
         local color = should_wait and G.C.UI.BACKGROUND_INACTIVE or G.C.ORANGE
         local button_func = is_wait_boss and (should_wait and 'nil' or 'view_leaderboard') or 'cash_out'
         G.NEXT_ROUND_BUTTON = UIBox{
@@ -88,7 +88,7 @@ G.FUNCS.tcp_listen("GO_TO_SHOP", function(data)
 end)
 
 G.FUNCS.tcp_listen("LEADERBOARD", function(data)
-  G.MULTIPLAYER.leaderboard = data.leaderboard
+  Balatrogether.server.leaderboard = data.leaderboard
   local e = G.NEXT_ROUND_BUTTON and G.NEXT_ROUND_BUTTON:get_UIE_by_ID('cash_out_button')
   if not e then return end
   e.config.button = "view_leaderboard"

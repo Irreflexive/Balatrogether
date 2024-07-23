@@ -11,12 +11,12 @@ local tcp = {
 G.FUNCS.tcp_connect = function()
   if tcp.enabled then return end
   tcp.enabled = true
-  tcp.thread = love.thread.newThread(NFS.read(SMODS.current_mod.path .. "tcp_thread.lua"))
+  tcp.thread = love.thread.newThread(NFS.read(Balatrogether.file_path .. "tcp_thread.lua"))
   tcp.send_channel = love.thread.newChannel()
   tcp.receive_channel = love.thread.newChannel()
   tcp.send_queue = {}
-  tcp.thread:start(G.MULTIPLAYER.address, tcp.send_channel, tcp.receive_channel)
-  if G.MULTIPLAYER.debug then sendDebugMessage("TCP connection opened") end
+  tcp.thread:start(Balatrogether.server.address, tcp.send_channel, tcp.receive_channel)
+  if Balatrogether.server.debug then sendDebugMessage("TCP connection opened") end
 end
 
 local function receive_and_parse()
@@ -46,16 +46,16 @@ G.FUNCS.tcp_receive = function()
   local res = receive_and_parse()
   if res.success then
     if not res.data then return end
-    local funcs = G.MULTIPLAYER.actions[res.cmd]
+    local funcs = Balatrogether.server.actions[res.cmd]
     if funcs then
       for _, func in ipairs(funcs) do
         func(res.data)
       end
     else
-      if G.MULTIPLAYER.debug then sendDebugMessage("Unknown action: " .. res.cmd) end
+      if Balatrogether.server.debug then sendDebugMessage("Unknown action: " .. res.cmd) end
     end
   else
-    if G.MULTIPLAYER.debug then sendDebugMessage("Failed to receive data: " .. (res.error or "Unknown error")) end
+    if Balatrogether.server.debug then sendDebugMessage("Failed to receive data: " .. (res.error or "Unknown error")) end
     G.FUNCS.tcp_close()
   end
 end
@@ -64,17 +64,17 @@ G.FUNCS.tcp_close = function()
   if not tcp.enabled then return end
   tcp.send_channel:push("KILL")
   tcp.enabled = false
-  G.MULTIPLAYER.enabled = false
-  G.MULTIPLAYER.players = {}
-  G.MULTIPLAYER.leaderboard_blind = false
-  G.MULTIPLAYER.leaderboard = nil
+  Balatrogether.server.enabled = false
+  Balatrogether.server.players = {}
+  Balatrogether.server.leaderboard_blind = false
+  Balatrogether.server.leaderboard = nil
   if G.STAGE == G.STAGES.MAIN_MENU then
     G.FUNCS.exit_overlay_menu()
   else
     remove_save()
     G.FUNCS.go_to_menu()
   end
-  if G.MULTIPLAYER.debug then sendDebugMessage("TCP connection closed") end
+  if Balatrogether.server.debug then sendDebugMessage("TCP connection closed") end
 end
 
 G.FUNCS.tcp_send = function(data)
@@ -93,15 +93,15 @@ G.FUNCS.tcp_update = function(dt)
   time_since_last_send = 0
   local data = tcp.send_queue[1]
   table.remove(tcp.send_queue, 1)
-  if G.MULTIPLAYER.debug then sendDebugMessage("Sending data: " .. data) end
+  if Balatrogether.server.debug then sendDebugMessage("Sending data: " .. data) end
   tcp.send_channel:push(data)
 end
 
 G.FUNCS.tcp_listen = function(event, callback)
-  if not G.MULTIPLAYER.actions[event] then
-    G.MULTIPLAYER.actions[event] = {}
+  if not Balatrogether.server.actions[event] then
+    Balatrogether.server.actions[event] = {}
   end
-  table.insert(G.MULTIPLAYER.actions[event], callback)
+  table.insert(Balatrogether.server.actions[event], callback)
 end
 
 ----------------------------------------------

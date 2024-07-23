@@ -27,7 +27,7 @@ G.FUNCS.start_setup_run = function(e)
       seed = generate_starting_seed(), 
       challenge = nil, 
       deck = _deck, 
-      versus = G.new_multiplayer_run_config.versus
+      versus = Balatrogether.new_run_config.versus
     })
 
   elseif G.SETTINGS.current_setup == 'Continue' then
@@ -48,7 +48,7 @@ function Controller:key_hold_update(key, dt)
               end
               G:save_settings()
               self.held_key_times[key] = nil
-              if G.MULTIPLAYER.enabled then
+              if Balatrogether.server.enabled then
                 G.SETTINGS.current_setup = 'Multiplayer Run'
               else
                 G.SETTINGS.current_setup = 'New Run'
@@ -71,10 +71,10 @@ function Controller:key_hold_update(key, dt)
 end
 
 G.FUNCS.tcp_listen("JOIN", function(data)
-  G.MULTIPLAYER.enabled = true
-  G.MULTIPLAYER.versus = false
-  G.MULTIPLAYER.players = data.players
-  G.MULTIPLAYER.max_players = data.maxPlayers
+  Balatrogether.server.enabled = true
+  Balatrogether.server.versus = false
+  Balatrogether.server.players = data.players
+  Balatrogether.server.max_players = data.maxPlayers
   if (G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('balatrogether_player_list')) or data.players[#data.players] == tostring(G.STEAM.user.getSteamID()) then
     G.FUNCS.setup_run_multiplayer()
   end
@@ -82,17 +82,17 @@ G.FUNCS.tcp_listen("JOIN", function(data)
 end)
 
 G.FUNCS.tcp_listen("LEAVE", function(data)
-  G.MULTIPLAYER.players = data.players
+  Balatrogether.server.players = data.players
   if G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('balatrogether_player_list') then
     G.FUNCS.setup_run_multiplayer()
   end
 end)
 
 G.FUNCS.tcp_listen("START", function(data)
-  G.MULTIPLAYER.versus = data.versus
-  G.new_multiplayer_run_config.versus = data.versus
-  G.MULTIPLAYER.leaderboard_blind = false
-  G.MULTIPLAYER.leaderboard = nil
+  Balatrogether.server.versus = data.versus
+  Balatrogether.new_run_config.versus = data.versus
+  Balatrogether.server.leaderboard_blind = false
+  Balatrogether.server.leaderboard = nil
   G.GAME.selected_back = Back(get_deck_from_name(data.deck))
   local cards = {}
   for i = 1, 52 do
