@@ -1,17 +1,12 @@
-G.FUNCS.tcp_listen("THE_CUP", function(data)
-  ease_dollars(data.eliminated * 8)
+G.FUNCS.tcp_listen("MONEY", function(data)
+  ease_dollars(data.money)
 end)
 
-G.FUNCS.tcp_listen("GREEN_SEAL", function(data)
-  local money = G.P_SEALS['s_' .. Balatrogether.prefix .. '_green_seal'].config.money
-  ease_dollars(-money)
+G.FUNCS.tcp_listen("HAND_SIZE", function(data)
+  G.hand:change_size(data.hand_size)
 end)
 
-G.FUNCS.tcp_listen("VS_VOUCHER", function(data)
-  G.hand:change_size(-1)
-end)
-
-G.FUNCS.tcp_listen("ANNIE_AND_HALLIE", function(data)
+G.FUNCS.tcp_listen("SWAP_JOKERS", function(data)
   local jokers = {}
   for k, v in pairs(G.jokers.cards) do
     if not v.edition or v.edition.type ~= Balatrogether.prefix .. "_secure" then
@@ -32,7 +27,7 @@ G.FUNCS.tcp_listen("ANNIE_AND_HALLIE", function(data)
       end
       return true end }))
   if data.user then
-    G.FUNCS.tcp_send({ cmd = "ANNIE_AND_HALLIE", jokers = jokers, player = data.user, responding = true })
+    G.FUNCS.tcp_send({ cmd = "SWAP_JOKERS", jokers = jokers, player = data.user, responding = true })
   end
   local _first_materialize = nil
   G.E_MANAGER:add_event(Event({trigger = 'before', delay = 0.4, func = function()
