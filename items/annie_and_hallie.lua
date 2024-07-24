@@ -21,17 +21,14 @@ SMODS.Joker{
   soul_pos = {x = 1, y = 0},
   calculate = function(self, card, context)
     if context.selling_self and G.FUNCS.is_versus_game() then
-      local jokers = {}
-      for k, v in pairs(G.jokers.cards) do
-        if v.ID ~= card.ID and (not v.edition or v.edition.type ~= Balatrogether.prefix .. "_secure") then
-          table.insert(jokers, {
-            joker = v.config.center.key,
-            ability = v.ability,
-            edition = v.edition,
-          })
+      local jokers = G.FUNCS.get_unsecure_jokers()
+      local serialized = {}
+      for k, v in pairs(jokers) do
+        if v.ID ~= card.ID then
+          table.insert(serialized, G.FUNCS.serialize_joker(v))
         end
       end
-      G.FUNCS.tcp_send({ cmd = "SWAP_JOKERS", jokers = jokers, responding = false })
+      G.FUNCS.tcp_send({ cmd = "SWAP_JOKERS", jokers = serialized, responding = false })
     end
   end,
   in_pool = function(self)
