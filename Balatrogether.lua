@@ -27,6 +27,7 @@ Balatrogether.server = {
   actions = {},
   max_players = 0,
   remaining = 0,
+  network_pack = {jokers = {}, cards = {}},
 }
 
 sendDebugMessage("Launching Balatrogether!")

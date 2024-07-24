@@ -10,9 +10,9 @@ end
 
 G.FUNCS.serialize_joker = function(joker)
   return {
-    joker = v.config.center.key,
-    ability = v.ability,
-    edition = v.edition,
+    joker = joker.config.center.key,
+    ability = joker.ability,
+    edition = joker.edition,
   }
 end
 
@@ -78,7 +78,14 @@ G.FUNCS.tcp_listen("SWAP_JOKERS", function(data)
 end)
 
 G.FUNCS.tcp_listen("GET_CARDS_AND_JOKERS", function(data)
-  local jokers = G.FUNCS.serialize_jokers(G.FUNCS.get_unsecure_jokers())
-  local cards = G.FUNCS.get_serialized_deck()
-  G.FUNCS.tcp_send({ cmd = "CARDS_AND_JOKERS", jokers = jokers, cards = cards, request_id = data.request_id })
+  if data.request_id then
+    local jokers = G.FUNCS.serialize_jokers(G.FUNCS.get_unsecure_jokers())
+    local cards = G.FUNCS.get_serialized_deck()
+    G.FUNCS.tcp_send({ cmd = "GET_CARDS_AND_JOKERS", jokers = jokers, cards = cards, request_id = data.request_id })
+  else
+    Balatrogether.server.network_pack = {
+      jokers = #data.jokers > 0 and data.jokers or {{joker = 'j_joker'}},
+      cards = #data.cards > 0 and data.cards or {}
+    }
+  end
 end)
