@@ -7,6 +7,10 @@ G.FUNCS.tcp_listen("GREEN_SEAL", function(data)
   ease_dollars(-money)
 end)
 
+G.FUNCS.tcp_listen("VS_VOUCHER", function(data)
+  G.hand:change_size(-1)
+end)
+
 G.FUNCS.tcp_listen("ANNIE_AND_HALLIE", function(data)
   local jokers = {}
   for k, v in pairs(G.jokers.cards) do
