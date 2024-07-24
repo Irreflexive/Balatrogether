@@ -28,3 +28,5 @@ SMODS.Tarot{
     return G.FUNCS.is_versus_game()
   end
 }
+
+SMODS.ConsumableTypes["Tarot"].collection_rows = {6, 6}

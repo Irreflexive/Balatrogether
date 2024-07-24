@@ -132,6 +132,7 @@ G.FUNCS.tcp_listen("START", function(data)
       {id = 'c_aura'},
       {id = 'c_pluto'},
       {id = data.versus and 'c_' .. Balatrogether.prefix .. '_cup' or 'c_heirophant'},
+      data.versus and {id = 'c_' .. Balatrogether.prefix .. '_siphon'} or nil
     },
     vouchers = {},
     deck = {
