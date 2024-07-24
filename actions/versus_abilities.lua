@@ -65,8 +65,8 @@ G.FUNCS.tcp_listen("SWAP_JOKERS", function(data)
           _first_dissolve = true
       end
       return true end }))
-  if data.user then
-    G.FUNCS.tcp_send({ cmd = "SWAP_JOKERS", jokers = G.FUNCS.serialize_jokers(jokers), player = data.user, responding = true })
+  if data.request_id then
+    G.FUNCS.tcp_send({ cmd = "SWAP_JOKERS", jokers = G.FUNCS.serialize_jokers(jokers), request_id = data.request_id })
   end
   local _first_materialize = nil
   G.E_MANAGER:add_event(Event({trigger = 'before', delay = 0.4, func = function()
@@ -80,5 +80,5 @@ end)
 G.FUNCS.tcp_listen("GET_CARDS_AND_JOKERS", function(data)
   local jokers = G.FUNCS.serialize_jokers(G.FUNCS.get_unsecure_jokers())
   local cards = G.FUNCS.get_serialized_deck()
-  G.FUNCS.tcp_send({ cmd = "CARDS_AND_JOKERS", jokers = jokers, cards = cards })
+  G.FUNCS.tcp_send({ cmd = "CARDS_AND_JOKERS", jokers = jokers, cards = cards, request_id = data.request_id })
 end)

@@ -26,6 +26,9 @@ G.FUNCS.cash_out = function(...)
   if G.FUNCS.is_coop_game() then
     G.FUNCS.tcp_send({ cmd = "GO_TO_SHOP" })
   else
+    if G.FUNCS.is_versus_game() then
+      G.FUNCS.tcp_send({ cmd = "GET_CARDS_AND_JOKERS" })
+    end
     G.SINGLEPLAYER_FUNCS.go_to_shop(...)
   end
 end

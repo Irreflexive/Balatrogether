@@ -32,13 +32,12 @@ SMODS.Spectral{
   use = function(self, card)
     if G.FUNCS.is_versus_game() then
       for i = 1, card.ability.max_highlighted do
-          local highlighted = G.hand.highlighted[i]
-
-          if highlighted then
-              highlighted:set_seal(sealId)
-          else
-              break
-          end
+        local highlighted = G.hand.highlighted[i]
+        if highlighted then
+          highlighted:set_seal(sealId)
+        else
+          break
+        end
       end
       return true
     end
