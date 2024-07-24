@@ -10,18 +10,18 @@ local loc_def = {
 
 local function create_network_card(self, card)
   local cardType = pseudorandom_element({"Joker", "Base"}, pseudoseed('networktype'..G.GAME.round_resets.ante))
-  if #Balatrogether.server.network_pack.cards == 0 then cardType == "Joker" end
+  if #Balatrogether.server.network_pack.cards == 0 then cardType = "Joker" end
   local card = nil
   if cardType == "Joker" then
     local selected = pseudorandom_element(Balatrogether.server.network_pack.jokers, pseudoseed('netjoker'..G.GAME.round_resets.ante))
     card = create_card(cardType, G.pack_cards, nil, nil, true, true, selected.joker)
     if selected.edition then card:set_edition({[selected.edition] = true}) end
-    if selected.ability then card:set_ability(selected.ability) end
+    if selected.ability then card.ability = selected.ability end
   else
     local selected = pseudorandom_element(Balatrogether.server.network_pack.cards, pseudoseed('netcard'..G.GAME.round_resets.ante))
     card = create_card(cardType, G.pack_cards, nil, nil, true, true, selected.key)
     if selected.edition then card:set_edition({[selected.edition] = true}) end
-    if selected.ability then card:set_ability(selected.ability) end
+    if selected.ability then card.ability = selected.ability end
     if selected.seal then card:set_seal(selected.seal) end
   end
   return card
