@@ -16,7 +16,7 @@ G.FUNCS.tcp_connect = function()
   tcp.receive_channel = love.thread.newChannel()
   tcp.send_queue = {}
   tcp.thread:start(Balatrogether.server.address, tcp.send_channel, tcp.receive_channel)
-  if Balatrogether.server.debug then sendDebugMessage("TCP connection opened") end
+  if Balatrogether.debug then sendDebugMessage("TCP connection opened") end
 end
 
 local function receive_and_parse()
@@ -46,16 +46,16 @@ G.FUNCS.tcp_receive = function()
   local res = receive_and_parse()
   if res.success then
     if not res.data then return end
-    local funcs = Balatrogether.server.actions[res.cmd]
+    local funcs = Balatrogether.actions[res.cmd]
     if funcs then
       for _, func in ipairs(funcs) do
         func(res.data)
       end
     else
-      if Balatrogether.server.debug then sendDebugMessage("Unknown action: " .. res.cmd) end
+      if Balatrogether.debug then sendDebugMessage("Unknown action: " .. res.cmd) end
     end
   else
-    if Balatrogether.server.debug then sendDebugMessage("Failed to receive data: " .. (res.error or "Unknown error")) end
+    if Balatrogether.debug then sendDebugMessage("Failed to receive data: " .. (res.error or "Unknown error")) end
     G.FUNCS.tcp_close()
   end
 end
@@ -74,7 +74,7 @@ G.FUNCS.tcp_close = function()
     remove_save()
     G.FUNCS.go_to_menu()
   end
-  if Balatrogether.server.debug then sendDebugMessage("TCP connection closed") end
+  if Balatrogether.debug then sendDebugMessage("TCP connection closed") end
 end
 
 G.FUNCS.tcp_send = function(data)
@@ -93,15 +93,15 @@ G.FUNCS.tcp_update = function(dt)
   time_since_last_send = 0
   local data = tcp.send_queue[1]
   table.remove(tcp.send_queue, 1)
-  if Balatrogether.server.debug then sendDebugMessage("Sending data: " .. data) end
+  if Balatrogether.debug then sendDebugMessage("Sending data: " .. data) end
   tcp.send_channel:push(data)
 end
 
 G.FUNCS.tcp_listen = function(event, callback)
-  if not Balatrogether.server.actions[event] then
-    Balatrogether.server.actions[event] = {}
+  if not Balatrogether.actions[event] then
+    Balatrogether.actions[event] = {}
   end
-  table.insert(Balatrogether.server.actions[event], callback)
+  table.insert(Balatrogether.actions[event], callback)
 end
 
 ----------------------------------------------

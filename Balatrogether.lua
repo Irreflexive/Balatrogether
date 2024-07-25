@@ -16,6 +16,8 @@ Balatrogether = {
   new_run_config = {
     versus = false,
   },
+  debug = true,
+  actions = {},
 }
 
 Balatrogether.server = {
@@ -23,8 +25,6 @@ Balatrogether.server = {
   address = "",
   players = {},
   versus = false,
-  debug = true,
-  actions = {},
   max_players = 0,
   remaining = 0,
   network_pack = {jokers = {}, cards = {}},
