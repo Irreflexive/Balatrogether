@@ -6,15 +6,7 @@ priority = 0
 [[patches]]
 [patches.pattern]
 target = 'functions/button_callbacks.lua'
-pattern = "if args.key == '[' or args.key == ']' then return end"
-position = 'after'
-match_indent = true
-payload = "if args.key == '0' then args.key = '0o' end"
-
-[[patches]]
-[patches.pattern]
-target = 'functions/button_callbacks.lua'
 pattern = "if args.key == '0' then args.key = 'o' end"
-position = 'after'
+position = 'at'
 match_indent = true
-payload = "if args.key == '0o' then args.key = '0' end"
+payload = ""
