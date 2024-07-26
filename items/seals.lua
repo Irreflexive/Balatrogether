@@ -16,7 +16,7 @@ SMODS.Seal{
   key = "green",
   pos = { x = 2, y = 0 },
   loc_txt = loc_def,
-  badge_colour = HEX('15CB5C'),
+  badge_colour = G.C.GREEN,
   config = { money = 1 },
   atlas = "Balatrogether_cards",
   loc_vars = function(self, info_queue)
