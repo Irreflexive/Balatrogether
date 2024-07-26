@@ -211,8 +211,8 @@ end
 local get_new_boss_ref = get_new_boss
 function get_new_boss()
   if G.FUNCS.is_versus_game() then
-    local the_duel = 'bl_' .. Balatrogether.prefix .. '_the_duel'
-    local the_showdown = 'bl_' .. Balatrogether.prefix .. '_final_showdown'
+    local the_duel = createCollectionId('bl', 'the_duel')
+    local the_showdown = createCollectionId('bl', 'final_showdown')
     local old_perscribed = G.GAME.perscribed_bosses
     G.GAME.perscribed_bosses = old_perscribed or {}
     local ante = G.GAME.round_resets.ante

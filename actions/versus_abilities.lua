@@ -1,7 +1,7 @@
 G.FUNCS.get_unsecure_jokers = function()
   local jokers = {}
   for k, v in pairs(G.jokers.cards) do
-    if not v.edition or v.edition.type ~= Balatrogether.prefix .. "_secure" then
+    if not v.edition or v.edition.type ~= createCollectionId(nil, 'secure') then
       table.insert(jokers, v)
     end
   end
@@ -27,7 +27,7 @@ end
 G.FUNCS.get_serialized_deck = function()
   local serialized = {}
   for k, v in pairs(G.deck.cards) do
-    if not v.edition or v.edition.type ~= Balatrogether.prefix .. "_secure" then
+    if not v.edition or v.edition.type ~= createCollectionId(nil, 'secure') then
       local suit = (v.base.suit == 'Diamonds' and 'D_') or
       (v.base.suit == 'Spades' and 'S_') or
       (v.base.suit == 'Clubs' and 'C_') or

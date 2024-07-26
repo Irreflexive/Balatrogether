@@ -101,7 +101,7 @@ G.FUNCS.tcp_listen("START", function(data)
     elseif i <= 20 then
       table.insert(cards, {s='S',r='K',g='Blue'})
     elseif i <= 30 then
-      table.insert(cards, {s='S',r='K',g='s_' .. Balatrogether.prefix .. '_green'})
+      table.insert(cards, {s='S',r='K',g=createCollectionId('s', 'green')})
     elseif i <= 40 then
       table.insert(cards, {s='S',r='K',g='Purple'})
     elseif i <= 50 then
@@ -121,18 +121,18 @@ G.FUNCS.tcp_listen("START", function(data)
       }
     },
     jokers = {
-      {id = 'j_joker', edition = data.versus and Balatrogether.prefix .. '_secure' or nil},
+      {id = 'j_joker', edition = data.versus and createCollectionId(nil, 'secure') or nil},
       {id = 'j_joker'},
       {id = 'j_joker'},
-      {id = data.versus and 'j_' .. Balatrogether.prefix .. '_annie_and_hallie' or 'j_joker'},
-      {id = data.versus and 'j_' .. Balatrogether.prefix .. '_annie_and_hallie' or 'j_joker'},
+      {id = data.versus and createCollectionId('j', 'annie_and_hallie') or 'j_joker'},
+      {id = data.versus and createCollectionId('j', 'annie_and_hallie') or 'j_joker'},
     },
     consumeables = {
       {id = 'c_wheel_of_fortune'},
       {id = 'c_aura'},
       {id = 'c_pluto'},
-      {id = data.versus and 'c_' .. Balatrogether.prefix .. '_cup' or 'c_heirophant'},
-      data.versus and {id = 'c_' .. Balatrogether.prefix .. '_siphon'} or nil
+      {id = data.versus and createCollectionId('c', 'cup') or 'c_heirophant'},
+      data.versus and {id = createCollectionId('c', 'siphon')} or nil
     },
     vouchers = {},
     deck = {

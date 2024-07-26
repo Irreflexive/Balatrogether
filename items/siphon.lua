@@ -7,7 +7,7 @@ local loc_def = {
   }
 }
 
-local sealId = 's_' .. Balatrogether.prefix .. '_green'
+local sealId = createCollectionId('s', 'green')
 SMODS.Spectral{
   name = "Siphon", 
   key = "siphon", 

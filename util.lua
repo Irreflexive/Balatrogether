@@ -27,3 +27,7 @@ function findDescendantOfNodeTreeByConfig(t, property, value)
   end
   return nil
 end
+
+function createCollectionId(prefix, id)
+  return (prefix and prefix .. "_" or "") .. Balatrogether.prefix .. "_" .. id
+end

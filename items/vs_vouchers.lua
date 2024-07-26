@@ -36,7 +36,7 @@ SMODS.Voucher{
   discovered = false,
   loc_txt = loc_def2,
   atlas = "Balatrogether_cards",
-  requires = {"v_" .. Balatrogether.prefix .. "_eraser"},
+  requires = {createCollectionId('v', 'eraser')},
   redeem = function(self)
     G.FUNCS.tcp_send({ cmd = "PAINT_BUCKET" })
   end,
