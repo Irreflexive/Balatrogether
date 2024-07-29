@@ -33,6 +33,7 @@ Balatrogether.server = {
 sendDebugMessage("Launching Balatrogether!")
 assert(load(NFS.read(Balatrogether.file_path .. "json.lua")))()
 assert(load(NFS.read(Balatrogether.file_path .. "util.lua")))()
+assert(load(NFS.read(Balatrogether.file_path .. "card_tagging.lua")))()
 assert(load(NFS.read(Balatrogether.file_path .. "singleplayer_funcs.lua")))()
 assert(load(NFS.read(Balatrogether.file_path .. "UI_definitions.lua")))()
 assert(load(NFS.read(Balatrogether.file_path .. "connection.lua")))()

@@ -91,6 +91,7 @@ end)
 G.FUNCS.tcp_listen("START", function(data)
   Balatrogether.server.versus = data.versus
   Balatrogether.new_run_config.versus = data.versus
+  Balatrogether.server.card_id = 0
   Balatrogether.server.leaderboard_blind = false
   Balatrogether.server.leaderboard = nil
   G.GAME.selected_back = Back(get_deck_from_name(data.deck))

@@ -5,14 +5,7 @@ function Card:click()
       for k,v in ipairs(self.area.cards) do
         if v.ID == self.ID then index = k end
       end
-      local areaType = self.area == G.hand and "hand" 
-        or self.area == G.jokers and "jokers" 
-        or self.area == G.consumeables and "consumeables" 
-        or self.area == G.shop_jokers and "shop_jokers"
-        or self.area == G.shop_booster and "shop_booster"
-        or self.area == G.shop_vouchers and "shop_vouchers"
-        or self.area == G.pack_cards and "pack_cards"
-        or nil
+      local areaType = getCardAreaType(self.area)
       if self.highlighted ~= true then 
           if G.FUNCS.is_coop_game() and areaType then
             G.FUNCS.tcp_send({ cmd = "HIGHLIGHT", index = index, type = areaType })
@@ -46,11 +39,19 @@ function Controller:queue_R_cursor_press(x, y)
 end
 
 G.FUNCS.tcp_listen("HIGHLIGHT", function(data)
-  G[data.type]:add_to_highlighted(G[data.type].cards[data.index])
+  local area = G[data.type]
+  local areaType = getCardAreaType(area)
+  if areaType then
+    G[data.type]:add_to_highlighted(G[data.type].cards[data.index])
+  end
 end)
 
 G.FUNCS.tcp_listen("UNHIGHLIGHT", function(data)
-  G[data.type]:remove_from_highlighted(G[data.type].cards[data.index])
+  local area = G[data.type]
+  local areaType = getCardAreaType(area)
+  if areaType then
+    G[data.type]:remove_from_highlighted(G[data.type].cards[data.index])
+  end
 end)
 
 G.FUNCS.tcp_listen("UNHIGHLIGHT_ALL", function(data)

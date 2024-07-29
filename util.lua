@@ -31,3 +31,24 @@ end
 function createCollectionId(prefix, id)
   return (prefix and prefix .. "_" or "") .. Balatrogether.prefix .. "_" .. id
 end
+
+function getCardAreaType(area, allowedAreas)
+  if allowedAreas then
+    local allowed = false
+    for _,allowedArea in ipairs(allowedAreas) do
+      if allowedArea and area == allowedArea then
+        allowed = true
+        break
+      end
+    end
+    if not allowed then return nil end
+  end
+  if area == G.hand then return "hand" end
+  if area == G.jokers then return "jokers" end
+  if area == G.consumeables then return "consumeables" end
+  if area == G.shop_jokers then return "shop_jokers" end
+  if area == G.shop_booster then return "shop_booster" end
+  if area == G.shop_vouchers then return "shop_vouchers" end
+  if area == G.pack_cards then return "pack_cards" end
+  return nil
+end
