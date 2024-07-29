@@ -52,3 +52,10 @@ function getCardAreaType(area, allowedAreas)
   if area == G.pack_cards then return "pack_cards" end
   return nil
 end
+
+function getCardFromMultiplayerID(area, id)
+  for _,card in pairs(area.cards) do
+    if card.Multiplayer_ID == id then return card end
+  end
+  return nil
+end
