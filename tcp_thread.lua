@@ -323,9 +323,6 @@ tcp:settimeout(0)
 while handshake_success do
   local data = send_channel:pop()
   if data then
-    receive_channel:push({
-      debug = "SEND DEBUG: " .. data
-    })
     if data == "KILL" then
       tcp:close()
       break

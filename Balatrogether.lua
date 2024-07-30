@@ -228,5 +228,14 @@ function get_new_boss()
   return get_new_boss_ref()
 end
 
+local get_pack_ref = get_pack
+function get_pack(_key, _type)
+  if not G.FUNCS.is_versus_game() then
+    G.GAME.banned_keys[createCollectionId('p', 'network')] = true
+    G.GAME.banned_keys[createCollectionId('p', 'network_2')] = true
+  end
+  return get_pack_ref(_key, _type)
+end
+
 ----------------------------------------------
 ------------MOD CODE END----------------------

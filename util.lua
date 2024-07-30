@@ -35,14 +35,15 @@ end
 function getCardAreaType(area, allowedAreas)
   if allowedAreas then
     local allowed = false
-    for _,allowedArea in ipairs(allowedAreas) do
-      if allowedArea and area == allowedArea then
+    for _,allowedArea in pairs(allowedAreas) do
+      if area == allowedArea then
         allowed = true
         break
       end
     end
     if not allowed then return nil end
   end
+  if not area then return nil end
   if area == G.hand then return "hand" end
   if area == G.jokers then return "jokers" end
   if area == G.consumeables then return "consumeables" end
