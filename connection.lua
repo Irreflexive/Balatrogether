@@ -81,6 +81,7 @@ end
 G.FUNCS.tcp_send = function(data)
   if data.cmd == "JOIN" then
     data.steam_id = tostring(G.STEAM.user.getSteamID())
+    data.unlock_hash = G.FUNCS.compute_unlock_hash()
   end
   table.insert(tcp.send_queue, G.JSON.encode(data))
 end

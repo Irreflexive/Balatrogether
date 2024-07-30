@@ -327,7 +327,7 @@ while handshake_success do
       tcp:close()
       break
     else
-      tcp:send(data .. "\n")
+      tcp:send(data)
     end
   end
   local s, status, partial = tcp:receive("*l")

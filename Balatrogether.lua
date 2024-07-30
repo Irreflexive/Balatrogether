@@ -195,6 +195,17 @@ G.FUNCS.lose_duel_versus = function(e)
   G.STATE_COMPLETE = false
 end
 
+G.FUNCS.compute_unlock_hash = function()
+  local content = {}
+  for k,v in pairs(G.P_CENTERS) do
+    if v.unlocked and v.set ~= "Back" then
+      table.insert(content, k)
+    end
+  end
+  table.sort(content)
+  return love.data.encode("string", "base64", love.data.hash("sha512", table.concat(content, ",")))
+end
+
 G.FUNCS.paste_address = function(e)
   G.CONTROLLER.text_input_hook = e.UIBox:get_UIE_by_ID('text_input').children[1].children[1]
   for i = 1, 16 do
