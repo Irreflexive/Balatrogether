@@ -120,11 +120,26 @@ return {
   misc = {
     labels = {
       btgr_secure = "Secure",
-      s_btgr_green_seal = "Green Seal",
+      s_btgr_green_seal = "Green Seal"
     },
     dictionary = {
+      b_eliminated = "ELIMINATED",
+      b_join = "JOIN",
+      b_paste = "Paste",
+      b_players = "Players",
+      b_player_list = "Player List",
+      b_multiplayer_run = "Start Run",
+      b_balatrogether = "Balatrogether",
+      b_boss_leaderboard = "Boss Results",
+      b_new_server = "New Server",
+      b_saved_servers = "Saved Servers",
+      b_server_settings = "Server Settings",
+      b_leave_server = "Leave Server",
+      b_save_address = "Save",
+      b_versus_mode = "Versus Mode",
+      b_ip_address = "IP Address",
       k_booster_group_p_btgr_network = "Network Pack",
-      k_booster_group_p_btgr_network_2 = "Network Pack",
+      k_booster_group_p_btgr_network_2 = "Network Pack"
     }
   },
 }

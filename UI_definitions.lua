@@ -36,7 +36,7 @@ function G.UIDEF.run_setup(from_game_over)
               chosen = _challenge_chosen
             } or nil,
             {
-              label = "Balatrogether",
+              label = localize('b_balatrogether'),
               tab_definition_function = G.UIDEF.multiplayer_join,
             }
         },
@@ -50,20 +50,20 @@ function G.UIDEF.multiplayer_join()
   local t = {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR, minh = 5, minw = 6}, nodes={
     G.UIDEF.saved_servers(),
     {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-      {n=G.UIT.T, config={text = 'New Server', scale = 0.5, colour = G.C.WHITE}},
+      {n=G.UIT.T, config={text = localize('b_new_server'), scale = 0.5, colour = G.C.WHITE}},
     }},
     {n=G.UIT.R, config={align = "cm", padding = 0.05}, nodes={
       {n=G.UIT.C, config={align = "cm", minw = 1}, nodes={
-        create_text_input({ref_table = Balatrogether.server, extended_corpus = true, keep_zeroes = true, ref_value = 'address', prompt_text = "IP Address"}),
+        create_text_input({ref_table = Balatrogether.server, extended_corpus = true, keep_zeroes = true, ref_value = 'address', prompt_text = localize('b_ip_address')}),
         {n=G.UIT.C, config={align = "cm", minw = 0.1}, nodes={}},
-        UIBox_button({label = {"Paste"}, minw = 1, minh = 0.6, button = 'paste_address', colour = G.C.BLUE, scale = 0.3, col = true})
+        UIBox_button({label = {localize('b_paste')}, minw = 1, minh = 0.6, button = 'paste_address', colour = G.C.BLUE, scale = 0.3, col = true})
       }},
     }},
     {n=G.UIT.R, config={align = "cm", minh = 0.3}, nodes={}},
     {n=G.UIT.R, config={align = "cm", padding = 0.05, minh = 0.9}, nodes={
         {n=G.UIT.C, config={align = "cm", minw = 4, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.GREEN, button = "join_server", one_press = true, shadow = true}, nodes={
           {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
-            {n=G.UIT.T, config={text = 'JOIN', scale = 0.8, colour = G.C.UI.TEXT_LIGHT, func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
+            {n=G.UIT.T, config={text = localize('b_join'), scale = 0.8, colour = G.C.UI.TEXT_LIGHT, func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
           }}
         }}
       }
@@ -80,12 +80,12 @@ function G.UIDEF.server_config(e)
         create_tabs(
         {tabs = {
             {
-              label = 'Players',
+              label = localize('b_players'),
               chosen = true,
               tab_definition_function = G.UIDEF.player_list,
             },
             {
-              label = 'Start Run',
+              label = localize('b_multiplayer_run'),
               chosen = false,
               tab_definition_function = G.UIDEF.run_setup_multiplayer,
               func = 'is_host'
@@ -100,7 +100,7 @@ end
 function G.UIDEF.run_setup_multiplayer()
   local t = G.UIDEF.run_setup_option('Multiplayer Run')
   table.insert(t.nodes, 1, create_toggle({
-    label = "Versus Mode",
+    label = localize('b_versus_mode'),
     ref_table = Balatrogether.new_run_config,
     ref_value = "versus",
     callback = function(_set_toggle)
@@ -123,18 +123,18 @@ function G.UIDEF.player_list()
   local t = {n=G.UIT.ROOT, config={id = 'balatrogether_player_list', align = "cm", colour = G.C.CLEAR, minh = 7, minw = 4.2}, nodes={
     {n=G.UIT.R, config={align = "cm", padding = 0.0}, nodes={
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        {n=G.UIT.T, config={text = 'IP Address', scale = 0.5, colour = G.C.WHITE}},
+        {n=G.UIT.T, config={text = localize('b_ip_address'), scale = 0.5, colour = G.C.WHITE}},
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
         UIBox_button({id = 'server_code', col = true, label = {Balatrogether.server.address}, button = 'nil', colour = G.C.BLUE, scale = 0.5, minw = 3, minh = 0.6, shadow = true}),
-        UIBox_button({id = 'copy_code', col = true, label = {'Copy'}, button = 'copy_server_code', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
+        UIBox_button({id = 'copy_code', col = true, label = {localize('b_copy')}, button = 'copy_server_code', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        UIBox_button({id = 'save_server', col = true, label = {'Save'}, button = 'save_server', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
+        UIBox_button({id = 'save_server', col = true, label = {localize('b_save_address')}, button = 'save_server', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.3}, nodes={}},
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        {n=G.UIT.T, config={text = 'Player List', scale = 0.5, colour = G.C.WHITE}},
+        {n=G.UIT.T, config={text = localize('b_player_list'), scale = 0.5, colour = G.C.WHITE}},
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.1, minh = 2.8, minw = 4.2}, nodes={
         {n=G.UIT.O, config={id = 'server_player_list', object = Moveable()}},
@@ -196,12 +196,12 @@ function create_UIBox_options()
 
   if G.STAGE == G.STAGES.RUN then
     if Balatrogether.server.enabled then
-      restart = UIBox_button{id = 'server_settings_button', label = {"Server Settings"}, button = "setup_run_multiplayer", minw = 5}
+      restart = UIBox_button{id = 'server_settings_button', label = {localize('b_server_settings')}, button = "setup_run_multiplayer", minw = 5}
     else
       restart = UIBox_button{id = 'restart_button', label = {localize('b_start_new_run')}, button = "setup_run", minw = 5}
     end
     if Balatrogether.server.enabled then
-      main_menu = UIBox_button{ label = {"Leave Server"}, button = "tcp_close", minw = 5}
+      main_menu = UIBox_button{ label = {localize('b_leave_server')}, button = "tcp_close", minw = 5}
     else
       main_menu = UIBox_button{ label = {localize('b_main_menu')}, button = "go_to_menu", minw = 5}
     end
@@ -263,7 +263,7 @@ function G.UIDEF.boss_leaderboard(leaderboard)
           {n=G.UIT.T, config={text = number_format(row.score), lang = G.LANGUAGES['en-us'], scale = 0.4, colour = G.C.WHITE, shadow = true}},
           {n=G.UIT.O, config={w=0.4,h=0.4, object = stake_sprite, hover = true, can_collide = false}},
         } or {
-          {n=G.UIT.T, config={text = "ELIMINATED", scale = 0.4, colour = G.C.WHITE, shadow = true}},
+          {n=G.UIT.T, config={text = localize('b_eliminated'), scale = 0.4, colour = G.C.WHITE, shadow = true}},
         }},
       }},
     }} or {n=G.UIT.R, config={align = "cm"}, nodes={
@@ -274,9 +274,9 @@ function G.UIDEF.boss_leaderboard(leaderboard)
     }}
   end
 
-  local t = create_UIBox_generic_options({ back_label = 'Continue', back_func = survived and 'close_leaderboard' or 'lose_duel_versus', contents = {
+  local t = create_UIBox_generic_options({ back_label = localize('b_continue'), back_func = survived and 'close_leaderboard' or 'lose_duel_versus', contents = {
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        {n=G.UIT.T, config={text = "Boss Results", scale = 0.5, colour = G.C.WHITE}},
+        {n=G.UIT.T, config={text = localize('b_boss_leaderboard'), scale = 0.5, colour = G.C.WHITE}},
       }},
       {
         n = G.UIT.R,
@@ -361,7 +361,7 @@ function G.UIDEF.saved_servers()
 
   local t = {n=G.UIT.R, config={align = "cm", colour = G.C.CLEAR}, nodes={
     {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-      {n=G.UIT.T, config={text = 'Saved Servers', scale = 0.5, colour = G.C.WHITE}},
+      {n=G.UIT.T, config={text = localize('b_saved_servers'), scale = 0.5, colour = G.C.WHITE}},
     }},
     {n=G.UIT.R, config={align = "cm", padding = 0.1, minh = 2.8, minw = 4.2}, nodes={
       {n=G.UIT.O, config={id = 'saved_servers_list', object = Moveable()}},
