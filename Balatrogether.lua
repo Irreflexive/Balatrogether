@@ -13,11 +13,13 @@
 Balatrogether = {
   prefix = SMODS.current_mod.prefix,
   file_path = SMODS.current_mod.path,
+  mod = SMODS.current_mod,
   new_run_config = {
     versus = false,
   },
   debug = true,
   actions = {},
+  address_input = "",
 }
 
 Balatrogether.server = {
@@ -67,13 +69,16 @@ end
 
 G.FUNCS.join_server = function()
   sendDebugMessage("Joining server!")
+  Balatrogether.server.address = Balatrogether.address_input
   G.FUNCS.tcp_connect()
   G.FUNCS.tcp_send({ cmd = "JOIN" })
 end
 
 G.FUNCS.join_saved_server = function(e)
+  sendDebugMessage("Joining server!")
   Balatrogether.server.address = e.config.id
-  G.FUNCS.join_server()
+  G.FUNCS.tcp_connect()
+  G.FUNCS.tcp_send({ cmd = "JOIN" })
 end
 
 G.FUNCS.is_coop_game = function()
@@ -139,23 +144,25 @@ G.FUNCS.copy_server_code = function(e)
 end
 
 G.FUNCS.save_server = function(e)
-  local servers = G.PROFILES[G.SETTINGS.profile].saved_servers
+  local servers = Balatrogether.mod.config.saved_servers or {}
   for _,server in ipairs(servers) do
     if server == Balatrogether.server.address then
       return
     end
   end
   servers[#servers+1] = Balatrogether.server.address
-  G.PROFILES[G.SETTINGS.profile].saved_servers = servers
+  Balatrogether.mod.config.saved_servers = servers
+  SMODS.save_mod_config(Balatrogether.mod)
 end
 
 G.FUNCS.remove_server = function(e)
-  local servers = G.PROFILES[G.SETTINGS.profile].saved_servers
+  local servers = Balatrogether.mod.config.saved_servers or {}
   local id = e.config.id:match("remove_(.*)")
   for i,server in ipairs(servers) do
     if server == id then
       table.remove(servers, i)
-      G.PROFILES[G.SETTINGS.profile].saved_servers = servers
+      Balatrogether.mod.config.saved_servers = servers
+      SMODS.save_mod_config(Balatrogether.mod)
       G.FUNCS.change_server_list_page()
       return
     end

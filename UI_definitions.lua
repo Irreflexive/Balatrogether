@@ -54,7 +54,7 @@ function G.UIDEF.multiplayer_join()
     }},
     {n=G.UIT.R, config={align = "cm", padding = 0.05}, nodes={
       {n=G.UIT.C, config={align = "cm", minw = 1}, nodes={
-        create_text_input({ref_table = Balatrogether.server, extended_corpus = true, keep_zeroes = true, ref_value = 'address', prompt_text = localize('b_ip_address')}),
+        create_text_input({ref_table = Balatrogether, extended_corpus = true, keep_zeroes = true, ref_value = 'address_input', prompt_text = localize('b_ip_address')}),
         {n=G.UIT.C, config={align = "cm", minw = 0.1}, nodes={}},
         UIBox_button({label = {localize('b_paste')}, minw = 1, minh = 0.6, button = 'paste_address', colour = G.C.BLUE, scale = 0.3, col = true})
       }},
@@ -347,12 +347,10 @@ function create_UIBox_game_over()
 end
 
 function G.UIDEF.saved_servers()
-  G.PROFILES[G.SETTINGS.profile].saved_servers = G.PROFILES[G.SETTINGS.profile].saved_servers or {}
-
   local server_page_size = 4
   local server_pages = {}
-  for i = 1, math.ceil(#G.PROFILES[G.SETTINGS.profile].saved_servers/server_page_size) do
-    table.insert(server_pages, localize('k_page')..' '..tostring(i)..'/'..tostring(math.ceil(#G.PROFILES[G.SETTINGS.profile].saved_servers/server_page_size)))
+  for i = 1, math.ceil(#Balatrogether.mod.config.saved_servers/server_page_size) do
+    table.insert(server_pages, localize('k_page')..' '..tostring(i)..'/'..tostring(math.ceil(#Balatrogether.mod.config.saved_servers/server_page_size)))
   end
   if #server_pages == 0 then server_pages = {localize('k_page')..' 1/0'} end
   G.E_MANAGER:add_event(Event({func = (function()
@@ -379,7 +377,7 @@ function G.UIDEF.saved_servers_page(_page)
   local snapped = false
   local saved_servers = {}
   for k = server_page_size*(_page or 0) + 1, server_page_size*((_page or 0) + 1) do
-    v = G.PROFILES[G.SETTINGS.profile].saved_servers[k]
+    v = Balatrogether.mod.config.saved_servers[k]
     if G.CONTROLLER.focused.target and G.CONTROLLER.focused.target.config.id == 'server_list_page' then snapped = true end
 
     saved_servers[#saved_servers+1] = 
