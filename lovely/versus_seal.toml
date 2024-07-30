@@ -1,0 +1,39 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.regex]
+target = 'card.lua'
+pattern = '''
+(?<indent>[\t ]*)if seal_type > 0.75 then card:set_seal\('Red'\)
+[\t ]*elseif seal_type > 0.5 then card:set_seal\('Blue'\)
+[\t ]*elseif seal_type > 0.25 then card:set_seal\('Gold'\)
+[\t ]*else card:set_seal\('Purple'\)
+[\t ]*end'''
+position = 'at'
+line_prepend = '$indent'
+payload = '''
+local seal_rng_buffer = {}
+for _,v in ipairs(SMODS.Seal.rng_buffer) do
+    if not G.FUNCS.is_versus_game() or v ~= 's_btgr_green' then
+        seal_rng_buffer[#seal_rng_buffer + 1] = v
+    end
+end
+card:set_seal(seal_rng_buffer[math.ceil(seal_type*#seal_rng_buffer) or 1])'''
+
+[[patches]]
+[patches.pattern]
+target = 'card.lua'
+pattern = "card:set_seal(SMODS.Seal.rng_buffer[math.ceil(seal_type*#SMODS.Seal.rng_buffer) or 1])"
+position = 'at'
+match_indent = true
+payload = '''
+local seal_rng_buffer = {}
+for _,v in ipairs(SMODS.Seal.rng_buffer) do
+    if not G.FUNCS.is_versus_game() or v ~= 's_btgr_green' then
+        seal_rng_buffer[#seal_rng_buffer + 1] = v
+    end
+end
+card:set_seal(seal_rng_buffer[math.ceil(seal_type*#seal_rng_buffer) or 1])'''
