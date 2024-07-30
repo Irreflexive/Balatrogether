@@ -18,16 +18,19 @@ G.FUNCS.skip_blind = function(...)
 end
 
 G.FUNCS.tcp_listen("SELECT_BLIND", function(data)
+  if G.STATE ~= G.STATES.BLIND_SELECT then return end
   local e = findDescendantOfElementByConfig(G.blind_select:get_UIE_by_ID(G.GAME.blind_on_deck), "button", "select_blind")
   if e then G.SINGLEPLAYER_FUNCS.select_blind(e) end
 end)
 
 G.FUNCS.tcp_listen("SKIP_BLIND", function(data)
+  if G.STATE ~= G.STATES.BLIND_SELECT then return end
   local e = findDescendantOfElementByConfig(G.blind_select:get_UIE_by_ID(G.GAME.blind_on_deck), "button", "skip_blind")
   if e then G.SINGLEPLAYER_FUNCS.skip_blind() end
 end)
 
 G.FUNCS.tcp_listen("START_BOSS", function(data)
+  if G.STATE ~= G.STATES.BLIND_SELECT then return end
   local e = findDescendantOfElementByConfig(G.blind_select:get_UIE_by_ID(G.GAME.blind_on_deck), "button", "select_blind")
   if e then G.SINGLEPLAYER_FUNCS.select_blind(e) end
 end)

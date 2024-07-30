@@ -74,23 +74,28 @@ function add_round_eval_row(config)
 end
 
 G.FUNCS.tcp_listen("SKIP_BOOSTER", function(data)
+  if G.STATE ~= G.STATES.SHOP then return end
   G.SINGLEPLAYER_FUNCS.skip_booster()
 end)
 
 G.FUNCS.tcp_listen("REROLL", function(data)
+  if G.STATE ~= G.STATES.SHOP then return end
   G.SINGLEPLAYER_FUNCS.reroll()
 end)
 
 G.FUNCS.tcp_listen("NEXT_ROUND", function(data)
+  if G.STATE ~= G.STATES.SHOP then return end
   G.SINGLEPLAYER_FUNCS.next_round()
 end)
 
 G.FUNCS.tcp_listen("GO_TO_SHOP", function(data)
+  if G.STATE ~= G.STATES.ROUND_EVAL then return end
   local e = G.NEXT_ROUND_BUTTON:get_UIE_by_ID('cash_out_button')
   G.SINGLEPLAYER_FUNCS.go_to_shop(e)
 end)
 
 G.FUNCS.tcp_listen("LEADERBOARD", function(data)
+  if G.STATE ~= G.STATES.ROUND_EVAL then return end
   Balatrogether.server.leaderboard = data.leaderboard
   local e = G.NEXT_ROUND_BUTTON and G.NEXT_ROUND_BUTTON:get_UIE_by_ID('cash_out_button')
   if not e then return end
