@@ -1,14 +1,4 @@
-local loc_def = {
-  name = "Annie and Hallie",
-  text = {
-      "Sell this card to",
-      "{C:attention}swap{} Jokers with",
-      "a random {C:attention}opponent{}"
-  }
-}
-
 SMODS.Joker{
-  name = "Annie and Hallie", 
   key = "annie_and_hallie", 
   rarity = 4, 
   unlocked = true,
@@ -16,7 +6,6 @@ SMODS.Joker{
   pos = {x = 0, y = 0}, 
   cost = 20, 
   config = {},
-  loc_txt = loc_def, 
   atlas = "Balatrogether_cards", 
   soul_pos = {x = 1, y = 0},
   calculate = function(self, card, context)

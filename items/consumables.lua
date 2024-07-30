@@ -1,18 +1,7 @@
-local loc_def = {
-  name = "The Cup",
-  text = {
-      "Earn {C:money}$8{} for each",
-      "opponent that has",
-      "been {C:attention}eliminated{}"
-  }
-}
-
 SMODS.Tarot{
-  name = "The Cup", 
   key = "cup", 
   config = {}, 
   pos = {x = 0, y = 1}, 
-  loc_txt = loc_def, 
   unlocked = true, 
   discovered = false, 
   atlas = "Balatrogether_cards",
@@ -29,18 +18,8 @@ SMODS.Tarot{
   end
 }
 
-local loc_def2 = {
-  name = "Siphon",
-  text = {
-      "Add a {C:green}Green Seal{}",
-      "to {C:attention}#1#{} selected",
-      "card in your hand"
-  }
-}
-
 local sealId = createCollectionId('s', 'green')
 SMODS.Spectral{
-  name = "Siphon", 
   key = "siphon", 
   config = {
     mod_conv = sealId .. '_seal',
@@ -48,7 +27,6 @@ SMODS.Spectral{
     max_highlighted = 1,
   }, 
   pos = {x = 0, y = 2}, 
-  loc_txt = loc_def2, 
   unlocked = true, 
   discovered = false, 
   atlas = "Balatrogether_cards",
