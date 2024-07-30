@@ -15,18 +15,19 @@ G.FUNCS.tcp_connect = function()
   tcp.send_channel = love.thread.newChannel()
   tcp.receive_channel = love.thread.newChannel()
   tcp.send_queue = {}
-  tcp.thread:start(Balatrogether.server.address, tcp.send_channel, tcp.receive_channel)
+  tcp.thread:start(Balatrogether.server.address, tcp.send_channel, tcp.receive_channel, true)
   if Balatrogether.debug then sendDebugMessage("TCP connection opened") end
 end
 
 local function receive_and_parse()
   local res = nil
   local popped = tcp.receive_channel:pop()
-  if not popped then
+  if not popped or popped.debug then
+    if popped and popped.debug then sendDebugMessage(popped.debug) end
     return { success = true }
   end
   local s, status, partial = popped.s, popped.status, popped.partial
-  if status == "timeout" then
+  if status == "timeout" or status == "wantread" or status == "wantwrite" then
     res = { success = true }
   elseif status == "closed" or s == nil then
     res = { success = false, error = "Connection closed" }
