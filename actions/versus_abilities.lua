@@ -46,6 +46,7 @@ G.FUNCS.get_serialized_deck = function()
       })
     end
   end
+  return serialized
 end
 
 G.FUNCS.tcp_listen("MONEY", function(data)
