@@ -4,15 +4,17 @@ local function create_network_card(self, card)
   local card = nil
   if cardType == "Joker" then
     local selected = pseudorandom_element(Balatrogether.server.network_pack.jokers, pseudoseed('netjoker'..G.GAME.round_resets.ante))
-    card = create_card(cardType, G.pack_cards, nil, nil, true, true, selected.joker)
-    if selected.edition then card:set_edition({[selected.edition] = true}) end
-    if selected.ability then card.ability = selected.ability end
+    card = create_card(cardType, G.pack_cards, nil, nil, true, true, selected.k)
+    if selected.ed then card:set_edition({[selected.ed] = true}) end
+    if selected.a then card.ability = selected.a end
+    if selected.et then card:set_eternal(selected.et) end
   else
     local selected = pseudorandom_element(Balatrogether.server.network_pack.cards, pseudoseed('netcard'..G.GAME.round_resets.ante))
-    card = create_card(cardType, G.pack_cards, nil, nil, true, true, selected.key)
-    if selected.edition then card:set_edition({[selected.edition] = true}) end
-    if selected.ability then card.ability = selected.ability end
-    if selected.seal then card:set_seal(selected.seal) end
+    card = create_card(cardType, G.pack_cards, nil, nil, true, true, selected.k)
+    if selected.ed then card:set_edition({[selected.edition] = true}) end
+    if selected.en then card:set_ability(G.P_CENTERS[selected.en]) end
+    if selected.s then card:set_seal(selected.s) end
+    if selected.c then card.ability.perma_bonus = selected.c end
   end
   return card
 end

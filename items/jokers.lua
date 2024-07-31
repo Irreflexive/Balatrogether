@@ -17,7 +17,7 @@ SMODS.Joker{
           table.insert(serialized, G.FUNCS.serialize_joker(v))
         end
       end
-      G.FUNCS.tcp_send({ cmd = "SWAP_JOKERS", jokers = serialized, responding = false })
+      G.FUNCS.tcp_send({ cmd = "SWAP_JOKERS", jokers = serialized })
     end
   end,
   in_pool = function(self)

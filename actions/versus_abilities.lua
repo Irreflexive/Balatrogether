@@ -9,10 +9,15 @@ G.FUNCS.get_unsecure_jokers = function()
 end
 
 G.FUNCS.serialize_joker = function(joker)
+  local ability = {}
+  for k,v in pairs(joker.ability) do
+    if v ~= 0 then ability[k] = v end
+  end
   return {
-    joker = joker.config.center.key,
-    ability = joker.ability,
-    edition = joker.edition,
+    k = joker.config.center.key,
+    a = ability,
+    ed = joker.edition,
+    et = joker.eternal or nil
   }
 end
 
@@ -22,6 +27,15 @@ G.FUNCS.serialize_jokers = function(jokers)
     table.insert(serialized, G.FUNCS.serialize_joker(v))
   end
   return serialized
+end
+
+local function getEnhancementKey(abilityName)
+  for k,v in pairs(G.P_CENTERS) do
+    if v.name == abilityName and k:match("^m_") then
+      return k
+    end
+  end
+  return nil
 end
 
 G.FUNCS.get_serialized_deck = function()
@@ -38,11 +52,14 @@ G.FUNCS.get_serialized_deck = function()
       (v.base.value == 'Jack' and 'J') or
       (v.base.value == '10' and 'T') or 
       (v.base.value)
+      local enhancement = getEnhancementKey(v.ability and v.ability.name)
+      local bonus = v.ability and v.ability.perma_bonus or nil
       table.insert(serialized, {
-        key = suit .. val,
-        edition = v.edition,
-        ability = v.ability,
-        seal = v.seal,
+        k = suit .. val,
+        ed = v.edition,
+        en = enhancement,
+        s = v.seal,
+        c = bonus ~= 0 and bonus or nil
       })
     end
   end
@@ -72,8 +89,8 @@ G.FUNCS.tcp_listen("SWAP_JOKERS", function(data)
   local _first_materialize = nil
   G.E_MANAGER:add_event(Event({trigger = 'before', delay = 0.4, func = function()
       for k, v in pairs(data.jokers) do
-        local card = add_joker(v.joker, v.edition, _first_materialize)
-        card.ability = v.ability
+        local card = add_joker(v.k, v.ed, _first_materialize, v.et)
+        if v.a then card:set_ability(v.a) end
       end
       return true end }))
 end)
@@ -85,7 +102,7 @@ G.FUNCS.tcp_listen("GET_CARDS_AND_JOKERS", function(data)
     G.FUNCS.tcp_send({ cmd = "GET_CARDS_AND_JOKERS", jokers = jokers, cards = cards, request_id = data.request_id })
   else
     Balatrogether.server.network_pack = {
-      jokers = #data.jokers > 0 and data.jokers or {{joker = 'j_joker'}},
+      jokers = #data.jokers > 0 and data.jokers or {{k = 'j_joker'}},
       cards = #data.cards > 0 and data.cards or {}
     }
   end
