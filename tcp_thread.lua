@@ -287,10 +287,20 @@ local ssl = {
 
 local address, send_channel, receive_channel, should_encrypt = ...
 local tcp = assert(socket.tcp())
+
+local function manualReceive(res)
+  res.success = true
+  receive_channel:push({s = res})
+end
+
+manualReceive({ cmd = "CONNECTION_STATUS", data = "b_connecting" })
+
 tcp:connect(address, 7063)
 
 local handshake_success
 if should_encrypt then
+  manualReceive({ cmd = "CONNECTION_STATUS", data = "b_encrypting" })
+
   tcp = ssl.wrap(tcp, { 
     mode = "client", 
     protocol = "any", 
@@ -319,7 +329,7 @@ else
   handshake_success = true
 end
 
-tcp:settimeout(0)
+if handshake_success then tcp:settimeout(0) end
 while handshake_success do
   local data = send_channel:pop()
   if data then
@@ -333,6 +343,7 @@ while handshake_success do
   local s, status, partial = tcp:receive("*l")
   if status ~= "timeout" and status ~= "wantread" and status ~= "wantwrite" then
     if s then
+      manualReceive({ cmd = "CONNECTION_STATUS", data = "" })
       local messages = {}
       local first = nil
       local num_open = 0

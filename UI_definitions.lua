@@ -47,6 +47,10 @@ function G.UIDEF.run_setup(from_game_over)
 end
 
 function G.UIDEF.multiplayer_join()
+  G.E_MANAGER:add_event(Event({func = (function()
+    G.FUNCS.update_connection_status()
+  return true end)}))
+
   local t = {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR, minh = 5, minw = 6}, nodes={
     G.UIDEF.saved_servers(),
     {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
@@ -59,7 +63,9 @@ function G.UIDEF.multiplayer_join()
         UIBox_button({label = {localize('b_paste')}, minw = 1, minh = 0.6, button = 'paste_address', colour = G.C.BLUE, scale = 0.3, col = true})
       }},
     }},
-    {n=G.UIT.R, config={align = "cm", minh = 0.3}, nodes={}},
+    {n=G.UIT.R, config={align = "cm", minh = 0.9}, nodes={ 
+      {n=G.UIT.O, config={id = 'connection_status', object = Moveable()}},
+    }},
     {n=G.UIT.R, config={align = "cm", padding = 0.05, minh = 0.9}, nodes={
         {n=G.UIT.C, config={align = "cm", minw = 4, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.GREEN, button = "join_server", one_press = true, shadow = true}, nodes={
           {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
@@ -69,6 +75,13 @@ function G.UIDEF.multiplayer_join()
       }
     }}
   }
+  return t
+end
+
+function G.UIDEF.connection_status()
+  local t = {n=G.UIT.ROOT, config={align = "cm", minh = 0.7, minw = 4, padding = 0.1, colour = G.C.BLACK, r = 0.1}, nodes={ 
+    {n=G.UIT.T, config={text = Balatrogether.connection_status or "", scale = 0.5, colour = G.C.WHITE}}
+  }}
   return t
 end
 

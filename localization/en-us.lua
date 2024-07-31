@@ -138,6 +138,8 @@ return {
       b_save_address = "Save",
       b_versus_mode = "Versus Mode",
       b_ip_address = "IP Address",
+      b_connecting = "Connecting...",
+      b_encrypting = "Encrypting...",
       k_booster_group_p_btgr_network = "Network Pack",
       k_booster_group_p_btgr_network_2 = "Network Pack"
     }

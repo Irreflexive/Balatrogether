@@ -35,6 +35,8 @@ local function receive_and_parse()
     local success, json = pcall(G.JSON.decode, s)
     if success then
       res = json
+    elseif type(s) == "table" then
+      res = s
     else
       res = { success = false, error = "Failed to parse packet" }
     end
