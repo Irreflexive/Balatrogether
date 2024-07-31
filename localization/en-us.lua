@@ -140,6 +140,7 @@ return {
       b_ip_address = "IP Address",
       b_connecting = "Connecting...",
       b_encrypting = "Encrypting...",
+      b_disconnected = "Disconnected",
       k_booster_group_p_btgr_network = "Network Pack",
       k_booster_group_p_btgr_network_2 = "Network Pack"
     }

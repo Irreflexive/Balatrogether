@@ -72,8 +72,15 @@ G.FUNCS.tcp_close = function()
   Balatrogether.server.leaderboard_blind = false
   Balatrogether.server.leaderboard = nil
   if G.STAGE == G.STAGES.MAIN_MENU then
-    G.FUNCS.exit_overlay_menu()
+    if G.OVERLAY_MENU then
+      if G.OVERLAY_MENU:get_UIE_by_ID('connection_status') then
+        G.FUNCS.set_connection_status("b_disconnected")
+      else
+        G.FUNCS.exit_overlay_menu()
+      end
+    end
   else
+    G.FUNCS.set_connection_status("")
     remove_save()
     G.FUNCS.go_to_menu()
   end

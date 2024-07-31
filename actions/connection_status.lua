@@ -11,7 +11,11 @@ G.FUNCS.update_connection_status = function()
   end
 end
 
-G.FUNCS.tcp_listen("CONNECTION_STATUS", function(data)
-  Balatrogether.connection_status = data ~= "" and localize(data) or ""
+G.FUNCS.set_connection_status = function(status)
+  Balatrogether.connection_status = (status and status ~= "") and localize(status) or ""
   G.FUNCS.update_connection_status()
+end
+
+G.FUNCS.tcp_listen("CONNECTION_STATUS", function(data)
+  G.FUNCS.set_connection_status(data)
 end)

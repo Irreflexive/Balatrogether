@@ -63,7 +63,7 @@ function G.UIDEF.multiplayer_join()
         UIBox_button({label = {localize('b_paste')}, minw = 1, minh = 0.6, button = 'paste_address', colour = G.C.BLUE, scale = 0.3, col = true})
       }},
     }},
-    {n=G.UIT.R, config={align = "cm", minh = 0.9}, nodes={ 
+    {n=G.UIT.R, config={align = "cm", minh = 1.3}, nodes={ 
       {n=G.UIT.O, config={id = 'connection_status', object = Moveable()}},
     }},
     {n=G.UIT.R, config={align = "cm", padding = 0.05, minh = 0.9}, nodes={
@@ -79,8 +79,9 @@ function G.UIDEF.multiplayer_join()
 end
 
 function G.UIDEF.connection_status()
-  local t = {n=G.UIT.ROOT, config={align = "cm", minh = 0.7, minw = 4, padding = 0.1, colour = G.C.BLACK, r = 0.1}, nodes={ 
-    {n=G.UIT.T, config={text = Balatrogether.connection_status or "", scale = 0.5, colour = G.C.WHITE}}
+  local text = Balatrogether.connection_status or ""
+  local t = {n=G.UIT.ROOT, config={align = "cm", minh = 0.7, minw = 0.7, padding = 0.2, colour = text == "" and G.C.CLEAR or G.C.BLACK, r = 0.1}, nodes={ 
+    {n=G.UIT.T, config={text = text, scale = 0.5, colour = G.C.WHITE}}
   }}
   return t
 end
