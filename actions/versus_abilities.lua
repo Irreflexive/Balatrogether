@@ -109,7 +109,7 @@ G.FUNCS.tcp_listen("GET_CARDS_AND_JOKERS", function(data)
   else
     Balatrogether.server.network_pack = {
       jokers = #data.jokers > 0 and data.jokers or {{k = 'j_joker'}},
-      cards = #data.cards > 0 and data.cards or {}
+      cards = #data.cards > 0 and data.cards or {{k = 'D_7'}}
     }
   end
 end)
