@@ -27,7 +27,7 @@ SMODS.Booster{
   weight = 1,
   cost = 6,
   config = {extra = 4, choose = 1},
-  atlas = "Balatrogether_cards",
+  atlas = "sprites",
   in_pool = function(self)
     return G.FUNCS.is_versus_game()
   end,
@@ -41,7 +41,7 @@ SMODS.Booster{
   weight = 1,
   cost = 6,
   config = {extra = 4, choose = 1},
-  atlas = "Balatrogether_cards",
+  atlas = "sprites",
   in_pool = function(self)
     return G.FUNCS.is_versus_game()
   end,

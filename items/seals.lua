@@ -3,7 +3,7 @@ SMODS.Seal{
   pos = { x = 2, y = 0 },
   badge_colour = G.C.GREEN,
   config = { money = 1 },
-  atlas = "Balatrogether_cards",
+  atlas = "sprites",
   loc_vars = function(self, info_queue)
       return { vars = {self.config.money} }
   end,

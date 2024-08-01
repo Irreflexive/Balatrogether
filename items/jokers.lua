@@ -6,7 +6,7 @@ SMODS.Joker{
   pos = {x = 0, y = 0}, 
   cost = 20, 
   config = {},
-  atlas = "Balatrogether_cards", 
+  atlas = "sprites", 
   soul_pos = {x = 1, y = 0},
   calculate = function(self, card, context)
     if context.selling_self and G.FUNCS.is_versus_game() then

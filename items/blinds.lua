@@ -4,7 +4,7 @@ SMODS.Blind{
   discovered = false,
   boss = { min = 2, max = 6 },
   boss_colour = {21/255, 203/255, 92/255, 1},
-  atlas = "Balatrogether_blinds",
+  atlas = "blinds",
   in_pool = function(self)
     local ante = G.GAME.round_resets.ante
     return G.FUNCS.is_versus_game() and 
@@ -30,7 +30,7 @@ SMODS.Blind{
   boss = { min = 8, max = 8 },
   showdown = true,
   dollars = 8,
-  atlas = "Balatrogether_blinds",
+  atlas = "blinds",
   in_pool = function(self)
     return G.FUNCS.is_versus_game() and G.GAME.round_resets.ante == G.GAME.win_ante
   end,

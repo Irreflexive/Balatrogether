@@ -4,7 +4,7 @@ SMODS.Tarot{
   pos = {x = 0, y = 1}, 
   unlocked = true, 
   discovered = false, 
-  atlas = "Balatrogether_cards",
+  atlas = "sprites",
   use = function(self)
     if G.FUNCS.is_versus_game() then
       G.FUNCS.tcp_send({ cmd = "THE_CUP" })
@@ -29,7 +29,7 @@ SMODS.Spectral{
   pos = {x = 0, y = 2}, 
   unlocked = true, 
   discovered = false, 
-  atlas = "Balatrogether_cards",
+  atlas = "sprites",
   loc_vars = function(self, info_queue, card)
     info_queue[#info_queue + 1] = {
       set = "Other",

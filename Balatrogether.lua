@@ -44,13 +44,13 @@ for _,file in ipairs(NFS.getDirectoryItems(Balatrogether.file_path .. "actions")
 end
 
 SMODS.Atlas{
-  key = "Balatrogether_cards",
+  key = "sprites",
   path = "sprites.png",
   px = 71,
   py = 95
 }
 SMODS.Atlas{
-  key = "Balatrogether_blinds",
+  key = "blinds",
   path = "blinds.png",
   atlas_table = "ANIMATION_ATLAS",
   frames = 21,
