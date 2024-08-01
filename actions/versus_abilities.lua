@@ -99,7 +99,13 @@ G.FUNCS.tcp_listen("GET_CARDS_AND_JOKERS", function(data)
   if data.request_id then
     local jokers = G.FUNCS.serialize_jokers(G.FUNCS.get_unsecure_jokers())
     local cards = G.FUNCS.get_serialized_deck()
-    G.FUNCS.tcp_send({ cmd = "GET_CARDS_AND_JOKERS", jokers = jokers, cards = cards, request_id = data.request_id })
+    local randomCardSelection = {}
+    table.sort(cards, function(a, b) return math.random() > 0.5 end)
+    for i = 1, 20 do
+      if not cards[i] then break end
+      table.insert(randomCardSelection, cards[i])
+    end
+    G.FUNCS.tcp_send({ cmd = "GET_CARDS_AND_JOKERS", jokers = jokers, cards = randomCardSelection, request_id = data.request_id })
   else
     Balatrogether.server.network_pack = {
       jokers = #data.jokers > 0 and data.jokers or {{k = 'j_joker'}},
