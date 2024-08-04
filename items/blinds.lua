@@ -27,8 +27,7 @@ SMODS.Blind{
   pos = {x = 0, y = 1},
   discovered = false,
   boss_colour = {21/255, 203/255, 92/255, 1},
-  boss = { min = 8, max = 8 },
-  showdown = true,
+  boss = { min = 8, max = 8, showdown = true },
   dollars = 8,
   atlas = "blinds",
   in_pool = function(self)
