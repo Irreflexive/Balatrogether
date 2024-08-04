@@ -102,7 +102,7 @@ function G.UIDEF.server_config(e)
               label = localize('b_multiplayer_run'),
               chosen = false,
               tab_definition_function = G.UIDEF.run_setup_multiplayer,
-              func = 'is_host'
+              func = 'can_setup_multiplayer_run'
             },
         },
         snap_to_nav = true}),

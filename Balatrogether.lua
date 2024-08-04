@@ -90,15 +90,18 @@ G.FUNCS.is_versus_game = function()
 end
 
 G.FUNCS.is_host = function(e)
-  local _is_host = tostring(G.STEAM.user.getSteamID()) == Balatrogether.server.players[1]
+  return tostring(G.STEAM.user.getSteamID()) == Balatrogether.server.players[1]
+end
+
+G.FUNCS.can_setup_multiplayer_run = function(e)
+  local _can_setup = G.FUNCS.is_host() and #Balatrogether.server.players >= 2
   if e and e.config and e.config.func then
-    if not _is_host then
+    if not _can_setup then
       e.config.colour = G.C.UI.BACKGROUND_INACTIVE
       e.config.button = nil
     end
     e.config.func = nil
   end
-  return _is_host
 end
 
 G.FUNCS.change_player_list_page = function(args)
