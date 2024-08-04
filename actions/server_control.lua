@@ -96,17 +96,21 @@ G.FUNCS.tcp_listen("START", function(data)
   Balatrogether.server.leaderboard = nil
   G.GAME.selected_back = Back(get_deck_from_name(data.deck))
   local cards = {}
+  local enhancements = {"m_bonus", "m_mult", "m_wild", "m_glass", "m_steel", "m_stone", "m_gold", "m_lucky"}
+  local editions = {"foil", "holo", "polychrome", createCollectionId(nil, 'secure')}
   for i = 1, 52 do
+    local en = enhancements[i % (#enhancements + 1) + 1]
+    local ed = editions[i % (#editions + 1) + 1]
     if i <= 10 then
-      table.insert(cards, {s='S',r='K',g='Red'})
+      table.insert(cards, {s='S',r='K',g='Red',e=en,d=ed})
     elseif i <= 20 then
-      table.insert(cards, {s='S',r='K',g='Blue'})
+      table.insert(cards, {s='S',r='K',g='Blue',e=en,d=ed})
     elseif i <= 30 then
-      table.insert(cards, {s='S',r='K',g=createCollectionId('s', 'green')})
+      table.insert(cards, {s='S',r='K',g=createCollectionId('s', 'green'),e=en,d=ed})
     elseif i <= 40 then
-      table.insert(cards, {s='S',r='K',g='Purple'})
+      table.insert(cards, {s='S',r='K',g='Purple',e=en,d=ed})
     elseif i <= 50 then
-      table.insert(cards, {s='S',r='K',g='Gold'})
+      table.insert(cards, {s='S',r='K',g='Gold',e=en,d=ed})
     else
       table.insert(cards, {s='S',r='K'})
     end

@@ -94,7 +94,7 @@ G.FUNCS.is_host = function(e)
 end
 
 G.FUNCS.can_setup_multiplayer_run = function(e)
-  local _can_setup = G.FUNCS.is_host() and #Balatrogether.server.players >= 2
+  local _can_setup = G.FUNCS.is_host() and (#Balatrogether.server.players >= 2 or Balatrogether.debug)
   if e and e.config and e.config.func then
     if not _can_setup then
       e.config.colour = G.C.UI.BACKGROUND_INACTIVE
