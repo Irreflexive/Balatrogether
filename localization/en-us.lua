@@ -112,7 +112,6 @@ return {
           "Opponents lose {C:money}$#1#{}",
           "when this card is played",
           "and scores, and earn {C:money}$#1#{}",
-          "{C:inactive}(Versus only){}",
         }
       }
     }

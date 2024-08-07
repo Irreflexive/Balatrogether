@@ -67,9 +67,12 @@ vec4 effect( vec4 colour, Image texture, vec2 texture_coords, vec2 screen_coords
     float angle = atan(adjusted_uv.y, adjusted_uv.x);
     float strength = pow(pow(sin(radius*40. + cos(angle - 3.14159 / 2.)*radius*20. + secure.x - secure.y), 2.), 2.);
 
-    tex.r = tex.r * strength;
-    tex.g = tex.g;
-    tex.b = tex.b * strength + (tex.g * 0.4) * (1. - strength);
+    vec4 offset_tex = Texel(texture, texture_coords - texture_details.b*0.00001*strength*vec2(cos(angle), sin(angle)));
+
+    tex.r = offset_tex.r * strength;
+    tex.g = offset_tex.g;
+    tex.b = offset_tex.b * strength + (offset_tex.g * 0.4) * (1. - strength);
+    tex.a = offset_tex.a;
 
     tex = laminate(tex, uv);
 

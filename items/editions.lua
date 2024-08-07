@@ -16,6 +16,7 @@ SMODS.Edition{
   weight = 14,
   extra_cost = 3,
   in_shop = true,
+  override_shape = true,
   sound = { sound = createCollectionId(nil, 'secure'), per = 1, vol = 0.4 },
   get_weight = function(self, card, context)
     if G.FUNCS.is_versus_game() then
