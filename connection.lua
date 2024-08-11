@@ -5,7 +5,6 @@ local tcp = {
   thread = nil,
   send_channel = nil,
   receive_channel = nil,
-  send_queue = {},
 }
 
 G.FUNCS.tcp_connect = function()
@@ -14,7 +13,6 @@ G.FUNCS.tcp_connect = function()
   tcp.thread = love.thread.newThread(NFS.read(Balatrogether.file_path .. "tcp_thread.lua"))
   tcp.send_channel = love.thread.newChannel()
   tcp.receive_channel = love.thread.newChannel()
-  tcp.send_queue = {}
   tcp.thread:start(Balatrogether.server.address, tcp.send_channel, tcp.receive_channel, true)
   if Balatrogether.debug then sendDebugMessage("TCP connection opened") end
 end
@@ -95,20 +93,13 @@ G.FUNCS.tcp_send = function(data)
     data.steam_id = tostring(G.STEAM.user.getSteamID())
     data.unlock_hash = G.FUNCS.compute_unlock_hash()
   end
-  table.insert(tcp.send_queue, G.JSON.encode(data))
+  local encoded = G.JSON.encode(data)
+  if Balatrogether.debug then sendDebugMessage("Sending data: " .. encoded) end
+  tcp.send_channel:push(encoded)
 end
 
-local time_since_last_send = 0
 G.FUNCS.tcp_update = function(dt)
   G.FUNCS.tcp_receive()
-  if not tcp.enabled then return end
-  time_since_last_send = time_since_last_send + dt
-  if #tcp.send_queue == 0 or time_since_last_send < 0.1 then return end
-  time_since_last_send = 0
-  local data = tcp.send_queue[1]
-  table.remove(tcp.send_queue, 1)
-  if Balatrogether.debug then sendDebugMessage("Sending data: " .. data) end
-  tcp.send_channel:push(data)
 end
 
 G.FUNCS.tcp_listen = function(event, callback)
