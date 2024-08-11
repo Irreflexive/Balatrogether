@@ -49,12 +49,15 @@ G.FUNCS.tcp_receive = function()
   local res = receive_and_parse()
   if res.success then
     if not res.data then return end
+    if res.game_state then
+      Balatrogether.server.game_state = res.game_state
+    end
     local funcs = Balatrogether.actions[res.cmd]
     if funcs then
       for _, func in ipairs(funcs) do
         func(res.data)
       end
-    else
+    elseif res.cmd ~= "NODATA" then
       if Balatrogether.debug then sendDebugMessage("Unknown action: " .. res.cmd) end
     end
   else

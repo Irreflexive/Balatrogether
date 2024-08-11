@@ -7,7 +7,7 @@ SMODS.Tarot{
   atlas = "sprites",
   use = function(self)
     if G.FUNCS.is_versus_game() then
-      G.FUNCS.tcp_send({ cmd = "THE_CUP" })
+      ease_dollars((Balatrogether.server.game_state.eliminated or 0) * 8)
     end
   end,
   can_use = function(self)

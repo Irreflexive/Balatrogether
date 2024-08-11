@@ -28,7 +28,7 @@ Balatrogether.server = {
   players = {},
   versus = false,
   max_players = 0,
-  remaining = 0,
+  game_state = {},
   network_pack = {jokers = {}, cards = {}},
 }
 
@@ -227,7 +227,7 @@ G.FUNCS.paste_address = function(e)
 end
 
 G.FUNCS.get_duel_threshold = function()
-  return math.ceil(Balatrogether.server.remaining / 2)
+  return math.ceil((Balatrogether.server.game_state.remaining or 0) / 2)
 end
 
 local get_new_boss_ref = get_new_boss

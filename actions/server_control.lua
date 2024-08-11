@@ -166,7 +166,3 @@ end)
 G.FUNCS.tcp_listen("WIN", function(data)
   win_game()
 end)
-
-G.FUNCS.tcp_listen("STATE_INFO", function(data)
-  Balatrogether.server.remaining = data.remaining
-end)

@@ -74,7 +74,6 @@ function add_round_eval_row(config)
 end
 
 G.FUNCS.tcp_listen("SKIP_BOOSTER", function(data)
-  if G.STATE ~= G.STATES.SHOP then return end
   G.SINGLEPLAYER_FUNCS.skip_booster()
 end)
 
