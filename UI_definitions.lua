@@ -124,73 +124,20 @@ function G.UIDEF.run_setup_multiplayer()
   return t
 end
 
-function G.UIDEF.player_list()
-  local player_page_size = 4
-  local player_pages = {}
-  for i = 1, math.ceil(#Balatrogether.server.players/player_page_size) do
-    table.insert(player_pages, localize('k_page')..' '..tostring(i)..'/'..tostring(math.ceil(#Balatrogether.server.players/player_page_size)))
-  end
-  G.E_MANAGER:add_event(Event({func = (function()
-    G.FUNCS.change_player_list_page{cycle_config = {current_option = 1}}
-  return true end)}))
-
-  local t = {n=G.UIT.ROOT, config={id = 'balatrogether_player_list', align = "cm", colour = G.C.CLEAR, minh = 7, minw = 4.2}, nodes={
-    {n=G.UIT.R, config={align = "cm", padding = 0.0}, nodes={
-      {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        {n=G.UIT.T, config={text = localize('b_ip_address'), scale = 0.5, colour = G.C.WHITE}},
-      }},
-      {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        UIBox_button({id = 'server_code', col = true, label = {Balatrogether.server.address}, button = 'nil', colour = G.C.BLUE, scale = 0.5, minw = 3, minh = 0.6, shadow = true}),
-        UIBox_button({id = 'copy_code', col = true, label = {localize('b_copy')}, button = 'copy_server_code', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
-      }},
-      {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        UIBox_button({id = 'save_server', col = true, label = {localize('b_save_address')}, button = 'save_server', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
-      }},
-      {n=G.UIT.R, config={align = "cm", padding = 0.3}, nodes={}},
-      {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        {n=G.UIT.T, config={text = localize('b_player_list'), scale = 0.5, colour = G.C.WHITE}},
-      }},
-      {n=G.UIT.R, config={align = "cm", padding = 0.1, minh = 2.8, minw = 4.2}, nodes={
-        {n=G.UIT.O, config={id = 'server_player_list', object = Moveable()}},
-      }},
-      {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        create_option_cycle({id = 'player_page',scale = 0.9, h = 0.3, w = 3.5, options = player_pages, cycle_shoulders = true, opt_callback = 'change_player_list_page', current_option = 1, colour = G.C.RED, no_pips = true, focus_args = {snap_to = true}})
-      }},
+function G.UIDEF.server_address()
+  local t = {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+    {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
+      {n=G.UIT.T, config={text = localize('b_ip_address'), scale = 0.5, colour = G.C.WHITE}},
+    }},
+    {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
+      UIBox_button({id = 'server_code', col = true, label = {Balatrogether.server.address}, button = 'nil', colour = G.C.BLUE, scale = 0.5, minw = 3, minh = 0.6, shadow = true}),
+    }},
+    {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
+      UIBox_button({id = 'copy_code', col = true, label = {localize('b_copy')}, button = 'copy_server_code', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
+      UIBox_button({id = 'save_server', col = true, label = {localize('b_save_address')}, button = 'save_server', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
     }},
   }}
   return t
-end
-
-function G.UIDEF.player_list_page(_page)
-  local player_page_size = 4
-  local snapped = false
-  local player_list = {}
-  for k = player_page_size*(_page or 0) + 1, player_page_size*((_page or 0) + 1) do
-    v = Balatrogether.server.players[k]
-    if G.CONTROLLER.focused.target and G.CONTROLLER.focused.target.config.id == 'player_page' then snapped = true end
-
-    player_list[#player_list+1] = 
-    {n=G.UIT.R, config={align = "cm"}, nodes={
-      {n=G.UIT.C, config={align = 'cl', minw = 0.8}, nodes = {
-        {n=G.UIT.T, config={text = k..'', scale = 0.4, colour = G.C.WHITE}},
-      }},
-      UIBox_button({
-        id = k, 
-        col = true, 
-        label = {v and G.STEAM.friends.getFriendPersonaName(G.STEAM.extra.parseUint64(v)) or ''}, 
-        button = 'nil', 
-        colour = v and (tostring(G.STEAM.user.getSteamID()) == v and G.C.IMPORTANT or G.C.RED) or G.C.GREY, 
-        minw = 4, 
-        scale = 0.4, 
-        minh = 0.6, 
-        focus_args = {snap_to = not snapped}, 
-        shadow = true
-      }),
-    }}      
-    snapped = true
-  end
-
-  return {n=G.UIT.ROOT, config={align = "cm", padding = 0.1, colour = G.C.CLEAR}, nodes=player_list}
 end
 
 function create_UIBox_options()  
@@ -360,51 +307,52 @@ function create_UIBox_game_over()
   return t
 end
 
-function G.UIDEF.saved_servers()
-  local server_page_size = 4
-  local server_pages = {}
-  for i = 1, math.ceil(#Balatrogether.mod.config.saved_servers/server_page_size) do
-    table.insert(server_pages, localize('k_page')..' '..tostring(i)..'/'..tostring(math.ceil(#Balatrogether.mod.config.saved_servers/server_page_size)))
-  end
-  if #server_pages == 0 then server_pages = {localize('k_page')..' 1/0'} end
-  G.E_MANAGER:add_event(Event({func = (function()
-    G.FUNCS.change_server_list_page{cycle_config = {current_option = 1}}
-  return true end)}))
+local saved_server_id = createUIListFunctions('saved_servers', function() return Balatrogether.mod.config.saved_servers end, 4, function(k, v)
+  return {
+    UIBox_button({id = v, col = true, label = {v or ""}, button = v and 'join_saved_server' or 'nil', colour = v and G.C.BLUE or G.C.GREY, minw = 4, scale = 0.4, minh = 0.6, one_press = true, focus_args = {snap_to = not snapped}}),
+    {n=G.UIT.C, config={align = 'cm', minw = 0.1}, nodes = {}},
+    UIBox_button({id = v and 'remove_'..v or nil, col = true, label = {'X'}, button = v and 'remove_server' or 'nil', colour = v and G.C.RED or G.C.GREY, scale = 0.4, minw = 0.6, minh = 0.6, one_press = true, focus_args = {snap_to = not snapped}}),
+  }
+end)
 
+function G.UIDEF.saved_servers()
   local t = {n=G.UIT.R, config={align = "cm", colour = G.C.CLEAR}, nodes={
     {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
       {n=G.UIT.T, config={text = localize('b_saved_servers'), scale = 0.5, colour = G.C.WHITE}},
     }},
-    {n=G.UIT.R, config={align = "cm", padding = 0.1, minh = 2.8, minw = 4.2}, nodes={
-      {n=G.UIT.O, config={id = 'saved_servers_list', object = Moveable()}},
-    }},
-    {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-      create_option_cycle({id = 'server_list_page',scale = 0.9, h = 0.3, w = 3.5, options = server_pages, cycle_shoulders = true, opt_callback = 'change_server_list_page', current_option = 1, colour = G.C.RED, no_pips = true, focus_args = {snap_to = true}})
-    }},
+    G.UIDEF[saved_server_id](),
   }}
 
   return t
 end
 
-function G.UIDEF.saved_servers_page(_page)
-  local server_page_size = 4
-  local snapped = false
-  local saved_servers = {}
-  for k = server_page_size*(_page or 0) + 1, server_page_size*((_page or 0) + 1) do
-    v = Balatrogether.mod.config.saved_servers[k]
-    if G.CONTROLLER.focused.target and G.CONTROLLER.focused.target.config.id == 'server_list_page' then snapped = true end
+local player_list_id = createUIListFunctions('lobby_players', function() return Balatrogether.server.players end, 4, function(k, v)
+  return {
+    UIBox_button({
+      id = k, 
+      col = true, 
+      label = {v and G.STEAM.friends.getFriendPersonaName(G.STEAM.extra.parseUint64(v)) or ''}, 
+      button = 'nil', 
+      colour = v and (tostring(G.STEAM.user.getSteamID()) == v and G.C.IMPORTANT or G.C.RED) or G.C.GREY, 
+      minw = 4, 
+      scale = 0.4, 
+      minh = 0.6, 
+      focus_args = {snap_to = not snapped}, 
+      shadow = true
+    }),
+  }
+end)
 
-    saved_servers[#saved_servers+1] = 
-    {n=G.UIT.R, config={align = "cm"}, nodes={
-      {n=G.UIT.C, config={align = 'cl', minw = 0.8}, nodes = {
-        {n=G.UIT.T, config={text = k..'', scale = 0.4, colour = G.C.WHITE}},
+function G.UIDEF.player_list()
+  local t = {n=G.UIT.ROOT, config={id = 'balatrogether_player_list', align = "cm", colour = G.C.CLEAR, minh = 7, minw = 4.2}, nodes={
+    {n=G.UIT.R, config={align = "cm", padding = 0.0}, nodes={
+      G.UIDEF.server_address(),
+      {n=G.UIT.R, config={align = "cm", padding = 0.3}, nodes={}},
+      {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
+        {n=G.UIT.T, config={text = localize('b_player_list'), scale = 0.5, colour = G.C.WHITE}},
       }},
-      UIBox_button({id = v, col = true, label = {v or ""}, button = v and 'join_saved_server' or 'nil', colour = v and G.C.BLUE or G.C.GREY, minw = 4, scale = 0.4, minh = 0.6, one_press = true, focus_args = {snap_to = not snapped}}),
-      {n=G.UIT.C, config={align = 'cm', minw = 0.1}, nodes = {}},
-      UIBox_button({id = v and 'remove_'..v or nil, col = true, label = {'X'}, button = v and 'remove_server' or 'nil', colour = v and G.C.RED or G.C.GREY, scale = 0.4, minw = 0.6, minh = 0.6, one_press = true, focus_args = {snap_to = not snapped}}),
-    }}      
-    snapped = true
-  end
-
-  return {n=G.UIT.ROOT, config={align = "cm", padding = 0.1, colour = G.C.CLEAR}, nodes=saved_servers}
+      G.UIDEF[player_list_id](),
+    }},
+  }}
+  return t
 end

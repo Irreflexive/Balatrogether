@@ -60,3 +60,72 @@ function getCardFromMultiplayerID(area, id)
   end
   return nil
 end
+
+function createUIListFunctions(name, get_list, page_size, element_func)
+  local ui_list_id = Balatrogether.prefix .. '_' .. name .. '_list'
+  local ui_page_id = ui_list_id .. '_page'
+  local change_page_id = 'change_' .. ui_page_id
+
+  G.UIDEF[ui_list_id] = function()
+    local pages = {}
+    for i = 1, math.ceil(#get_list()/page_size) do
+      table.insert(pages, localize('k_page')..' '..tostring(i)..'/'..tostring(math.ceil(#get_list()/page_size)))
+    end
+    if #pages == 0 then pages = {localize('k_page')..' 1/0'} end
+    G.E_MANAGER:add_event(Event({func = (function()
+      G.FUNCS[change_page_id]{cycle_config = {current_option = 1}}
+    return true end)}))
+  
+    local t = {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+      {n=G.UIT.R, config={align = "cm", padding = 0.1, minh = 2.8, minw = 4.2}, nodes={
+        {n=G.UIT.O, config={id = ui_list_id, object = Moveable()}},
+      }},
+      {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
+        create_option_cycle({id = ui_page_id,scale = 0.9, h = 0.3, w = 3.5, options = pages, cycle_shoulders = true, opt_callback = change_page_id, current_option = 1, colour = G.C.RED, no_pips = true, focus_args = {snap_to = true}})
+      }},
+    }}
+    return t
+  end
+
+  G.UIDEF[ui_page_id] = function(_page)
+    local snapped = false
+    local list_ui = {}
+    for k = page_size*(_page or 0) + 1, page_size*((_page or 0) + 1) do
+      v = get_list()[k]
+      if G.CONTROLLER.focused.target and G.CONTROLLER.focused.target.config.id == ui_page_id then snapped = true end
+  
+      list_ui[#list_ui+1] = 
+      {n=G.UIT.R, config={align = "cm"}, nodes={
+        {n=G.UIT.C, config={align = 'cl', minw = 0.8}, nodes = {
+          {n=G.UIT.T, config={text = k..'', scale = 0.4, colour = G.C.WHITE}},
+        }},
+        unpack(element_func(k, v)),
+      }}
+      snapped = true
+    end
+  
+    return {n=G.UIT.ROOT, config={align = "cm", padding = 0.1, colour = G.C.CLEAR}, nodes=list_ui}
+  end
+
+  local last_selected_page = 1
+  G.FUNCS[change_page_id] = function(args)
+    if not args then args = {} end
+    if not args.cycle_config then args.cycle_config = {} end
+    if not args.cycle_config.current_option then args.cycle_config.current_option = last_selected_page end
+    last_selected_page = args.cycle_config.current_option
+    if G.OVERLAY_MENU then
+      local ui_list = G.OVERLAY_MENU:get_UIE_by_ID(ui_list_id)
+      if ui_list then 
+        if ui_list.config.object then 
+          ui_list.config.object:remove() 
+        end
+        ui_list.config.object = UIBox{
+          definition = G.UIDEF[ui_page_id](args.cycle_config.current_option-1),
+          config = {offset = {x=0,y=0}, align = 'cm', parent = ui_list}
+        }
+      end
+    end
+  end
+
+  return ui_list_id
+end

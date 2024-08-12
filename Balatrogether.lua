@@ -104,40 +104,6 @@ G.FUNCS.can_setup_multiplayer_run = function(e)
   end
 end
 
-G.FUNCS.change_player_list_page = function(args)
-  if not args or not args.cycle_config then return end
-  if G.OVERLAY_MENU then
-    local pl_list = G.OVERLAY_MENU:get_UIE_by_ID('server_player_list')
-    if pl_list then 
-      if pl_list.config.object then 
-        pl_list.config.object:remove() 
-      end
-      pl_list.config.object = UIBox{
-        definition =  G.UIDEF.player_list_page(args.cycle_config.current_option-1),
-        config = {offset = {x=0,y=0}, align = 'cm', parent = pl_list}
-      }
-    end
-  end
-end
-
-local current_server_list_page = 1
-G.FUNCS.change_server_list_page = function(args)
-  if not args or not args.cycle_config then args = {cycle_config = {current_option = current_server_list_page}} end
-  current_server_list_page = args.cycle_config.current_option
-  if G.OVERLAY_MENU then
-    local pl_list = G.OVERLAY_MENU:get_UIE_by_ID('saved_servers_list')
-    if pl_list then 
-      if pl_list.config.object then 
-        pl_list.config.object:remove() 
-      end
-      pl_list.config.object = UIBox{
-        definition =  G.UIDEF.saved_servers_page(args.cycle_config.current_option-1),
-        config = {offset = {x=0,y=0}, align = 'cm', parent = pl_list}
-      }
-    end
-  end
-end
-
 G.FUNCS.copy_server_code = function(e)
   if G.F_LOCAL_CLIPBOARD then
     G.CLIPBOARD = Balatrogether.server.address
@@ -166,7 +132,7 @@ G.FUNCS.remove_server = function(e)
       table.remove(servers, i)
       Balatrogether.mod.config.saved_servers = servers
       SMODS.save_mod_config(Balatrogether.mod)
-      G.FUNCS.change_server_list_page()
+      G.FUNCS['change_' .. Balatrogether.prefix .. '_saved_servers_list_page']()
       return
     end
   end
