@@ -89,7 +89,7 @@ end)
 G.FUNCS.tcp_listen("LOBBIES", function(data)
   Balatrogether.server.lobbies = data
   if G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('balatrogether_lobby_list') then
-    G.FUNCS['change_' .. Balatrogether.prefix .. '_server_lobbies_list']()
+    G.FUNCS['change_' .. Balatrogether.prefix .. '_server_lobbies_list_page']()
   else
     G.FUNCS.overlay_menu{
       definition = G.UIDEF.lobby_list(),

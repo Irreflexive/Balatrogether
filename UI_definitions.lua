@@ -362,7 +362,7 @@ local lobby_list_id = createUIListFunctions('server_lobbies', function() return 
     UIBox_button({
       id = k, 
       col = true, 
-      label = {v and (tostring(v.players)..'/'..tostring(v.max) .. ' Players') or ''}, 
+      label = {v and (tostring(v.players)..'/'..tostring(v.max) .. ' ' .. localize('b_players')) or ''}, 
       button = (v and v.open) and 'join_lobby' or 'nil', 
       colour = (v and v.open) and G.C.BLUE or G.C.GREY, 
       minw = 4, 
@@ -384,6 +384,13 @@ function G.UIDEF.lobby_list()
           {n=G.UIT.T, config={text = localize('b_lobby_list'), scale = 0.5, colour = G.C.WHITE}},
         }},
         G.UIDEF[lobby_list_id](),
+        {n=G.UIT.R, config={align = "cm", padding = 0.05, minh = 0.7}, nodes={
+          {n=G.UIT.C, config={align = "cm", minw = 3, minh = 0.6, padding = 0.1, r = 0.1, hover = true, colour = G.C.BLUE, button = "refresh_lobbies", shadow = true}, nodes={
+            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+              {n=G.UIT.T, config={text = localize('b_refresh'), scale = 0.4, colour = G.C.UI.TEXT_LIGHT, func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
+            }}
+          }}
+        }},
       }},
     }}
   }})

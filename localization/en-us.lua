@@ -124,6 +124,7 @@ return {
     dictionary = {
       b_eliminated = "ELIMINATED",
       b_join = "JOIN",
+      b_refresh = "Refresh",
       b_paste = "Paste",
       b_players = "Players",
       b_player_list = "Player List",

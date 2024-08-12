@@ -75,6 +75,11 @@ G.FUNCS.join_server = function()
   G.FUNCS.tcp_send({ cmd = "JOIN" })
 end
 
+G.FUNCS.refresh_lobbies = function()
+  G.FUNCS.tcp_connect()
+  G.FUNCS.tcp_send({ cmd = "JOIN" })
+end
+
 G.FUNCS.join_saved_server = function(e)
   sendDebugMessage("Joining server!")
   Balatrogether.server.address = e.config.id
