@@ -81,6 +81,17 @@ G.FUNCS.tcp_listen("JOIN", function(data)
   G.OVERLAY_MENU.config.no_esc = true
 end)
 
+G.FUNCS.tcp_listen("LOBBIES", function(data)
+  Balatrogether.server.lobbies = data
+  if G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('balatrogether_lobby_list') then
+    G.FUNCS['change_' .. Balatrogether.prefix .. '_server_lobbies_list']()
+  else
+    G.FUNCS.overlay_menu{
+      definition = G.UIDEF.lobby_list(),
+    }
+  end
+end)
+
 G.FUNCS.tcp_listen("LEAVE", function(data)
   Balatrogether.server.players = data.players
   if G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('balatrogether_player_list') then

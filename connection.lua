@@ -76,7 +76,7 @@ G.FUNCS.tcp_close = function()
     if G.OVERLAY_MENU then
       if G.OVERLAY_MENU:get_UIE_by_ID('connection_status') then
         G.FUNCS.set_connection_status("b_disconnected")
-      else
+      elseif not G.OVERLAY_MENU:get_UIE_by_ID('balatrogether_lobby_list') then
         G.FUNCS.exit_overlay_menu()
       end
     end

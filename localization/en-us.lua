@@ -127,6 +127,7 @@ return {
       b_paste = "Paste",
       b_players = "Players",
       b_player_list = "Player List",
+      b_lobby_list = "Lobbies",
       b_multiplayer_run = "Start Run",
       b_balatrogether = "Balatrogether",
       b_boss_leaderboard = "Boss Results",

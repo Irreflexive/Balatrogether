@@ -26,6 +26,7 @@ Balatrogether.server = {
   enabled = false,
   address = "",
   players = {},
+  lobbies = {},
   versus = false,
   max_players = 0,
   game_state = {},

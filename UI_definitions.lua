@@ -356,3 +356,37 @@ function G.UIDEF.player_list()
   }}
   return t
 end
+
+local lobby_list_id = createUIListFunctions('server_lobbies', function() return Balatrogether.server.lobbies end, 4, function(k, v)
+  return {
+    UIBox_button({
+      id = k, 
+      col = true, 
+      label = {v and (tostring(v.players)..'/'..tostring(v.max) .. ' Players') or ''}, 
+      -- TODO: implement join_lobby
+      button = (v and v.open) and 'join_lobby' or 'nil', 
+      colour = (v and v.open) and G.C.BLUE or G.C.GREY, 
+      minw = 4, 
+      scale = 0.4, 
+      minh = 0.6, 
+      focus_args = {snap_to = not snapped}, 
+      shadow = true
+    }),
+  }
+end)
+
+function G.UIDEF.lobby_list()
+  local t = create_UIBox_generic_options({ contents = {
+    {n=G.UIT.R, config={id = 'balatrogether_lobby_list', align = "cm", colour = G.C.CLEAR, minh = 7, minw = 4.2}, nodes={
+      {n=G.UIT.R, config={align = "cm", padding = 0.0}, nodes={
+        G.UIDEF.server_address(),
+        {n=G.UIT.R, config={align = "cm", padding = 0.3}, nodes={}},
+        {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
+          {n=G.UIT.T, config={text = localize('b_lobby_list'), scale = 0.5, colour = G.C.WHITE}},
+        }},
+        G.UIDEF[lobby_list_id](),
+      }},
+    }}
+  }})
+  return t
+end
