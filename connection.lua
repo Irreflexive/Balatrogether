@@ -89,7 +89,7 @@ G.FUNCS.tcp_close = function()
 end
 
 G.FUNCS.tcp_send = function(data)
-  if data.cmd == "JOIN" then
+  if data.cmd == "JOIN" or data.cmd == "JOIN_LOBBY" then
     data.steam_id = tostring(G.STEAM.user.getSteamID())
     data.unlock_hash = G.FUNCS.compute_unlock_hash()
   end

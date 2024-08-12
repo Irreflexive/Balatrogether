@@ -363,7 +363,6 @@ local lobby_list_id = createUIListFunctions('server_lobbies', function() return 
       id = k, 
       col = true, 
       label = {v and (tostring(v.players)..'/'..tostring(v.max) .. ' Players') or ''}, 
-      -- TODO: implement join_lobby
       button = (v and v.open) and 'join_lobby' or 'nil', 
       colour = (v and v.open) and G.C.BLUE or G.C.GREY, 
       minw = 4, 

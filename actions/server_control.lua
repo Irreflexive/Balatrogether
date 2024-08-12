@@ -37,6 +37,11 @@ G.FUNCS.start_setup_run = function(e)
   end
 end
 
+G.FUNCS.join_lobby = function(e)
+  G.FUNCS.tcp_connect()
+  G.FUNCS.tcp_send({ cmd = "JOIN_LOBBY", number = e.config.id })
+end
+
 function Controller:key_hold_update(key, dt)
   if ((self.locked) and not G.SETTINGS.paused) or (self.locks.frame) or (self.frame_buttonpress) then return end
   --self.frame_buttonpress = true
