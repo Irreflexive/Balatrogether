@@ -218,7 +218,7 @@ function G.UIDEF.boss_leaderboard(leaderboard)
       }},
       {n=G.UIT.C, config={align = "cm", minw = 7.5, minh = 0.6, r = 0.1, colour = (row.score and k <= survive_count) and G.C.BLUE or G.C.GREY}, nodes = {
         {n=G.UIT.C, config={align = "cl", minw = 4, minh = 0.6, padding = 0.1}, nodes={
-          {n=G.UIT.T, config={text = row.name or G.STEAM.friends.getFriendPersonaName(G.STEAM.extra.parseUint64(row.player)), scale = 0.4, colour = G.C.WHITE, shadow = true}},
+          {n=G.UIT.T, config={text = G.FUNCS.get_player_name(row.player), scale = 0.4, colour = G.C.WHITE, shadow = true}},
         }},
         {n=G.UIT.C, config={align = "cr", minw = 3.5, minh = 0.6, padding = 0.1}, nodes=row.score and {
           {n=G.UIT.T, config={text = number_format(row.score), lang = G.LANGUAGES['en-us'], scale = 0.4, colour = G.C.WHITE, shadow = true}},
@@ -331,9 +331,9 @@ local player_list_id = createUIListFunctions('lobby_players', function() return 
     UIBox_button({
       id = k, 
       col = true, 
-      label = {v and G.STEAM.friends.getFriendPersonaName(G.STEAM.extra.parseUint64(v)) or ''}, 
+      label = {G.FUNCS.get_player_name(v)}, 
       button = 'nil', 
-      colour = v and (tostring(G.STEAM.user.getSteamID()) == v and G.C.IMPORTANT or G.C.RED) or G.C.GREY, 
+      colour = v and (tostring(G.STEAM.user.getSteamID()) == v.id and G.C.IMPORTANT or G.C.RED) or G.C.GREY, 
       minw = 4, 
       scale = 0.4, 
       minh = 0.6, 

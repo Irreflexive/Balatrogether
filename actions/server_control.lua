@@ -80,7 +80,7 @@ G.FUNCS.tcp_listen("JOIN", function(data)
   Balatrogether.server.versus = false
   Balatrogether.server.players = data.players
   Balatrogether.server.max_players = data.maxPlayers
-  if (G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('balatrogether_player_list')) or data.players[#data.players] == tostring(G.STEAM.user.getSteamID()) then
+  if (G.OVERLAY_MENU and G.OVERLAY_MENU:get_UIE_by_ID('balatrogether_player_list')) or data.players[#data.players].id == tostring(G.STEAM.user.getSteamID()) then
     G.FUNCS.setup_run_multiplayer()
   end
   G.OVERLAY_MENU.config.no_esc = true

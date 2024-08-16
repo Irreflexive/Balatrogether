@@ -96,7 +96,24 @@ G.FUNCS.is_versus_game = function()
 end
 
 G.FUNCS.is_host = function(e)
-  return tostring(G.STEAM.user.getSteamID()) == Balatrogether.server.players[1]
+  if #Balatrogether.server.players == 0 then return false end
+  return tostring(G.STEAM.user.getSteamID()) == Balatrogether.server.players[1].id
+end
+
+G.FUNCS.get_player_name = function(player)
+  if not player then return "" end
+  if type(player) == "userdata" then
+    player = tostring(player)
+  end
+  if type(player) == "string" then
+    for _,p in ipairs(Balatrogether.server.players) do
+      if p.id == player and p.name then
+        return p.name
+      end
+    end
+    player = {id = player}
+  end
+  return player.name or G.STEAM.friends.getFriendPersonaName(G.STEAM.extra.parseUint64(player.id))
 end
 
 G.FUNCS.can_setup_multiplayer_run = function(e)
