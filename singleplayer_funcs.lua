@@ -11,6 +11,7 @@ G.SINGLEPLAYER_FUNCS = {
   next_round = G.FUNCS.toggle_shop,
   go_to_shop = G.FUNCS.cash_out,
   skip_booster = G.FUNCS.skip_booster,
+  change_gamespeed = G.FUNCS.change_gamespeed,
 }
 
 G.SINGLEPLAYER_FUNCS.buy_card = function(e)

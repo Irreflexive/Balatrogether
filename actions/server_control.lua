@@ -2,6 +2,13 @@ G.FUNCS.endless_multiplayer = function(e)
   G.FUNCS.tcp_send({ cmd = "ENDLESS" })
 end
 
+G.FUNCS.change_gamespeed = function(args)
+  if G.FUNCS.is_coop_game() then
+    G.FUNCS.tcp_send({ cmd = "GAME_SPEED", speed = args.to_val })
+  end
+  G.SINGLEPLAYER_FUNCS.change_gamespeed(args)
+end
+
 G.FUNCS.start_setup_run = function(e)
   if G.OVERLAY_MENU then G.FUNCS.exit_overlay_menu() end
   if G.SETTINGS.current_setup == 'New Run' then 
@@ -27,7 +34,8 @@ G.FUNCS.start_setup_run = function(e)
       seed = generate_starting_seed(), 
       challenge = nil, 
       deck = _deck, 
-      versus = Balatrogether.new_run_config.versus
+      versus = Balatrogether.new_run_config.versus,
+      speed = G.SETTINGS.GAMESPEED
     })
 
   elseif G.SETTINGS.current_setup == 'Continue' then
@@ -110,7 +118,12 @@ G.FUNCS.tcp_listen("START", function(data)
   Balatrogether.server.card_id = 0
   Balatrogether.server.leaderboard_blind = false
   Balatrogether.server.leaderboard = nil
+  if not data.versus then
+    G.SINGLEPLAYER_FUNCS.change_gamespeed({to_val = data.speed})
+  end
+
   G.GAME.selected_back = Back(get_deck_from_name(data.deck))
+
   local cards = {}
   local enhancements = {"m_bonus", "m_mult", "m_wild", "m_glass", "m_steel", "m_stone", "m_gold", "m_lucky"}
   local editions = {"foil", "holo", "polychrome", createCollectionId(nil, 'secure')}
@@ -131,6 +144,7 @@ G.FUNCS.tcp_listen("START", function(data)
       table.insert(cards, {s='S',r='K'})
     end
   end
+
   local debug_challenge = {
     name = 'Multiplayer (DEBUG)',
     id = 'c_multiplayer_debug',
@@ -166,6 +180,7 @@ G.FUNCS.tcp_listen("START", function(data)
       banned_other = {}
     }
   }
+
   G.FUNCS.start_run(nil, { 
     seed = data.seed, 
     stake = data.stake, 
@@ -181,4 +196,8 @@ end)
 
 G.FUNCS.tcp_listen("WIN", function(data)
   win_game()
+end)
+
+G.FUNCS.tcp_listen("GAME_SPEED", function(data)
+  G.SINGLEPLAYER_FUNCS.change_gamespeed({to_val = data.speed})
 end)
