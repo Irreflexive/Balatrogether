@@ -26,22 +26,6 @@ SMODS.Edition{
   end,
 }
 
-SMODS.Consumable:take_ownership("wheel_of_fortune", {
-  loc_vars = function(self, info_queue)
-    local secure = createCollectionId('e', 'secure')
-    info_queue[#info_queue+1] = G.P_CENTERS[secure]
-    return {}
-  end,
-})
-
-SMODS.Consumable:take_ownership("aura", {
-  loc_vars = function(self, info_queue)
-    local secure = createCollectionId('e', 'secure')
-    info_queue[#info_queue+1] = G.P_CENTERS[secure]
-    return {}
-  end,
-})
-
 local poll_edition_ref = poll_edition
 function poll_edition(_key, _mod, _no_neg, _guaranteed, _options)
   if (_key == "wheel_of_fortune" or _key == "aura") and G.FUNCS.is_versus_game() then

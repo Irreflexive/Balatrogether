@@ -93,6 +93,12 @@ G.FUNCS.tcp_send = function(data)
   if data.cmd == "JOIN" or data.cmd == "JOIN_LOBBY" then
     data.steam_id = tostring(G.STEAM.user.getSteamID())
     data.unlock_hash = G.FUNCS.compute_unlock_hash()
+    data.stakes = {}
+    for k, v in pairs(G.P_CENTERS) do
+      if v.set == "Back" then
+        data.stakes[v.name] = G.PROFILES[G.SETTINGS.profile].all_unlocked and 8 or math.min(get_deck_win_stake(v.key) + 1, 8)
+      end
+    end
   end
   local encoded = G.JSON.encode(data)
   if Balatrogether.debug then sendDebugMessage("Sending data: " .. encoded) end
