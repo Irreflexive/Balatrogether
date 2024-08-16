@@ -202,59 +202,6 @@ function create_UIBox_options()
   return t
 end
 
-function G.UIDEF.boss_leaderboard(leaderboard)
-  local list = {}
-  local survive_count = G.FUNCS.get_duel_threshold()
-  local survived = false
-  for k = 1, Balatrogether.server.max_players do
-    local row = leaderboard[k]
-    local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5)
-    if row and tostring(G.STEAM.user.getSteamID()) == row.player and row.score and k <= survive_count then
-      survived = true
-    end
-    list[#list+1] = row and {n=G.UIT.R, config={align = "cm"}, nodes={
-      {n=G.UIT.C, config={align = "cl", minw = 0.5}, nodes = {
-        {n=G.UIT.T, config={text = k..'', scale = 0.4, colour = G.C.WHITE}},
-      }},
-      {n=G.UIT.C, config={align = "cm", minw = 7.5, minh = 0.6, r = 0.1, colour = (row.score and k <= survive_count) and G.C.BLUE or G.C.GREY}, nodes = {
-        {n=G.UIT.C, config={align = "cl", minw = 4, minh = 0.6, padding = 0.1}, nodes={
-          {n=G.UIT.T, config={text = G.FUNCS.get_player_name(row.player), scale = 0.4, colour = G.C.WHITE, shadow = true}},
-        }},
-        {n=G.UIT.C, config={align = "cr", minw = 3.5, minh = 0.6, padding = 0.1}, nodes=row.score and {
-          {n=G.UIT.T, config={text = number_format(row.score), lang = G.LANGUAGES['en-us'], scale = 0.4, colour = G.C.WHITE, shadow = true}},
-          {n=G.UIT.O, config={w=0.4,h=0.4, object = stake_sprite, hover = true, can_collide = false}},
-        } or {
-          {n=G.UIT.T, config={text = localize('b_eliminated'), scale = 0.4, colour = G.C.WHITE, shadow = true}},
-        }},
-      }},
-    }} or {n=G.UIT.R, config={align = "cm"}, nodes={
-      {n=G.UIT.C, config={align = "cl", minw = 0.5}, nodes = {
-        {n=G.UIT.T, config={text = k..'', scale = 0.4, colour = G.C.WHITE}},
-      }},
-      {n=G.UIT.C, config={align = "cm", minw = 7.5, minh = 0.6, r = 0.1, colour = G.C.GREY}, nodes = {}},
-    }}
-  end
-
-  local t = create_UIBox_generic_options({ back_label = localize('b_continue'), back_func = survived and 'close_leaderboard' or 'lose_duel_versus', contents = {
-      {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        {n=G.UIT.T, config={text = localize('b_boss_leaderboard'), scale = 0.5, colour = G.C.WHITE}},
-      }},
-      {
-        n = G.UIT.R,
-        config = {
-          emboss = 0.05,
-          r = 0.1,
-          minw = 8,
-          align = "cm",
-          padding = 0.2,
-          colour = G.C.BLACK
-        },
-        nodes = list
-      },
-    }})
-  return t
-end
-
 local create_UIBox_win_ref = create_UIBox_win
 function create_UIBox_win()
   local t = create_UIBox_win_ref()
@@ -394,5 +341,56 @@ function G.UIDEF.lobby_list()
       }},
     }}
   }})
+  return t
+end
+
+local leaderboard_list_id = createUIListFunctions('boss_leaderboard', function() return Balatrogether.server.leaderboard end, 8, function(k, v)
+  local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5)
+  return v and {
+    {n=G.UIT.C, config={align = "cm", minw = 7.5, minh = 0.6, r = 0.1, colour = (row.score and k <= survive_count) and G.C.BLUE or G.C.GREY}, nodes = {
+      {n=G.UIT.C, config={align = "cl", minw = 4, minh = 0.6, padding = 0.1}, nodes={
+        {n=G.UIT.T, config={text = G.FUNCS.get_player_name(v.player), scale = 0.4, colour = G.C.WHITE, shadow = true}},
+      }},
+      {n=G.UIT.C, config={align = "cr", minw = 3.5, minh = 0.6, padding = 0.1}, nodes=row.score and {
+        {n=G.UIT.T, config={text = number_format(row.score), lang = G.LANGUAGES['en-us'], scale = 0.4, colour = G.C.WHITE, shadow = true}},
+        {n=G.UIT.O, config={w=0.4,h=0.4, object = stake_sprite, hover = true, can_collide = false}},
+      } or {
+        {n=G.UIT.T, config={text = localize('b_eliminated'), scale = 0.4, colour = G.C.WHITE, shadow = true}},
+      }},
+    }},
+  } or {
+    {n=G.UIT.C, config={align = "cm", minw = 7.5, minh = 0.6, r = 0.1, colour = G.C.GREY}, nodes = {}},
+  }
+end)
+
+function G.UIDEF.boss_leaderboard(leaderboard)
+  local list = {}
+  local survive_count = G.FUNCS.get_duel_threshold()
+  local survived = false
+  for k = 1, Balatrogether.server.max_players do
+    local row = leaderboard[k]
+    if row and tostring(G.STEAM.user.getSteamID()) == row.player and row.score and k <= survive_count then
+      survived = true
+      break
+    end
+  end
+
+  local t = create_UIBox_generic_options({ back_label = localize('b_continue'), back_func = survived and 'close_leaderboard' or 'lose_duel_versus', contents = {
+      {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
+        {n=G.UIT.T, config={text = localize('b_boss_leaderboard'), scale = 0.5, colour = G.C.WHITE}},
+      }},
+      {
+        n = G.UIT.R,
+        config = {
+          emboss = 0.05,
+          r = 0.1,
+          minw = 8,
+          align = "cm",
+          padding = 0.2,
+          colour = G.C.BLACK
+        },
+        nodes = {G.UIDEF[leaderboard_list_id]()}
+      },
+    }})
   return t
 end
