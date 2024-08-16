@@ -17,7 +17,7 @@ Balatrogether = {
   new_run_config = {
     versus = false,
   },
-  debug = true,
+  debug = false,
   actions = {},
   address_input = "",
 }
@@ -33,7 +33,7 @@ Balatrogether.server = {
   network_pack = {jokers = {}, cards = {}},
 }
 
-sendDebugMessage("Launching Balatrogether!")
+sendDebugMessage("Launching Balatrogether!", "Balatrogether")
 assert(load(NFS.read(Balatrogether.file_path .. "json.lua")))()
 assert(load(NFS.read(Balatrogether.file_path .. "util.lua")))()
 assert(load(NFS.read(Balatrogether.file_path .. "card_tagging.lua")))()
@@ -69,7 +69,7 @@ function love.update(dt)
 end
 
 G.FUNCS.join_server = function()
-  sendDebugMessage("Joining server!")
+  sendDebugMessage("Joining server!", "Balatrogether")
   Balatrogether.server.address = Balatrogether.address_input
   G.FUNCS.tcp_connect()
   G.FUNCS.tcp_send({ cmd = "JOIN" })
@@ -81,7 +81,7 @@ G.FUNCS.refresh_lobbies = function()
 end
 
 G.FUNCS.join_saved_server = function(e)
-  sendDebugMessage("Joining server!")
+  sendDebugMessage("Joining server!", "Balatrogether")
   Balatrogether.server.address = e.config.id
   G.FUNCS.tcp_connect()
   G.FUNCS.tcp_send({ cmd = "JOIN" })

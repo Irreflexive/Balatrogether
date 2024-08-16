@@ -14,14 +14,14 @@ G.FUNCS.tcp_connect = function()
   tcp.send_channel = love.thread.newChannel()
   tcp.receive_channel = love.thread.newChannel()
   tcp.thread:start(Balatrogether.server.address, tcp.send_channel, tcp.receive_channel, true)
-  if Balatrogether.debug then sendDebugMessage("TCP connection opened") end
+  sendDebugMessage("TCP connection opened", "Balatrogether")
 end
 
 local function receive_and_parse()
   local res = nil
   local popped = tcp.receive_channel:pop()
   if not popped or popped.debug then
-    if popped and popped.debug then sendDebugMessage(popped.debug) end
+    if popped and popped.debug then sendDebugMessage(popped.debug, "Balatrogether") end
     return { success = true }
   end
   local s, status, partial = popped.s, popped.status, popped.partial
@@ -56,10 +56,10 @@ G.FUNCS.tcp_receive = function()
         func(res.data)
       end
     elseif res.cmd ~= "NODATA" then
-      if Balatrogether.debug then sendDebugMessage("Unknown action: " .. res.cmd) end
+      sendDebugMessage("Unknown action: " .. res.cmd, "Balatrogether")
     end
   else
-    if Balatrogether.debug then sendDebugMessage("Failed to receive data: " .. (res.error or "Unknown error")) end
+    sendDebugMessage("Failed to receive data: " .. (res.error or "Unknown error"), "Balatrogether")
     G.FUNCS.tcp_close()
   end
 end
@@ -86,7 +86,7 @@ G.FUNCS.tcp_close = function()
     remove_save()
     G.FUNCS.go_to_menu()
   end
-  if Balatrogether.debug then sendDebugMessage("TCP connection closed") end
+  sendDebugMessage("TCP connection closed", "Balatrogether")
 end
 
 G.FUNCS.tcp_send = function(data)
@@ -101,7 +101,7 @@ G.FUNCS.tcp_send = function(data)
     end
   end
   local encoded = G.JSON.encode(data)
-  if Balatrogether.debug then sendDebugMessage("Sending data: " .. encoded) end
+  sendDebugMessage("Sending data: " .. encoded, "Balatrogether")
   tcp.send_channel:push(encoded)
 end
 

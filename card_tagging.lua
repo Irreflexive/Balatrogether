@@ -4,7 +4,7 @@ function CardArea:emplace(card, location, stay_flipped)
     local id = Balatrogether.server.card_id + 1
     Balatrogether.server.card_id = id
     card.Multiplayer_ID = id
-    if Balatrogether.debug then sendDebugMessage("Tagged card with multiplayer ID " .. tostring(card.Multiplayer_ID)) end
+    sendDebugMessage("Tagged card with multiplayer ID " .. tostring(card.Multiplayer_ID), "Balatrogether")
   end
   emplace_ref(self, card, location, stay_flipped)
 end
