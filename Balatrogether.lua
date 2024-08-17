@@ -16,6 +16,7 @@ Balatrogether = {
   mod = SMODS.current_mod,
   new_run_config = {
     versus = false,
+    debug = false,
   },
   actions = {},
   address_input = "",

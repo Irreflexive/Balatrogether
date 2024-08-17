@@ -22,6 +22,7 @@ G.FUNCS.start_setup_run = function(e)
       challenge = nil, 
       deck = _deck, 
       versus = Balatrogether.new_run_config.versus,
+      debug = Balatrogether.new_run_config.debug,
       speed = G.SETTINGS.GAMESPEED
     })
   else

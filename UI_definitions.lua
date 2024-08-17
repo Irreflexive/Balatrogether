@@ -138,6 +138,16 @@ function G.UIDEF.run_setup_multiplayer()
       Balatrogether.new_run_config.versus = _set_toggle
     end,
   }))
+  if Balatrogether.mod.config.debug then
+    table.insert(t.nodes, 2, create_toggle({
+      label = localize('b_debug_mode'),
+      ref_table = Balatrogether.new_run_config,
+      ref_value = "debug",
+      callback = function(_set_toggle)
+        Balatrogether.new_run_config.debug = _set_toggle
+      end,
+    }))
+  end
   return t
 end
 
