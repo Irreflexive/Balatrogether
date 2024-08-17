@@ -190,15 +190,15 @@ end
 G.FUNCS.paste_address = function(e)
   G.CONTROLLER.text_input_hook = e.UIBox:get_UIE_by_ID('text_input').children[1].children[1]
   G.CONTROLLER.text_input_id = 'text_input'
-  for i = 1, 255 do
+  for i = 1, #Balatrogether.address_input do
     G.FUNCS.text_input_key({key = 'right'})
   end
-  for i = 1, 255 do
-      G.FUNCS.text_input_key({key = 'backspace'})
+  for i = 1, #Balatrogether.address_input do
+    G.FUNCS.text_input_key({key = 'backspace'})
   end
   local clipboard = (G.F_LOCAL_CLIPBOARD and G.CLIPBOARD or love.system.getClipboardText()) or ''
   clipboard = clipboard:gsub("[^%w%.%-]", "")
-  for i = 1, #clipboard do
+  for i = 1, math.min(#clipboard, 255) do
     local c = clipboard:sub(i,i)
     G.FUNCS.text_input_key({key = c})
   end

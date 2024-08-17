@@ -1,0 +1,12 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = 'engine/string_packer.lua'
+pattern = "local save_string = type(_data) == 'table' and STR_PACK(_data) or _data"
+position = 'before'
+match_indent = true
+payload = "if _file and _file:match('save%.jkr$') and Balatrogether and Balatrogether.server and Balatrogether.server.enabled then return end"

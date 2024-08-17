@@ -20,6 +20,7 @@ SMODS.Voucher{
 }
 
 local get_current_pool_ref = get_current_pool
+-- TODO: doesn't work properly, fix
 function get_current_pool(_type, _rarity, _legendary, _append)
   local _pool, _pool_key = get_current_pool_ref(_type, _rarity, _legendary, _append)
   if _type == "Voucher" then

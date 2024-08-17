@@ -131,6 +131,8 @@ return {
       b_lobby_list = "Lobbies",
       b_multiplayer_run = "Start Run",
       b_balatrogether = "Balatrogether",
+      b_singleplayer = "Singleplayer",
+      b_multiplayer = "Multiplayer",
       b_boss_leaderboard = "Boss Results",
       b_new_server = "New Server",
       b_saved_servers = "Saved Servers",
