@@ -5,8 +5,8 @@ priority = 0
 
 [[patches]]
 [patches.pattern]
-target = 'engine/string_packer.lua'
-pattern = "local save_string = type(_data) == 'table' and STR_PACK(_data) or _data"
-position = 'before'
+target = 'game.lua'
+pattern = "if G.FILE_HANDLER.run then"
+position = 'at'
 match_indent = true
-payload = "if _file and _file:match('save%.jkr$') and Balatrogether and Balatrogether.server and Balatrogether.server.enabled then return end"
+payload = "if G.FILE_HANDLER.run and (not Balatrogether or not Balatrogether.server or not Balatrogether.server.enabled) then"

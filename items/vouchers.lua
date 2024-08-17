@@ -20,23 +20,26 @@ SMODS.Voucher{
 }
 
 local get_current_pool_ref = get_current_pool
--- TODO: doesn't work properly, fix
 function get_current_pool(_type, _rarity, _legendary, _append)
-  local _pool, _pool_key = get_current_pool_ref(_type, _rarity, _legendary, _append)
   if _type == "Voucher" then
+    local hieroglyph_banned = G.GAME.banned_keys['v_hieroglyph']
+    local petroglyph_banned = G.GAME.banned_keys['v_petroglyph']
+    local eraser_banned = G.GAME.banned_keys[createCollectionId('v', 'eraser')]
+    local bucket_banned = G.GAME.banned_keys[createCollectionId('v', 'bucket')]
     if G.FUNCS.is_versus_game() then
-      for i = 1, #_pool, -1 do
-        if _pool[i] == 'v_hieroglyph' or _pool[i] == 'v_petroglyph' then
-          table.remove(_pool, i)
-        end
-      end
+      G.GAME.banned_keys['v_hieroglyph'] = true
+      G.GAME.banned_keys['v_petroglyph'] = true
     else
-      for i = 1, #_pool, -1 do
-        if _pool[i] == createCollectionId('v', 'eraser') or _pool[i] == createCollectionId('v', 'bucket') then
-          table.remove(_pool, i)
-        end
-      end
+      G.GAME.banned_keys['v_eraser'] = true
+      G.GAME.banned_keys['v_bucket'] = true
     end
+    local _pool, _pool_key = get_current_pool_ref(_type, _rarity, _legendary, _append)
+    G.GAME.banned_keys['v_hieroglyph'] = hieroglyph_banned
+    G.GAME.banned_keys['v_petroglyph'] = petroglyph_banned
+    G.GAME.banned_keys['v_eraser'] = eraser_banned
+    G.GAME.banned_keys['v_bucket'] = bucket_banned
+    return _pool, _pool_key
+  else
+    return get_current_pool_ref(_type, _rarity, _legendary, _append)
   end
-  return _pool, _pool_key
 end
