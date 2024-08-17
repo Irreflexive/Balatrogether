@@ -48,3 +48,12 @@ SMODS.Booster{
   end,
   create_card = create_network_card
 }
+
+local get_pack_ref = get_pack
+function get_pack(_key, _type)
+  if not G.FUNCS.is_versus_game() then
+    G.GAME.banned_keys[createCollectionId('p', 'network')] = true
+    G.GAME.banned_keys[createCollectionId('p', 'network_2')] = true
+  end
+  return get_pack_ref(_key, _type)
+end

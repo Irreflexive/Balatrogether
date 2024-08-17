@@ -93,7 +93,7 @@ end
 G.FUNCS.tcp_send = function(data)
   if data.cmd == "JOIN" or data.cmd == "JOIN_LOBBY" then
     data.steam_id = tostring(G.STEAM.user.getSteamID())
-    data.unlock_hash = G.FUNCS.compute_unlock_hash()
+    data.unlock_hash = computeUnlockHash()
     data.stakes = {}
     for k, v in pairs(G.P_CENTERS) do
       if v.set == "Back" then

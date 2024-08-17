@@ -187,64 +187,22 @@ G.FUNCS.lose_duel_versus = function(e)
   G.STATE_COMPLETE = false
 end
 
-G.FUNCS.compute_unlock_hash = function()
-  local content = {}
-  for k,v in pairs(G.P_CENTERS) do
-    if v.unlocked and v.set ~= "Back" then
-      table.insert(content, k)
-    end
-  end
-  table.sort(content)
-  return love.data.encode("string", "base64", love.data.hash("sha512", table.concat(content, ",")))
-end
-
 G.FUNCS.paste_address = function(e)
   G.CONTROLLER.text_input_hook = e.UIBox:get_UIE_by_ID('text_input').children[1].children[1]
-  for i = 1, 16 do
+  G.CONTROLLER.text_input_id = 'text_input'
+  for i = 1, 255 do
     G.FUNCS.text_input_key({key = 'right'})
   end
-  for i = 1, 16 do
+  for i = 1, 255 do
       G.FUNCS.text_input_key({key = 'backspace'})
   end
   local clipboard = (G.F_LOCAL_CLIPBOARD and G.CLIPBOARD or love.system.getClipboardText()) or ''
-  clipboard = clipboard:gsub("[^%w%.]", "")
+  clipboard = clipboard:gsub("[^%w%.%-]", "")
   for i = 1, #clipboard do
     local c = clipboard:sub(i,i)
     G.FUNCS.text_input_key({key = c})
   end
   G.FUNCS.text_input_key({key = 'return'})
-end
-
-G.FUNCS.get_duel_threshold = function()
-  return math.ceil((Balatrogether.server.game_state.remaining or 0) / 2)
-end
-
-local get_new_boss_ref = get_new_boss
-function get_new_boss()
-  if G.FUNCS.is_versus_game() then
-    local the_duel = createCollectionId('bl', 'the_duel')
-    local the_showdown = createCollectionId('bl', 'final_showdown')
-    local old_perscribed = G.GAME.perscribed_bosses
-    G.GAME.perscribed_bosses = old_perscribed or {}
-    local ante = G.GAME.round_resets.ante
-    if G.FUNCS.get_duel_threshold() >= 2 and ante % 2 == 0 then
-      G.GAME.perscribed_bosses[ante] = the_duel
-    end
-    G.GAME.perscribed_bosses[G.GAME.win_ante] = the_showdown
-    local boss = get_new_boss_ref()
-    G.GAME.perscribed_bosses = old_perscribed
-    return boss
-  end
-  return get_new_boss_ref()
-end
-
-local get_pack_ref = get_pack
-function get_pack(_key, _type)
-  if not G.FUNCS.is_versus_game() then
-    G.GAME.banned_keys[createCollectionId('p', 'network')] = true
-    G.GAME.banned_keys[createCollectionId('p', 'network_2')] = true
-  end
-  return get_pack_ref(_key, _type)
 end
 
 ----------------------------------------------

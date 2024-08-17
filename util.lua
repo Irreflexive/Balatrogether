@@ -129,3 +129,14 @@ function createUIListFunctions(name, get_list, page_size, element_func)
 
   return ui_list_id
 end
+
+function computeUnlockHash()
+  local content = {}
+  for k,v in pairs(G.P_CENTERS) do
+    if v.unlocked and v.set ~= "Back" then
+      table.insert(content, k)
+    end
+  end
+  table.sort(content)
+  return love.data.encode("string", "base64", love.data.hash("sha512", table.concat(content, ",")))
+end

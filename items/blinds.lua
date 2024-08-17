@@ -38,3 +38,26 @@ SMODS.Blind{
     G.FUNCS.tcp_send({ cmd = "DEFEATED_BOSS", score = G.GAME.chips })
   end
 }
+
+G.FUNCS.get_duel_threshold = function()
+  return math.ceil((Balatrogether.server.game_state.remaining or 0) / 2)
+end
+
+local get_new_boss_ref = get_new_boss
+function get_new_boss()
+  if G.FUNCS.is_versus_game() then
+    local the_duel = createCollectionId('bl', 'the_duel')
+    local the_showdown = createCollectionId('bl', 'final_showdown')
+    local old_perscribed = G.GAME.perscribed_bosses
+    G.GAME.perscribed_bosses = old_perscribed or {}
+    local ante = G.GAME.round_resets.ante
+    if G.FUNCS.get_duel_threshold() >= 2 and ante % 2 == 0 then
+      G.GAME.perscribed_bosses[ante] = the_duel
+    end
+    G.GAME.perscribed_bosses[G.GAME.win_ante] = the_showdown
+    local boss = get_new_boss_ref()
+    G.GAME.perscribed_bosses = old_perscribed
+    return boss
+  end
+  return get_new_boss_ref()
+end
