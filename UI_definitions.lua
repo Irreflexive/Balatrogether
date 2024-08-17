@@ -58,7 +58,7 @@ function G.UIDEF.multiplayer_join()
     }},
     {n=G.UIT.R, config={align = "cm", padding = 0.05}, nodes={
       {n=G.UIT.C, config={align = "cm", minw = 1}, nodes={
-        create_text_input({ref_table = Balatrogether, extended_corpus = true, keep_zeroes = true, ref_value = 'address_input', prompt_text = localize('b_ip_address')}),
+        create_text_input({ref_table = Balatrogether, extended_corpus = true, keep_zeroes = true, ref_value = 'address_input', prompt_text = localize('b_hostname')}),
         {n=G.UIT.C, config={align = "cm", minw = 0.1}, nodes={}},
         UIBox_button({label = {localize('b_paste')}, minw = 1, minh = 0.6, button = 'paste_address', colour = G.C.BLUE, scale = 0.3, col = true})
       }},
@@ -67,7 +67,7 @@ function G.UIDEF.multiplayer_join()
       {n=G.UIT.O, config={id = 'connection_status', object = Moveable()}},
     }},
     {n=G.UIT.R, config={align = "cm", padding = 0.05, minh = 0.9}, nodes={
-        {n=G.UIT.C, config={align = "cm", minw = 4, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.GREEN, button = "join_server", one_press = true, shadow = true}, nodes={
+        {n=G.UIT.C, config={align = "cm", minw = 4, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.BLUE, button = "join_server", one_press = true, shadow = true}, nodes={
           {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
             {n=G.UIT.T, config={text = localize('b_join'), scale = 0.8, colour = G.C.UI.TEXT_LIGHT, func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
           }}
@@ -127,10 +127,7 @@ end
 function G.UIDEF.server_address()
   local t = {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
     {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-      {n=G.UIT.T, config={text = localize('b_ip_address'), scale = 0.5, colour = G.C.WHITE}},
-    }},
-    {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-      UIBox_button({id = 'server_code', col = true, label = {Balatrogether.server.address}, button = 'nil', colour = G.C.BLUE, scale = 0.5, minw = 3, minh = 0.6, shadow = true}),
+      {n=G.UIT.T, config={text = localize('b_hostname') .. ': ' .. Balatrogether.server.address, scale = 0.5, colour = G.C.WHITE}},
     }},
     {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
       UIBox_button({id = 'copy_code', col = true, label = {localize('b_copy')}, button = 'copy_server_code', colour = G.C.BLUE, scale = 0.5, minw = 2, minh = 0.6}),
@@ -206,7 +203,7 @@ end
 
 local saved_server_id = createUIListFunctions('saved_servers', function() return Balatrogether.mod.config.saved_servers end, 4, function(k, v)
   return {
-    UIBox_button({id = v, col = true, label = {v or ""}, button = v and 'join_saved_server' or 'nil', colour = v and G.C.BLUE or G.C.GREY, minw = 4, scale = 0.4, minh = 0.6, one_press = true, focus_args = {snap_to = not snapped}}),
+    UIBox_button({id = v, col = true, label = {v or ""}, button = v and 'join_saved_server' or 'nil', colour = v and G.C.RED or G.C.GREY, minw = 5, scale = 0.4, minh = 0.6, one_press = true, focus_args = {snap_to = not snapped}}),
     {n=G.UIT.C, config={align = 'cm', minw = 0.1}, nodes = {}},
     UIBox_button({id = v and 'remove_'..v or nil, col = true, label = {'X'}, button = v and 'remove_server' or 'nil', colour = v and G.C.RED or G.C.GREY, scale = 0.4, minw = 0.6, minh = 0.6, one_press = true, focus_args = {snap_to = not snapped}}),
   }
@@ -261,7 +258,7 @@ local lobby_list_id = createUIListFunctions('server_lobbies', function() return 
       col = true, 
       label = {v and (tostring(v.players)..'/'..tostring(v.max) .. ' ' .. localize('b_players')) or ''}, 
       button = (v and v.open) and 'join_lobby' or 'nil', 
-      colour = (v and v.open) and G.C.BLUE or G.C.GREY, 
+      colour = (v and v.open) and G.C.RED or G.C.GREY, 
       minw = 4, 
       scale = 0.4, 
       minh = 0.6, 
@@ -281,15 +278,15 @@ function G.UIDEF.lobby_list()
           {n=G.UIT.T, config={text = localize('b_lobby_list'), scale = 0.5, colour = G.C.WHITE}},
         }},
         G.UIDEF[lobby_list_id](),
-        {n=G.UIT.R, config={align = "cm", padding = 0.05, minh = 0.7}, nodes={
-          {n=G.UIT.C, config={align = "cm", minw = 3, minh = 0.6, padding = 0.1, r = 0.1, hover = true, colour = G.C.BLUE, button = "refresh_lobbies", shadow = true}, nodes={
-            {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
-              {n=G.UIT.T, config={text = localize('b_refresh'), scale = 0.4, colour = G.C.UI.TEXT_LIGHT, func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
-            }}
+      }},
+      {n=G.UIT.R, config={align = "cm", padding = 0.0}, nodes={
+        {n=G.UIT.C, config={align = "cm", minw = 3, padding = 0.1, r = 0.1, hover = true, colour = G.C.RED, button = "refresh_lobbies", shadow = true}, nodes={
+          {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
+            {n=G.UIT.T, config={text = localize('b_refresh'), scale = 0.5, colour = G.C.UI.TEXT_LIGHT, func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
           }}
         }},
       }},
-    }}
+    }},
   }})
   return t
 end

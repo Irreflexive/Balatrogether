@@ -50,6 +50,7 @@ G.FUNCS.tcp_receive = function()
     if res.game_state then
       Balatrogether.server.game_state = res.game_state
     end
+    sendDebugMessage("Received data: " .. G.JSON.encode(res), "Balatrogether")
     local funcs = Balatrogether.actions[res.cmd]
     if funcs then
       for _, func in ipairs(funcs) do
