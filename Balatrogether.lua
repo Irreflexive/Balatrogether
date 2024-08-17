@@ -17,7 +17,6 @@ Balatrogether = {
   new_run_config = {
     versus = false,
   },
-  debug = false,
   actions = {},
   address_input = "",
 }
@@ -117,7 +116,7 @@ G.FUNCS.get_player_name = function(player)
 end
 
 G.FUNCS.can_setup_multiplayer_run = function(e)
-  local _can_setup = G.FUNCS.is_host() and (#Balatrogether.server.players >= 2 or Balatrogether.debug)
+  local _can_setup = G.FUNCS.is_host() and (#Balatrogether.server.players >= 2 or Balatrogether.mod.config.debug)
   if e and e.config and e.config.func then
     if not _can_setup then
       e.config.colour = G.C.UI.BACKGROUND_INACTIVE

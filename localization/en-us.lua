@@ -140,6 +140,7 @@ return {
       b_leave_server = "Leave Server",
       b_save_address = "Save",
       b_versus_mode = "Versus Mode",
+      b_debug_mode = "Debug Mode",
       b_hostname = "Host/IP",
       b_connecting = "Connecting...",
       b_encrypting = "Encrypting...",

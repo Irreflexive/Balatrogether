@@ -1,3 +1,14 @@
+Balatrogether.mod.config_tab = function()
+  return {n = G.UIT.ROOT, config = {r = 0.1, minw = 5, align = "cm", padding = 0.2, colour = G.C.BLACK}, nodes = {
+    create_toggle({
+      label = localize('b_debug_mode'), 
+      ref_table = Balatrogether.mod.config, 
+      ref_value = 'debug', 
+      callback = function() SMODS.save_mod_config(Balatrogether.mod) end
+    }),
+  }}
+end
+
 local create_UIBox_main_menu_buttons_ref = create_UIBox_main_menu_buttons
 function create_UIBox_main_menu_buttons()
   local t = create_UIBox_main_menu_buttons_ref()

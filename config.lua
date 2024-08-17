@@ -1,3 +1,4 @@
 return {
-  saved_servers = {}
+  saved_servers = {},
+  debug = false
 }
