@@ -130,6 +130,8 @@ end
 
 function G.UIDEF.run_setup_multiplayer()
   local t = G.UIDEF.run_setup_option('Multiplayer Run')
+  G.viewed_stake = G.PROFILES[G.SETTINGS.profile].MEMORY.stake or 1
+  G.FUNCS.change_stake({to_key = G.viewed_stake})
   table.insert(t.nodes, 1, create_toggle({
     label = localize('b_versus_mode'),
     ref_table = Balatrogether.new_run_config,
