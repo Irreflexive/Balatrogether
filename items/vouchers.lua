@@ -30,14 +30,14 @@ function get_current_pool(_type, _rarity, _legendary, _append)
       G.GAME.banned_keys['v_hieroglyph'] = true
       G.GAME.banned_keys['v_petroglyph'] = true
     else
-      G.GAME.banned_keys['v_eraser'] = true
-      G.GAME.banned_keys['v_bucket'] = true
+      G.GAME.banned_keys[createCollectionId('v', 'eraser')] = true
+      G.GAME.banned_keys[createCollectionId('v', 'eraser')] = true
     end
     local _pool, _pool_key = get_current_pool_ref(_type, _rarity, _legendary, _append)
     G.GAME.banned_keys['v_hieroglyph'] = hieroglyph_banned
     G.GAME.banned_keys['v_petroglyph'] = petroglyph_banned
-    G.GAME.banned_keys['v_eraser'] = eraser_banned
-    G.GAME.banned_keys['v_bucket'] = bucket_banned
+    G.GAME.banned_keys[createCollectionId('v', 'eraser')] = eraser_banned
+    G.GAME.banned_keys[createCollectionId('v', 'eraser')] = bucket_banned
     return _pool, _pool_key
   else
     return get_current_pool_ref(_type, _rarity, _legendary, _append)
