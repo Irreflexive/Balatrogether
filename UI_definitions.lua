@@ -116,6 +116,12 @@ function G.UIDEF.server_config(e)
               tab_definition_function = G.UIDEF.player_list,
             },
             {
+              label = localize('b_settings'),
+              chosen = false,
+              tab_definition_function = G.UIDEF.multiplayer_settings,
+              func = 'can_setup_multiplayer_run'
+            },
+            {
               label = localize('b_multiplayer_run'),
               chosen = false,
               tab_definition_function = G.UIDEF.run_setup_multiplayer,
@@ -128,28 +134,44 @@ function G.UIDEF.server_config(e)
   return t
 end
 
+function G.UIDEF.multiplayer_settings()
+  local t = {n=G.UIT.ROOT, config={id = 'balatrogether_run_settings', align = "cm", colour = G.C.CLEAR, minh = 3, minw = 4.2}, nodes={
+    {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
+      Balatrogether.mod.config.debug and create_toggle({
+        label = localize('b_debug_mode'),
+        ref_table = Balatrogether.new_run_config,
+        ref_value = "debug",
+        callback = function(_set_toggle)
+          Balatrogether.new_run_config.debug = _set_toggle
+        end,
+      }) or nil,
+      create_toggle({
+        label = localize('b_versus_mode'),
+        ref_table = Balatrogether.new_run_config,
+        ref_value = "versus",
+        callback = function(_set_toggle)
+          Balatrogether.new_run_config.versus = _set_toggle
+        end,
+      }),
+      create_option_cycle({
+        label = localize('b_showdown_ante'), 
+        options = {8, 16}, 
+        -- TODO: implement functionality (server and client)
+        opt_callback = 'nil', 
+        current_option = 1, 
+        colour = G.C.RED, 
+        w = 2, 
+        scale = 0.8
+      })
+    }}
+  }}
+  return t
+end
+
 function G.UIDEF.run_setup_multiplayer()
   local t = G.UIDEF.run_setup_option('Multiplayer Run')
   G.viewed_stake = G.PROFILES[G.SETTINGS.profile].MEMORY.stake or 1
   G.FUNCS.change_stake({to_key = G.viewed_stake})
-  table.insert(t.nodes, 1, create_toggle({
-    label = localize('b_versus_mode'),
-    ref_table = Balatrogether.new_run_config,
-    ref_value = "versus",
-    callback = function(_set_toggle)
-      Balatrogether.new_run_config.versus = _set_toggle
-    end,
-  }))
-  if Balatrogether.mod.config.debug then
-    table.insert(t.nodes, 2, create_toggle({
-      label = localize('b_debug_mode'),
-      ref_table = Balatrogether.new_run_config,
-      ref_value = "debug",
-      callback = function(_set_toggle)
-        Balatrogether.new_run_config.debug = _set_toggle
-      end,
-    }))
-  end
   return t
 end
 

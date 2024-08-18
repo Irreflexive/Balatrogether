@@ -30,6 +30,15 @@ G.FUNCS.start_setup_run = function(e)
   end
 end
 
+local init_game_object_ref = Game.init_game_object
+function Game:init_game_object()
+  local g = init_game_object_ref(self)
+  if G.FUNCS.is_versus_game() then
+    g.win_ante = Balatrogether.server.win_ante
+  end
+  return g
+end
+
 G.FUNCS.join_lobby = function(e)
   G.FUNCS.tcp_connect()
   G.FUNCS.tcp_send({ cmd = "JOIN_LOBBY", number = e.config.id })
