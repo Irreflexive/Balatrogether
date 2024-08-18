@@ -61,7 +61,7 @@ function getCardFromMultiplayerID(area, id)
   return nil
 end
 
-function createUIListFunctions(name, get_list, page_size, element_func)
+function createUIListFunctions(name, get_list, page_size, element_func, config)
   local ui_list_id = Balatrogether.prefix .. '_' .. name .. '_list'
   local ui_page_id = ui_list_id .. '_page'
   local change_page_id = 'change_' .. ui_page_id
@@ -77,11 +77,23 @@ function createUIListFunctions(name, get_list, page_size, element_func)
     return true end)}))
   
     local t = {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
-      {n=G.UIT.R, config={align = "cm", padding = 0.1, minh = 2.8, minw = 4.2}, nodes={
+      {n=G.UIT.R, config={align = "cm", padding = 0.1, minh = config and config.minh or 0.7*page_size, minw = config and config.minw or 4.2}, nodes={
         {n=G.UIT.O, config={id = ui_list_id, object = Moveable()}},
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
-        create_option_cycle({id = ui_page_id,scale = 0.9, h = 0.3, w = 3.5, options = pages, cycle_shoulders = true, opt_callback = change_page_id, current_option = 1, colour = G.C.RED, no_pips = true, focus_args = {snap_to = true}})
+        create_option_cycle({
+          id = ui_page_id, 
+          scale = 0.9, 
+          h = 0.3, 
+          w = 3.5, 
+          options = pages, 
+          cycle_shoulders = true, 
+          opt_callback = change_page_id, 
+          current_option = 1, 
+          colour = G.C.RED, 
+          no_pips = true, 
+          focus_args = {snap_to = true}
+        })
       }},
     }}
     return t
@@ -104,7 +116,7 @@ function createUIListFunctions(name, get_list, page_size, element_func)
       snapped = true
     end
   
-    return {n=G.UIT.ROOT, config={align = "cm", padding = 0.1, colour = G.C.CLEAR}, nodes=list_ui}
+    return {n=G.UIT.R, config={align = "cm", padding = 0.1, colour = G.C.CLEAR}, nodes=list_ui}
   end
 
   local last_selected_page = 1

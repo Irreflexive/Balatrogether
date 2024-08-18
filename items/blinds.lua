@@ -3,7 +3,7 @@ SMODS.Blind{
   pos = {x = 0, y = 0},
   discovered = false,
   boss = { min = 1, max = 39 },
-  boss_colour = {21/255, 203/255, 92/255, 1},
+  boss_colour = HEX('15CB5C'),
   atlas = "blinds",
   in_pool = function(self)
     local ante = G.GAME.round_resets.ante
@@ -26,7 +26,7 @@ SMODS.Blind{
   key = "final_showdown",
   pos = {x = 0, y = 1},
   discovered = false,
-  boss_colour = {21/255, 203/255, 92/255, 1},
+  boss_colour = HEX('15CB5C'),
   boss = { showdown = true },
   dollars = 8,
   atlas = "blinds",

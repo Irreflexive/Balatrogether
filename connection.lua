@@ -65,14 +65,12 @@ G.FUNCS.tcp_receive = function()
   end
 end
 
+local originalMultiplayerState = Balatrogether.server
 G.FUNCS.tcp_close = function()
   if not tcp.enabled then return end
   tcp.send_channel:push("KILL")
   tcp.enabled = false
-  Balatrogether.server.enabled = false
-  Balatrogether.server.players = {}
-  Balatrogether.server.leaderboard_blind = false
-  Balatrogether.server.leaderboard = nil
+  Balatrogether.server = originalMultiplayerState
   if G.STAGE == G.STAGES.MAIN_MENU then
     if G.OVERLAY_MENU then
       if G.OVERLAY_MENU:get_UIE_by_ID('connection_status') then

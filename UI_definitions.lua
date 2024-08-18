@@ -2,6 +2,7 @@ Balatrogether.mod.config_tab = function()
   return {n = G.UIT.ROOT, config = {r = 0.1, minw = 5, align = "cm", padding = 0.2, colour = G.C.BLACK}, nodes = {
     create_toggle({
       label = localize('b_debug_mode'), 
+      w = 0,
       ref_table = Balatrogether.mod.config, 
       ref_value = 'debug', 
       callback = function() SMODS.save_mod_config(Balatrogether.mod) end
@@ -65,7 +66,6 @@ function G.UIDEF.multiplayer_join()
   return true end)}))
 
   local t = {n=G.UIT.ROOT, config={align = "cm", colour = G.C.CLEAR, minh = 5, minw = 8}, nodes={
-    G.UIDEF.saved_servers(),
     {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
       {n=G.UIT.T, config={text = localize('b_new_server'), scale = 0.5, colour = G.C.WHITE}},
     }},
@@ -76,16 +76,17 @@ function G.UIDEF.multiplayer_join()
         UIBox_button({label = {localize('b_paste')}, minw = 1, minh = 0.6, button = 'paste_address', colour = G.C.BLUE, scale = 0.3, col = true})
       }},
     }},
-    {n=G.UIT.R, config={align = "cm", minh = 1.3}, nodes={ 
-      {n=G.UIT.O, config={id = 'connection_status', object = Moveable()}},
-    }},
-    {n=G.UIT.R, config={align = "cm", padding = 0.05, minh = 0.9}, nodes={
+    {n=G.UIT.R, config={align = "cm", padding = 0.3, minh = 1.4}, nodes={
       {n=G.UIT.C, config={align = "cm", minw = 4, minh = 0.8, padding = 0.2, r = 0.1, hover = true, colour = G.C.BLUE, button = "join_server", one_press = true, shadow = true}, nodes={
         {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
           {n=G.UIT.T, config={text = localize('b_join'), scale = 0.8, colour = G.C.UI.TEXT_LIGHT, func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
         }}
       }}
-    }}
+    }},
+    G.UIDEF.saved_servers(),
+    {n=G.UIT.R, config={align = "cm", minh = 0.9}, nodes={ 
+      {n=G.UIT.O, config={id = 'connection_status', object = Moveable()}},
+    }},
   }}
   return t
 end
@@ -101,36 +102,37 @@ end
 function G.UIDEF.server_config(e)
   local in_game = G.STAGE ~= G.STAGES.MAIN_MENU
   local no_escape = e and (e.config.id == 'from_game_over' or e.config.id == 'from_game_won')
-  local t =   create_UIBox_generic_options({
+  local t = create_UIBox_generic_options({
     no_esc = not in_game or no_escape, 
     no_back = no_escape, 
     back_func = not in_game and "tcp_close" or nil, 
     back_label = not in_game and localize('b_leave_server') or nil,
-    contents ={
+    contents = {
       {n=G.UIT.R, config={align = "cm", padding = 0, draw_layer = 1}, nodes={
         create_tabs(
         {tabs = {
-            {
-              label = localize('b_players'),
-              chosen = true,
-              tab_definition_function = G.UIDEF.player_list,
-            },
-            {
-              label = localize('b_settings'),
-              chosen = false,
-              tab_definition_function = G.UIDEF.multiplayer_settings,
-              func = 'can_setup_multiplayer_run'
-            },
-            {
-              label = localize('b_multiplayer_run'),
-              chosen = false,
-              tab_definition_function = G.UIDEF.run_setup_multiplayer,
-              func = 'can_setup_multiplayer_run'
-            },
+          {
+            label = localize('b_players'),
+            chosen = true,
+            tab_definition_function = G.UIDEF.player_list,
+          },
+          {
+            label = localize('b_settings'),
+            chosen = false,
+            tab_definition_function = G.UIDEF.multiplayer_settings,
+            func = 'can_setup_multiplayer_run'
+          },
+          {
+            label = localize('b_multiplayer_run'),
+            chosen = false,
+            tab_definition_function = G.UIDEF.run_setup_multiplayer,
+            func = 'can_setup_multiplayer_run'
+          },
         },
         snap_to_nav = true}),
       }},
-  }})
+    }
+  })
   return t
 end
 
@@ -143,6 +145,7 @@ function G.UIDEF.multiplayer_settings()
     {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
       Balatrogether.mod.config.debug and create_toggle({
         label = localize('b_debug_mode'),
+        w = 0,
         ref_table = Balatrogether.new_run_config,
         ref_value = "debug",
         callback = function(_set_toggle)
@@ -151,6 +154,7 @@ function G.UIDEF.multiplayer_settings()
       }) or nil,
       create_toggle({
         label = localize('b_versus_mode'),
+        w = 0,
         ref_table = Balatrogether.new_run_config,
         ref_value = "versus",
         callback = function(_set_toggle)
@@ -159,9 +163,9 @@ function G.UIDEF.multiplayer_settings()
       }),
       create_option_cycle({
         label = localize('b_showdown_ante'), 
-        options = {4, 8, 12, 16}, 
+        options = Balatrogether.mod.config.debug and {1, 4, 8, 12, 16}, {4, 8, 12, 16}, 
         opt_callback = 'change_showdown_ante', 
-        current_option = Balatrogether.new_run_config.showdown_ante / 4, 
+        current_option = math.ceil(Balatrogether.new_run_config.showdown_ante / 4), 
         colour = G.C.RED, 
         w = 2, 
         scale = 0.8
@@ -334,7 +338,7 @@ function G.UIDEF.lobby_list()
         G.UIDEF[lobby_list_id](),
       }},
       {n=G.UIT.R, config={align = "cm", padding = 0.0}, nodes={
-        {n=G.UIT.C, config={align = "cm", minw = 3, padding = 0.1, r = 0.1, hover = true, colour = G.C.RED, button = "refresh_lobbies", shadow = true}, nodes={
+        {n=G.UIT.C, config={align = "cm", minw = 3, padding = 0.1, r = 0.1, hover = true, colour = G.C.BLUE, button = "refresh_lobbies", shadow = true}, nodes={
           {n=G.UIT.R, config={align = "cm", padding = 0}, nodes={
             {n=G.UIT.T, config={text = localize('b_refresh'), scale = 0.5, colour = G.C.UI.TEXT_LIGHT, func = 'set_button_pip', focus_args = {button = 'x',set_button_pip = true}}}
           }}
@@ -348,12 +352,12 @@ end
 local leaderboard_list_id = createUIListFunctions('boss_leaderboard', function() return Balatrogether.server.leaderboard end, 8, function(k, v)
   local stake_sprite = get_stake_sprite(G.GAME.stake or 1, 0.5)
   return v and {
-    {n=G.UIT.C, config={align = "cm", minw = 7.5, minh = 0.6, r = 0.1, colour = (row.score and k <= survive_count) and G.C.BLUE or G.C.GREY}, nodes = {
+    {n=G.UIT.C, config={align = "cm", minw = 7.5, minh = 0.6, r = 0.1, colour = (v.score and k <= G.FUNCS.get_duel_threshold()) and G.C.BLUE or G.C.GREY}, nodes = {
       {n=G.UIT.C, config={align = "cl", minw = 4, minh = 0.6, padding = 0.1}, nodes={
         {n=G.UIT.T, config={text = G.FUNCS.get_player_name(v.player), scale = 0.4, colour = G.C.WHITE, shadow = true}},
       }},
-      {n=G.UIT.C, config={align = "cr", minw = 3.5, minh = 0.6, padding = 0.1}, nodes=row.score and {
-        {n=G.UIT.T, config={text = number_format(row.score), lang = G.LANGUAGES['en-us'], scale = 0.4, colour = G.C.WHITE, shadow = true}},
+      {n=G.UIT.C, config={align = "cr", minw = 3.5, minh = 0.6, padding = 0.1}, nodes=v.score and {
+        {n=G.UIT.T, config={text = number_format(v.score), lang = G.LANGUAGES['en-us'], scale = 0.4, colour = G.C.WHITE, shadow = true}},
         {n=G.UIT.O, config={w=0.4,h=0.4, object = stake_sprite, hover = true, can_collide = false}},
       } or {
         {n=G.UIT.T, config={text = localize('b_eliminated'), scale = 0.4, colour = G.C.WHITE, shadow = true}},
@@ -362,15 +366,14 @@ local leaderboard_list_id = createUIListFunctions('boss_leaderboard', function()
   } or {
     {n=G.UIT.C, config={align = "cm", minw = 7.5, minh = 0.6, r = 0.1, colour = G.C.GREY}, nodes = {}},
   }
-end)
+end, {minw = 9})
 
-function G.UIDEF.boss_leaderboard(leaderboard)
+function G.UIDEF.boss_leaderboard()
   local list = {}
-  local survive_count = G.FUNCS.get_duel_threshold()
   local survived = false
-  for k = 1, Balatrogether.server.max_players do
-    local row = leaderboard[k]
-    if row and tostring(G.STEAM.user.getSteamID()) == row.player and row.score and k <= survive_count then
+  for k = 1, G.FUNCS.get_duel_threshold() do
+    local row = Balatrogether.server.leaderboard[k]
+    if row and tostring(G.STEAM.user.getSteamID()) == row.player then
       survived = true
       break
     end

@@ -48,7 +48,7 @@ function add_round_eval_row(config)
         local is_wait_boss = G.FUNCS.is_versus_game() and Balatrogether.server.leaderboard_blind
         local should_wait = is_wait_boss and not Balatrogether.server.leaderboard
         local color = should_wait and G.C.UI.BACKGROUND_INACTIVE or G.C.ORANGE
-        local button_func = is_wait_boss and (should_wait and 'nil' or 'view_leaderboard') or 'cash_out'
+        local button_func = not is_wait_boss and 'cash_out' or (not should_wait and 'view_leaderboard' or nil)
         G.NEXT_ROUND_BUTTON = UIBox{
             definition = {n=G.UIT.ROOT, config={align = 'cm', colour = G.C.CLEAR}, nodes={
                 {n=G.UIT.R, config={id = 'cash_out_button', align = "cm", padding = 0.1, minw = 7, r = 0.15, colour = color, shadow = true, hover = true, one_press = true, button = button_func, focus_args = {snap_to = true}}, nodes={

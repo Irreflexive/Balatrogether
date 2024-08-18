@@ -1,8 +1,11 @@
 G.FUNCS.select_blind = function(...)
-  local boss_blind = G.P_BLINDS[G.GAME.round_resets.blind_choices.Boss]
+  local boss_blind = G.GAME.round_resets.blind_choices.Boss
+  local matchesDuel = (boss_blind == createCollectionId('bl', 'the_duel') or boss_blind == createCollectionId('bl', 'final_showdown'))
+  sendDebugMessage("Is a boss blind: " .. tostring(G.GAME.blind_on_deck == "Boss"), "Balatrogether")
+  sendDebugMessage("Is boss a duel blind: " .. tostring(matchesDuel), "Balatrogether")
   if G.FUNCS.is_coop_game() then
     G.FUNCS.tcp_send({ cmd = "SELECT_BLIND" })
-  elseif G.FUNCS.is_versus_game() and G.GAME.blind_on_deck == "Boss" and boss_blind.name == "The Duel" or boss_blind.name == "Final Showdown" then
+  elseif G.FUNCS.is_versus_game() and G.GAME.blind_on_deck == "Boss" and matchesDuel then
     G.FUNCS.tcp_send({ cmd = "READY_FOR_BOSS" })
   else
     G.SINGLEPLAYER_FUNCS.select_blind(...)

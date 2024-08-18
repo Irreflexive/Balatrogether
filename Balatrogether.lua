@@ -170,14 +170,14 @@ end
 
 G.FUNCS.view_leaderboard = function(e)
   G.FUNCS.overlay_menu{
-    definition = G.UIDEF.boss_leaderboard(Balatrogether.server.leaderboard),
+    definition = G.UIDEF.boss_leaderboard(),
   }
   G.OVERLAY_MENU.config.no_esc = true
-  Balatrogether.server.leaderboard_blind = false
-  Balatrogether.server.leaderboard = nil
 end
 
 G.FUNCS.close_leaderboard = function(e)
+  Balatrogether.server.leaderboard_blind = false
+  Balatrogether.server.leaderboard = nil
   G.FUNCS.exit_overlay_menu()
   G.FUNCS.cash_out(e)
 end
