@@ -23,6 +23,7 @@ G.FUNCS.start_setup_run = function(e)
       deck = _deck, 
       versus = Balatrogether.new_run_config.versus,
       debug = Balatrogether.new_run_config.debug,
+      showdown_ante = Balatrogether.new_run_config.showdown_ante,
       speed = G.SETTINGS.GAMESPEED
     })
   else
@@ -33,8 +34,8 @@ end
 local init_game_object_ref = Game.init_game_object
 function Game:init_game_object()
   local g = init_game_object_ref(self)
-  if G.FUNCS.is_versus_game() then
-    g.win_ante = Balatrogether.server.win_ante
+  if G.FUNCS.is_versus_game() and Balatrogether.server.showdown_ante then
+    g.win_ante = Balatrogether.server.showdown_ante
   end
   return g
 end
@@ -76,6 +77,7 @@ end)
 G.FUNCS.tcp_listen("START", function(data)
   Balatrogether.server.versus = data.versus
   Balatrogether.new_run_config.versus = data.versus
+  Balatrogether.server.showdown_ante = data.showdown_ante
   Balatrogether.server.card_id = 0
   Balatrogether.server.leaderboard_blind = false
   Balatrogether.server.leaderboard = nil

@@ -17,6 +17,7 @@ Balatrogether = {
   new_run_config = {
     versus = false,
     debug = false,
+    showdown_ante = 8,
   },
   actions = {},
   address_input = "",

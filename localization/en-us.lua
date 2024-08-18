@@ -141,7 +141,7 @@ return {
       b_save_address = "Save",
       b_versus_mode = "Versus Mode",
       b_debug_mode = "Debug Mode",
-      b_showdown_ante = "Final Showdown Ante",
+      b_showdown_ante = "Final Showdown Ante (Versus)",
       b_hostname = "Host/IP",
       b_connecting = "Connecting...",
       b_encrypting = "Encrypting...",

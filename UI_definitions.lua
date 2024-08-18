@@ -134,6 +134,10 @@ function G.UIDEF.server_config(e)
   return t
 end
 
+G.FUNCS.change_showdown_ante = function(args)
+  Balatrogether.new_run_config.showdown_ante = args.to_val
+end
+
 function G.UIDEF.multiplayer_settings()
   local t = {n=G.UIT.ROOT, config={id = 'balatrogether_run_settings', align = "cm", colour = G.C.CLEAR, minh = 3, minw = 4.2}, nodes={
     {n=G.UIT.R, config={align = "cm", padding = 0.1}, nodes={
@@ -155,10 +159,9 @@ function G.UIDEF.multiplayer_settings()
       }),
       create_option_cycle({
         label = localize('b_showdown_ante'), 
-        options = {8, 16}, 
-        -- TODO: implement functionality (server and client)
-        opt_callback = 'nil', 
-        current_option = 1, 
+        options = {4, 8, 12, 16}, 
+        opt_callback = 'change_showdown_ante', 
+        current_option = Balatrogether.new_run_config.showdown_ante / 4, 
         colour = G.C.RED, 
         w = 2, 
         scale = 0.8
