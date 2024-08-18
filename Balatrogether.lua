@@ -183,6 +183,8 @@ G.FUNCS.close_leaderboard = function(e)
 end
 
 G.FUNCS.lose_duel_versus = function(e)
+  Balatrogether.server.leaderboard_blind = false
+  Balatrogether.server.leaderboard = nil
   G.FUNCS.exit_overlay_menu()
   G.STATE = G.STATES.GAME_OVER
   G.STATE_COMPLETE = false
