@@ -30,7 +30,7 @@ local function receive_and_parse()
   elseif status == "closed" or s == nil then
     res = { success = false, error = "Connection closed" }
   else
-    local success, json = pcall(G.JSON.decode, s)
+    local success, json = pcall(JSON.decode, s)
     if success then
       res = json
     elseif type(s) == "table" then
@@ -50,7 +50,7 @@ G.FUNCS.tcp_receive = function()
     if res.game_state then
       Balatrogether.server.game_state = res.game_state
     end
-    sendDebugMessage("Received data: " .. G.JSON.encode(res), "Balatrogether")
+    sendDebugMessage("Received data: " .. JSON.encode(res), "Balatrogether")
     local funcs = Balatrogether.actions[res.cmd]
     if funcs then
       for _, func in ipairs(funcs) do
@@ -96,7 +96,7 @@ G.FUNCS.tcp_send = function(data)
       end
     end
   end
-  local encoded = G.JSON.encode(data)
+  local encoded = JSON.encode(data)
   sendDebugMessage("Sending data: " .. encoded, "Balatrogether")
   tcp.send_channel:push(encoded)
 end
